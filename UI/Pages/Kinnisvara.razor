@@ -1,0 +1,137 @@
+@page "/kinnisvara"
+@using GameEngine
+@using Player
+@using Player.House
+@using UI.Services
+<PageTitle>Kinnisvara</PageTitle>
+@inject Engine Engine
+@inject ChangeNotifier ChangeNotifier
+@inject AlertService Alerts
+
+@code {
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
+    private long _selectedHouseLevel;
+
+    protected override void OnInitialized()
+    {
+        ChangeNotifier.OnChange += StateHasChanged;
+        _selectedHouseLevel = D.HouseLevel;
+    }
+
+    string HouseName(long lvl)
+    {
+        return lvl switch
+        {
+            > 32 => $"Villa lvl {lvl - 32}",
+            > 16 => $"Maja lvl {lvl - 16}",
+            _ => $"Korter lvl {lvl}",
+        };
+    }
+
+    private string GetHouseImgUrl()
+    {
+        return _selectedHouseLevel <= 32 ? $"images/house1/{_selectedHouseLevel}.gif" : $"images/house2/{_selectedHouseLevel - 32}.png";
+    }
+
+    private string CurHouseName()
+    {
+        return HouseName(_selectedHouseLevel);
+    }
+
+    private HouseData GetSelectedHouseData()
+    {
+        return Houses.GetHouseData(_selectedHouseLevel);
+    }
+
+    private string GetHouseText(long lvl)
+    {
+        var cumPrice = Calculator.GetHouseCumulativePrices(D.HouseLevel + 1, lvl);
+        var nameText = $"{lvl}. {HouseName(lvl)}";
+        return $"{nameText} | {Utils.SepThousands(cumPrice)} EEK";
+    }
+
+    private void AutofillHouseLevel()
+    {
+        _selectedHouseLevel = Calculator.MaxHouseThatCanBeBought(D);
+        StateHasChanged();
+    }
+
+    private async Task BuyHouse()
+    {
+        Alerts.ShowAlert(P.BuyHouse(_selectedHouseLevel));
+        _selectedHouseLevel = D.HouseLevel;
+        await ChangeNotifier.Notify();
+    }
+
+}
+
+<h1>Kinnisvara</h1>
+<div class="content">
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                Sul on hetkel @HouseName(D.HouseLevel) <br>
+                Kuulsuse punkte: @D.Fame <br><br>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <form name="form" method="post">
+        <div class="content last">
+            <select name="vali" @bind="_selectedHouseLevel" class="preserve-whitespace">
+                @for (var lvl = D.HouseLevel; lvl <= Constants.HouseLevels; ++lvl)
+                {
+                    <option value="@lvl" selected="@(lvl == D.HouseLevel)">
+                        @GetHouseText(lvl)
+                    </option>
+                }
+            </select>
+            <div class="autofill" @onclick="AutofillHouseLevel"></div>
+            <table class="house-info-table">
+                @{
+                    var h = GetSelectedHouseData();
+                }
+                <tbody>
+                <tr>
+                    <td><b>Nimi:</b></td>
+                    <td>@HouseName(_selectedHouseLevel)</td>
+                    <td class="house-img-td" rowspan="10">
+                        <div class="house-flex">
+                            <div class="house-img-container">
+                                <img src="@GetHouseImgUrl()" class="house-img">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Maksumus:</b></td>
+                    <td>@Utils.SepThousands(h.Price) EEK</td>
+                </tr>
+                <tr>
+                    <td><b>Kommunaalkulud:</b></td>
+                    <td>@Utils.SepThousands(h.Taxes) EEK</td>
+                </tr>
+                <tr>
+                    <td><b>Kaitstud turvamehi:</b></td>
+                    <td>@Utils.SepThousands(h.ProtectedGuards)</td>
+                </tr>
+                <tr>
+                    <td><b>Puskari limiit:</b></td>
+                    <td>@Utils.SepThousands(h.MoonshineLimit)</td>
+                </tr>
+                <tr>
+                    <td><b>Kuulsust vaja:</b></td>
+                    <td>@Utils.SepThousands(h.RequiredFame)</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input name="ok" type="button" value="Osta" @onclick="BuyHouse">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>

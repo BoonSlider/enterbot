@@ -1,0 +1,279 @@
+﻿@namespace UI.Layout
+@using GameEngine
+@using Player
+@using UI.Services
+@inherits LayoutComponentBase
+@inject Engine Engine
+@inject ChangeNotifier Changes
+@inject AlertService Alerts
+
+@code {
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
+    private long? _movesNeed;
+
+    public void Dispose()
+    {
+        Changes.OnChange -= StateHasChanged;
+    }
+
+    private readonly List<IOperationResult> _alerts = [];
+
+    protected override void OnInitialized()
+    {
+        Changes.OnChange += StateHasChanged;
+        Alerts.OnAlert += (message) =>
+        {
+            if (message.Message is null) return;
+            lock (_alerts)
+            {
+                _alerts.Insert(0, message);
+            }
+
+            StateHasChanged();
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(3000);
+                lock (_alerts)
+                {
+                    _alerts.RemoveAt(_alerts.Count - 1);
+                }
+
+                StateHasChanged();
+            });
+        };
+    }
+
+    private async Task EndTurns(int turns)
+    {
+        for (var i = 0; i < turns; ++i)
+        {
+            await Engine.HumanEndTurn(i + 1 == turns);
+        }
+    }
+
+    private async Task EndTurnsUntilHasMoves()
+    {
+        while (D.Moves < _movesNeed)
+        {
+            var shouldUpdate = D.Moves + 15 >= _movesNeed;
+            await Engine.HumanEndTurn(shouldUpdate);
+        }
+
+        _movesNeed = null;
+        StateHasChanged();
+    }
+
+}
+
+<div class="alert-container">
+    @lock (_alerts)
+    {
+        foreach (var alert in _alerts)
+        {
+            <div class="custom-alert @(alert.Success ? "ok" : "error")" @key="@alert.Id">
+                @alert.Message
+            </div>
+        }
+    }
+</div>
+
+<div id="wrapper">
+    <div id="border">
+        <div id="header">
+            <div id="notice">
+                <div id="noticetxt">
+                    <table>
+                        <tr>
+                            <td style="width: 15%;"><img src="images/icons/kaigud.gif" alt="Käigud" title="Käigud"/>
+                            </td>
+                            <td style="width: 85%;">
+                                Käike: <span class="kaik">@Utils.SepThousands(D.Moves)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/icons/raha.gif" alt="Raha" title="Raha"/></td>
+                            <td>Raha: <span class="raha">@Utils.SepThousands(D.Money)</span></td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/icons/haridus.gif" alt="Haridus" title="Haridus"/></td>
+                            <td>Haridust: <span class="haridus">@Utils.SepThousands(D.Education)</span></td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/icons/toit.gif" alt="Toit" title="Toit"/></td>
+                            <td>Toitu: <span class="toit">@Utils.SepThousands(D.Food)</span></td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/icons/tervis.gif" alt="Tervis" title="Tervis"/></td>
+                            <td>Tervis: <span class="tervis">100</span>%</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/icons/kuulsus.gif" alt="Kuulsus" title="Kuulsus"/></td>
+                            <td>Kuulsust: <span class="kuulsus">Puudub</span></td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/icons/kaitse.gif" alt="Turva" title="Turva"/></td>
+                            <td>Turva: <span
+                                    class="securityTotal">@Utils.SepThousands(Calculator.PlayerSoloTotalDef(D))</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/icons/rynne.gif" alt="Maffia" title="Maffia"/></td>
+                            <td>Maffia: <span
+                                    class="mafiaTotal">@Utils.SepThousands(Calculator.PlayerSoloTotalAtk(D))</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="headermenu">
+            <img src="images/icons/avaleht.gif" alt="Avaleht" title="Avaleht"/>
+            <NavLink href="avaleht">Avaleht</NavLink>
+            <img src="images/icons/edetabel.gif" alt="Edetabel" title="Edetabel"/>
+            <NavLink
+                href="edetabel">Edetabel
+            </NavLink>
+            <img src="images/icons/tegevused.gif" alt="Sündmused" title="Sündmused"/>
+            <NavLink href="sündmused">Sündmused
+                (<span class="events_unread_html">0</span>)
+            </NavLink>
+            <img src="images/icons/postkast.gif" alt="Postkast" title="Postkast"/>
+            <NavLink href="postkast?loe1">Postkast
+                (<span class="unread_messages_html"><span style="color: #C00000;"><b>1</b></span></span>)
+            </NavLink>
+            <img src="images/icons/seaded.gif" alt="Konto seaded" title="Konto seaded"/>
+            <NavLink href="seaded">Konto
+                seaded
+            </NavLink>
+            <img src="images/icons/foorum.gif" alt="Foorum" title="Foorum"/>
+            <NavLink href="foorum">Foorum <span
+                    class="forum_unread_html"></span></NavLink>
+            <img src="images/icons/logout.gif" alt="Logi välja" title="Logi välja"/>
+            <NavLink href="uus_mäng">Uus mäng</NavLink>
+        </div>
+        <div id="leftcolumn">
+            <!-- Start Box -->
+            <div id="left">
+                <div class="left1h">
+                    Uuenda
+                </div>
+                <div class="left1">
+                    <ul>
+                        <li class="update-buttons">
+                            <button type="button" @onclick="() => EndTurns(1)" class="upd-button">15m</button>
+                            <button type="button" @onclick="() => EndTurns(4)" class="upd-button">1h</button>
+                            <button type="button" @onclick="() => EndTurns(16)" class="upd-button">4h</button>
+                            <button type="button" @onclick="() => EndTurns(32)" class="upd-button">8h</button>
+                            <button type="button" @onclick="() => EndTurns(96)" class="upd-button">1p</button>
+                            <button type="button" @onclick="() => EndTurns(2*96)" class="upd-button">2p</button>
+                            <button type="button" @onclick="() => EndTurns(4*96)" class="upd-button">4p</button>
+                            <button type="button" @onclick="() => EndTurns(8*96)" class="upd-button">8p</button>
+                            <button type="button" @onclick="() => EndTurns(16*96)" class="upd-button">16p</button>
+                            <button type="button" @onclick="() => EndTurns(32*96)" class="upd-button">32p</button>
+                            <button type="button" @onclick="() => EndTurns(64*96)" class="upd-button">64p</button>
+                        </li>
+                        <li class="update-until">
+                            <form @onsubmit="EndTurnsUntilHasMoves">
+                                <div>
+                                    <input type="number" @bind="_movesNeed" placeholder="Uuenda kuni käike"/>
+                                    <button class="upd-button">Uuenda</button>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <div class="left1h">Menüü</div>
+                <div class="left1">
+                    <p class="boxTxt1"></p>
+                    <div id="menu">
+                        <ul>
+                            <li>
+                                <NavLink href="avaleht">Avaleht</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="andmed">Andmed</NavLink>
+                            </li>
+                        </ul>
+                        <br>
+                        <ul>
+                            <li>
+                                <NavLink href="pank">Pank</NavLink>
+                                <NavLink href="pank?l=arved">(<span class="bills_unpaid_html">0</span>)</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="aktsiad">Aktsiad (<span class="cryptoPrice">161</span>)</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="kinnisvara">Kinnisvara</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="töökoht">Töökoht</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="turg">Turg</NavLink>
+                            </li>
+                        </ul>
+                        <br>
+                        <ul>
+                            <li>
+                                <NavLink href="haridus">Koolitamine</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="jõusaal">Jõusaal</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="kasiino">Kasiino</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="puskar">Puskar</NavLink>
+                            </li>
+                        </ul>
+                        <br>
+                        <ul>
+                            <li>
+                                <NavLink href="turva">Turva</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="maffia">Maffia</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="kaklemine">Kaklemine</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="spioonid">Spioonid</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="kamp">Kamp</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="kambad">Kampade nimekiri</NavLink>
+                            </li>
+                        </ul>
+                        <br>
+                        <ul>
+                            <li>
+                                <NavLink href="kkk">KKK</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="kontakt">Kontakt</NavLink>
+                            </li>
+                        </ul>
+                    </div>
+                    <br>
+                    <p></p>
+                </div>
+            </div>
+            <!-- End Box -->
+        </div>
+        <!-- End Left Column -->
+        <!-- Start Right Column -->
+        <div id="rightcolumn">
+            <!-- Start Main Content -->
+            <div class="contentWindow maincontent">
+                @Body
+            </div>
+        </div>
+        <!-- End Right Column -->
+    </div>
+</div>
+<div id="langCode" class="ehide">est</div>

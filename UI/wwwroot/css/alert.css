@@ -1,0 +1,29 @@
+.alert-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.custom-alert {
+    padding: 15px 25px;
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    animation: fadeOut 3s linear forwards;
+}
+
+.custom-alert.ok {
+    background-color: green;
+}
+.custom-alert.error {
+    background-color: red;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 0.9; }
+    100% { opacity: 0.3; }
+}

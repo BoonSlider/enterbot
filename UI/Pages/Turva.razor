@@ -1,0 +1,213 @@
+@page "/turva"
+@using GameEngine
+@using Player
+@using UI.Services
+<PageTitle>Turva</PageTitle>
+@inject Engine Engine
+@inject ChangeNotifier ChangeNotifier
+@inject AlertService Alerts
+
+@code {
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
+    private long? _guardsAmount;
+    private int? _desiredLevel;
+
+    protected override void OnInitialized()
+    {
+        ChangeNotifier.OnChange += StateHasChanged;
+        _desiredLevel = D.DefLevel + 1;
+    }
+
+    private void AutofillGuards()
+    {
+        _guardsAmount = Calculator.CanHireGuards(D);
+    }
+
+    private async Task HireGuards()
+    {
+        if (_guardsAmount is null) return;
+        Alerts.ShowAlert(P.HireGuards(_guardsAmount.Value));
+        _guardsAmount = null;
+        await ChangeNotifier.Notify();
+    }
+
+    private async Task UpdateLevel()
+    {
+        if (_desiredLevel is null) return;
+        Alerts.ShowAlert(P.UpdateDefLevel(_desiredLevel.Value));
+        _desiredLevel = null;
+        await ChangeNotifier.Notify();
+    }
+
+    private long GetCumulativePrice(int upToLvl)
+    {
+        var totalCost = 0L;
+        for (var lvl = D.DefLevel + 1; lvl <= upToLvl; ++lvl)
+        {
+            totalCost += Levels.LevelPrices[lvl];
+        }
+
+        return totalCost;
+    }
+
+    private void SetMaxAffordableLevel()
+    {
+        var money = D.Money;
+        var setTo = D.DefLevel;
+        for (var lvl = D.DefLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
+        {
+            var price = Levels.LevelPrices[lvl];
+            if (money >= price)
+            {
+                money -= price;
+                setTo = lvl;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        _desiredLevel = setTo == D.DefLevel ? null : setTo;
+        StateHasChanged();
+    }
+
+}
+
+<h1>Turva</h1>
+<div class="content">
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                Turva täiustamine on vajalik enda vara kaitsmiseks.
+                <br>Ühe turvamehe palkamine maksab @Constants.GuardPrice EEK, @Constants.GuardMoves käiku
+                ja @Constants.GuardFood toitu.
+                <br>Turvalevelist oleneb kambast saadav kaitse. Kui turvalevel on @D.DefLevel, siis saad @D.DefLevel%
+                kamba kaitsest.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="content">
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                <form @onsubmit="HireGuards">
+                    <input @bind="_guardsAmount" type="number" size="15">
+                    <div class="autofill" @onclick="AutofillGuards"></div>
+                    <input type="submit" value="Palka">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            @if (D.DefLevel < Constants.AtkDefLevels)
+            {
+                <td>
+                    <select name="level" @bind="_desiredLevel">
+                        <option></option>
+                        @for (var lvl = D.DefLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
+                        {
+                            <option value="@lvl">
+                                Level @lvl | @Utils.SepThousands(GetCumulativePrice(lvl)) EEK
+                            </option>
+                        }
+                    </select>
+                    <div class="autofill" @onclick="SetMaxAffordableLevel"></div>
+                    <input @onclick="UpdateLevel" type="button" value="Uuenda">
+                </td>
+            }
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="content">
+    <table>
+        <tbody>
+        <tr>
+            <td>Turvamehi: <span class="turvamees">@Utils.SepThousands(D.Guards)</span>
+                (kaitse all kuni <span class="maxGuards">@Utils.SepThousands(Calculator.MaxProtectedGuards(D))</span>
+                meest)
+            </td>
+        </tr>
+        <tr>
+            <td>Turvameeste maks: @(Utils.SepThousands(D.Guards * Constants.GuardTax))</td>
+        </tr>
+        <tr>
+            <td>Turvalevel: <span class="turva">@D.DefLevel</span></td>
+        </tr>
+        <tr>
+            <td>Turva meestest: @(Utils.SepThousands(D.Guards * D.DefLevel))</td>
+        </tr>
+        <tr>
+            <td>Enda turva kokku: @Utils.SepThousands(Calculator.PlayerSoloTotalDef(D))</td>
+        </tr>
+        <tr>
+            <td>Enda ja kamba turva kokku: @Utils.SepThousands(Calculator.PlayerGangTotalDef(D))</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="content last">
+    <table>
+        <tbody>
+        <tr>
+            <th>Relv</th>
+            <th>Kogus</th>
+            <th>Turva</th>
+            <th>Kaitse all</th>
+            <th>Röövitavad</th>
+        </tr>
+        <tr>
+            <td>Kurikas</td>
+            <td class="kurikas">0</td>
+            <td class="kurikasProtection">0</td>
+            <td class="kurikasUnderProtection">0</td>
+            <td class="kurikascanBeStolen">0</td>
+        </tr>
+        <tr>
+            <td>Automaat</td>
+            <td class="automaat">0</td>
+            <td class="automaatProtection">0</td>
+            <td class="automaatUnderProtection">0</td>
+            <td class="automaatcanBeStolen">0</td>
+        </tr>
+        <tr>
+            <td>Nuga</td>
+            <td class="nuga">0</td>
+            <td class="nugaProtection">0</td>
+            <td class="nugaUnderProtection">0</td>
+            <td class="nugacanBeStolen">0</td>
+        </tr>
+        <tr>
+            <td>Kuulivest</td>
+            <td class="kuulivest">0</td>
+            <td class="kuulivestProtection">0</td>
+            <td class="kuulivestUnderProtection">0</td>
+            <td class="kuulivestcanBeStolen">0</td>
+        </tr>
+        <tr>
+            <td>Kirves</td>
+            <td class="kirves">0</td>
+            <td class="kirvesProtection">0</td>
+            <td class="kirvesUnderProtection">0</td>
+            <td class="kirvescanBeStolen">0</td>
+        </tr>
+        <tr>
+            <td>Püstol</td>
+            <td class="pystol">0</td>
+            <td class="pystolProtection">0</td>
+            <td class="pystolUnderProtection">0</td>
+            <td class="pystolcanBeStolen">0</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

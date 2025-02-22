@@ -1,0 +1,104 @@
+@page "/töökoht"
+@using GameEngine
+@using Player
+@using Player.Job
+@using UI.Services
+<PageTitle>Töökoht</PageTitle>
+@inject Engine Engine
+@inject ChangeNotifier Changes
+@inject AlertService Alerts
+
+@code {
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
+    private int _selectedJob;
+
+    // A computed property returning the current job details based on the selected level.
+    private JobData CurrentJob => Jobs.GetJobData(_selectedJob);
+
+    protected override void OnInitialized()
+    {
+        Changes.OnChange += StateHasChanged;
+        _selectedJob = D.JobLevel;
+    }
+
+    private async Task AcceptJob()
+    {
+        Alerts.ShowAlert(P.AcceptJob(_selectedJob));
+        _selectedJob = D.JobLevel;
+        await Changes.Notify();
+    }
+
+    private async Task LeaveJob()
+    {
+        _selectedJob = 0;
+        await AcceptJob();
+    }
+
+    private string GetExpSalary()
+    {
+        return Utils.SepThousands(Jobs.GetExperiencedIncome(_selectedJob, D.JobExp[_selectedJob]));
+    }
+
+    private string CorrectWord()
+    {
+        return _selectedJob == D.JobLevel ? "saad" : "saaksid";
+    }
+
+    private void FindBestJob()
+    {
+        _selectedJob = Calculator.GetMaxJobLevel(D);
+    }
+
+}
+
+<h1>Töökoht</h1>
+<div class="content last">
+    <table>
+        <tbody>
+        <tr>
+            <td style="width: 25%;">&nbsp;</td>
+            <td>
+                <select @bind="_selectedJob">
+                    @for (int i = 0; i < Constants.JobCount; i++)
+                    {
+                        var job = Jobs.GetJobData(i);
+                        <option value="@i">@i. @job.JobTitle</option>
+                    }
+                </select>
+                <div class="autofill" @onclick="FindBestJob"></div>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Töökoht:</b></td>
+            <td>@CurrentJob.JobTitle</td>
+        </tr>
+        <tr>
+            <td><b>Palk:</b></td>
+            <td>@Utils.SepThousands(CurrentJob.Income) EEK</td>
+        </tr>
+        <tr>
+            <td><b>Nõutav haridus:</b></td>
+            <td>@Utils.SepThousands(CurrentJob.RequiredEducation)</td>
+        </tr>
+        <tr>
+            <td><b>Panga limiit:</b></td>
+            <td>@Utils.SepThousands(CurrentJob.BankLimit) EEK</td>
+        </tr>
+        <tr>
+            <td><b>Võimalik laenata:</b></td>
+            <td>@CurrentJob.AllowedToBorrowPercentage %</td>
+        </tr>
+        <tr>
+            <td><b>Seifi maks. level:</b></td>
+            <td>@CurrentJob.MaxSafeLvl</td>
+        </tr>
+        <tr>
+            <td><b>Kogemusi:</b></td>
+            <td class="tookogemus">@Utils.SepThousands(D.JobExp[_selectedJob]) (@CorrectWord() palka @GetExpSalary())</td>
+        </tr>
+        </tbody>
+    </table>
+    <input type="button" @onclick="AcceptJob" value="Tööle">
+    <input type="submit" @onclick="LeaveJob" value="Tule töölt ära">
+</div>

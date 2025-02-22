@@ -1,0 +1,34 @@
+@namespace UI.Pages
+@page "/uus_mäng"
+@using GameEngine
+@using Player
+@using UI.Services
+@inherits LayoutComponentBase
+@inject Engine Engine
+@inject ChangeNotifier Changes
+@inject AlertService Alerts
+
+<PageTitle>Uus mäng</PageTitle>
+
+@code {
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
+
+    private async Task ResetWorld()
+    {
+        await Engine.ResetWorld();
+        Alerts.ShowAlert(OperationResult.Ok("Alustasid maailma uuesti"));
+        await Changes.Notify();
+    }
+
+    protected override void OnInitialized()
+    {
+        Changes.OnChange += StateHasChanged;
+    }
+
+}
+<h1>Alusta uuesti</h1>
+<div class="content">
+    <input type="button" value="Kustuta andmed ja alusta uuesti" @onclick="ResetWorld"/>
+</div>
+

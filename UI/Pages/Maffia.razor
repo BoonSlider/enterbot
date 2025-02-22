@@ -1,0 +1,208 @@
+@page "/maffia"
+@using GameEngine
+@using Player
+@using UI.Services
+<PageTitle>Maffia</PageTitle>
+@inject Engine Engine
+@inject ChangeNotifier ChangeNotifier
+@inject AlertService Alerts
+
+@code {
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
+    private long? _mobstersAmount;
+    private int? _desiredLevel;
+
+    protected override void OnInitialized()
+    {
+        ChangeNotifier.OnChange += StateHasChanged;
+        _desiredLevel = D.AtkLevel + 1;
+    }
+
+    private void AutofillMobsters()
+    {
+        _mobstersAmount = Calculator.CanHireMobsters(D);
+    }
+
+    private async Task HireMobsters()
+    {
+        if (_mobstersAmount is null) return;
+        Alerts.ShowAlert(P.HireMobsters(_mobstersAmount.Value));
+        _mobstersAmount = null;
+        await ChangeNotifier.Notify();
+    }
+
+    private async Task UpdateLevel()
+    {
+        if (_desiredLevel is null) return;
+        Alerts.ShowAlert(P.UpdateAtkLevel(_desiredLevel.Value));
+        _desiredLevel = null;
+        await ChangeNotifier.Notify();
+    }
+
+    private long GetCumulativePrice(int upToLvl)
+    {
+        var totalCost = 0L;
+        for (var lvl = D.AtkLevel + 1; lvl <= upToLvl; ++lvl)
+        {
+            totalCost += Levels.LevelPrices[lvl];
+        }
+
+        return totalCost;
+    }
+
+    private void SetMaxAffordableLevel()
+    {
+        var money = D.Money;
+        var setTo = D.AtkLevel;
+        for (var lvl = D.AtkLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
+        {
+            var price = Levels.LevelPrices[lvl];
+            if (money >= price)
+            {
+                money -= price;
+                setTo = lvl;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        _desiredLevel = setTo == D.AtkLevel ? null : setTo;
+        StateHasChanged();
+    }
+
+}
+
+<h1>Maffia</h1>
+<div class="content">
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                Maffia täiustamine on vajalik teiste mängijate vara röövimiseks. Ründamine on üks mängu tulusamaid
+                tegevusi.
+                <br>Ühe mafiooso palkamine maksab @Constants.MobsterPrice EEK, @Constants.MobsterMoves käiku
+                ja @Constants.MobsterFood toitu.
+                <br>Maffialevelist oleneb kambast saadav rünne. Kui maffialevel on @D.AtkLevel, siis saad @D.AtkLevel%
+                kamba ründest.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="content">
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                <form @onsubmit="HireMobsters">
+                    <input name="kogus" type="number" @bind="_mobstersAmount" size="15">
+                    <div class="autofill" @onclick="AutofillMobsters"></div>
+                    <input type="submit" name="palka" value="Palka">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            @if (D.AtkLevel < Constants.AtkDefLevels)
+            {
+                <td>
+                    <select name="level" @bind="_desiredLevel">
+                        <option></option>
+                        @for (var lvl = D.AtkLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
+                        {
+                            <option value="@lvl">
+                                Level @lvl | @Utils.SepThousands(GetCumulativePrice(lvl)) EEK
+                            </option>
+                        }
+                    </select>
+                    <div class="autofill" @onclick="SetMaxAffordableLevel"></div>
+                    <input type="button" value="Uuenda" @onclick="UpdateLevel">
+                </td>
+            }
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="content">
+    <table>
+        <tbody>
+        <tr>
+            <td>Mafioososid: <span class="mafiooso">@Utils.SepThousands(D.Mobsters)</span></td>
+        </tr>
+        <tr>
+            <td>Maffialevel: <span class="maffia">@D.AtkLevel</span></td>
+        </tr>
+        <tr>
+            <td>Maffia meestest: @(Utils.SepThousands(D.AtkLevel * D.Mobsters))</td>
+        </tr>
+        <tr>
+            <td>Sinu maffiapunkte kokku: @Utils.SepThousands(Calculator.PlayerSoloTotalAtk(D))</td>
+        </tr>
+        <tr>
+            <td>Sinu ja kamba maffiapunkte kokku: @Utils.SepThousands(Calculator.PlayerGangTotalAtk(D))</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="content last">
+    <table>
+        <tbody>
+        <tr>
+            <th>Relv</th>
+            <th>Kogus</th>
+            <th>Maffia</th>
+            <th>Kaitse all</th>
+            <th>Röövitavad</th>
+        </tr>
+        <tr>
+            <td>Kurikas</td>
+            <td class="kurikas">0</td>
+            <td class="kurikasAttack">0</td>
+            <td class="kurikasUnderProtection">0</td>
+            <td class="kurikascanBeStolen">0</td>
+        </tr>
+        <tr>
+            <td>Automaat</td>
+            <td class="automaat">0</td>
+            <td class="automaatAttack">0</td>
+            <td class="automaatUnderProtection">0</td>
+            <td class="automaatcanBeStolen">0</td>
+        </tr>
+        <tr>
+            <td>Nuga</td>
+            <td class="nuga">0</td>
+            <td class="nugaAttack">0</td>
+            <td class="nugaUnderProtection">0</td>
+            <td class="nugacanBeStolen">0</td>
+        </tr>
+        <tr>
+            <td>Kuulivest</td>
+            <td class="kuulivest">0</td>
+            <td class="kuulivestAttack">0</td>
+            <td class="kuulivestUnderProtection">0</td>
+            <td class="kuulivestcanBeStolen">0</td>
+        </tr>
+        <tr>
+            <td>Kirves</td>
+            <td class="kirves">0</td>
+            <td class="kirvesAttack">0</td>
+            <td class="kirvesUnderProtection">0</td>
+            <td class="kirvescanBeStolen">0</td>
+        </tr>
+        <tr>
+            <td>Püstol</td>
+            <td class="pystol">0</td>
+            <td class="pystolAttack">0</td>
+            <td class="pystolUnderProtection">0</td>
+            <td class="pystolcanBeStolen">0</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

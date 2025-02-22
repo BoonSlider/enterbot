@@ -1,0 +1,65 @@
+@page "/haridus"
+@using GameEngine
+@using Player
+@using UI.Services
+<PageTitle>Koolitamine</PageTitle>
+@inject Engine Engine
+@inject ChangeNotifier ChangeNotifier
+@inject AlertService Alerts
+
+@code {
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
+    private long? _eduMoves;
+
+    protected override void OnInitialized()
+    {
+        ChangeNotifier.OnChange += StateHasChanged;
+    }
+
+    private async Task UpdateEducation()
+    {
+        if (_eduMoves == null) return;
+        Alerts.ShowAlert(P.IncreaseEducation(_eduMoves.Value));
+        _eduMoves = null;
+        await ChangeNotifier.Notify();
+    }
+
+    private void AutofillEducation()
+    {
+        _eduMoves = Calculator.HowManyMovesCanSpendOnEdu(D);
+    }
+
+}
+
+<h1>Koolitamine</h1>
+<div class="content last">
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                Ühe käigu eest saad @Constants.EduRate haridust, see maksab ka @Constants.EduCost EEK.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <br>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Haridust: @Utils.SepThousands(D.Education)</td>
+        </tr>
+        <tr>
+            <td>
+                <form @onsubmit="UpdateEducation">
+                    Mitu käiku soovid kulutada?
+                    <input type="number" @bind="_eduMoves">
+                    <div class="autofill" @onclick="AutofillEducation"></div>
+                    <input type="submit" value="Koolita">
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,147 @@
+@page "/profiil/{UserId}"
+@using GameEngine
+@using Player
+@using UI.Services
+<PageTitle>@UserId profiil</PageTitle>
+@inject Engine Engine
+@inject ChangeNotifier ChangeNotifier
+@inject AlertService Alerts
+
+@code {
+    [Parameter] public string UserId { get; set; } = string.Empty;
+
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
+    private IPlayerPublicData C => P.GetPlayerData(UserId);
+
+    protected override void OnInitialized()
+    {
+        ChangeNotifier.OnChange += StateHasChanged;
+    }
+
+}
+
+<span class="profile-header">
+    <h1>@C.Id</h1>
+</span>
+<div class="content">
+    <p><a href="postkast?send=1&amp;kasutaja=Flow">Saada talle kiri</a></p>
+    <table>
+        <tbody>
+        <tr>
+            <td style="width: 25%;"><b>Skoor</b></td>
+            <td>@Utils.SepThousands(C.GetScore())</td>
+            <td rowspan="9"></td>
+        </tr>
+        <tr>
+            <td><b>Raha</b></td>
+            <td>@Utils.SepThousands(C.Money) EEK</td>
+        </tr>
+        <tr>
+            <td><b>Toit</b></td>
+            <td>@Utils.SepThousands(C.Food)</td>
+        </tr>
+        <tr>
+            <td><b>Haridus</b></td>
+            <td>@Utils.SepThousands(C.Education)</td>
+        </tr>
+        <tr>
+            <td><b>Elamu</b></td>
+            <td>Korter lvl 1</td>
+        </tr>
+        <tr>
+            <td><b>Asukoht hetkel</b></td>
+            <td>Tallinn</td>
+        </tr>
+        <tr>
+            <td><b>Kamp</b></td>
+            <td><a href="kambad?kamp=22" style="color:red;">Puudub</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<h2>Maja röövimine</h2>
+<form method="post">
+    <div class="content">
+        <table>
+            <tbody>
+            <tr>
+                <td><b>1 rünne võtab @Constants.AtkMoves käiku</b> (nii koos kui ilma kambata).</td>
+            </tr>
+            <tr>
+                <td>Ebaõnnestunud ründe korral üksikud mafioosod surevad, enamus põgenevad.</td>
+            </tr>
+            <tr>
+                <td>Omades vähem kui 100 mafioosot ei ole võimalik rünnata.</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Röövi" name="roovi" id="roovi">
+                </td>
+            </tr>
+            <tr>
+                <td><b>Kui ründad kambaga, siis läheb kogu saak kambale.</b></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Röövi kambaga" name="roovi" id="roovi">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+<h2>Sinu andmed</h2>
+<div class="content">
+    <table>
+        <tbody>
+        <tr>
+            <td style="width: 40%"><b>Mafioososid:</b></td>
+            <td>@Utils.SepThousands(D.Mobsters)</td>
+        </tr>
+        <tr>
+            <td><b>Sinu maffiapunkte kokku:</b></td>
+            <td>@Utils.SepThousands(Calculator.PlayerSoloTotalAtk(D))</td>
+        </tr>
+        <tr>
+            <td><b>Sinu ja kamba maffiapunkte kokku:</b></td>
+            <td>@Utils.SepThousands(Calculator.PlayerGangTotalAtk(D))</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<h2>Luuramine</h2>
+<form method="post">
+    <div class="content">
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    <b>1 luure võtab 10 käiku ja 10 000 EEK.</b>
+                    <br>
+                    Sul pole spioone.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Luura" name="luura" id="luura">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+<h2>Kaklemine</h2>
+Maksimaalne kaklemise panus on 150 000 000 EEK ja korraga saab teha 5 väljakutset.
+<form method="post">
+    <div class="content last">
+        <table>
+            <tbody>
+            <tr>
+                <td>Panus: <input type="number" name="panus"> <input type="submit" value="Esita" id="kakle"
+                                                                     name="kakle"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

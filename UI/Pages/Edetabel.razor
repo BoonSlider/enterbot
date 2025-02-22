@@ -1,0 +1,160 @@
+@page "/edetabel"
+@using GameEngine
+@using Player
+@using UI.Services
+<PageTitle>Edetabel</PageTitle>
+@inject Engine Engine
+@inject ChangeNotifier ChangeNotifier
+@inject AlertService Alerts
+
+@code {
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
+
+    protected override void OnInitialized()
+    {
+        ChangeNotifier.OnChange += StateHasChanged;
+    }
+
+    public class PlayerLeaderboardData
+    {
+        public int LeaderboardRank { get; set; }
+        public required string Name { get; set; }
+        public long Score { get; set; }
+        public long Money { get; set; }
+        public string? Gang { get; set; }
+        public FameLevel Fame { get; set; }
+    }
+
+    public List<PlayerLeaderboardData> GetAllPlayers()
+    {
+        var players = P.GetAllPlayers().Select(id => P.GetPlayerData(id)).OrderByDescending(p => p.GetScore());
+        var data = new List<PlayerLeaderboardData>();
+        var index = 1;
+        foreach (var player in players)
+        {
+            data.Add(new PlayerLeaderboardData { LeaderboardRank = index, Name = player.Id, Score = player.GetScore(), Money = player.Money, Gang = null, Fame = player.GetFameLevel() });
+            index++;
+        }
+
+        return data;
+    }
+
+    private string GetClass(string id)
+    {
+        if (id == P.Id)
+        {
+            return "leaderboard-my-name";
+        }
+
+        return "";
+    }
+
+    private string GetFameClass(FameLevel fame)
+    {
+        var color = fame switch
+        {
+            FameLevel.Gray => "gray",
+            FameLevel.Green => "green",
+            FameLevel.Gold => "gold",
+            FameLevel.Darkorange => "darkorange",
+            FameLevel.Red => "red",
+            FameLevel.Black => "black",
+            _ => throw new ArgumentOutOfRangeException(nameof(fame), fame, null),
+        };
+        return $"fame-{color}";
+    }
+
+}
+
+<h1>Mängijad</h1>
+<div class="content last leaderboard">
+
+    <table class="fame-table">
+        <tbody>
+        <tr>
+            <td><span
+                    style="font-size: 14px; color: silver; text-shadow: 1px 1px 2px gray;">★</span>-
+            </td>
+            <td><b>Puudub</b></td>
+            <td rowspan="6" class="fame-text">Edetabel on järjestatud mängijate edukuse/skoori järjekorras
+                alustades edukaimast mängijast.
+                Tähekesed nimede ees näitavad kuulsust. Seda saab õnnestunud röövil (2p kui röövid endast kuulsamat,
+                1p kui röövid sama kuulsat või vähem kuulsat),
+                ebaõnnestumisel kaotad kuulsust (-1p kui röövid endast kuulsamat, -2p kui sama kuulsat või vähem
+                kuulsat).
+                Iga päev kaotab mängija 10 ühikut kuulsust.
+            </td>
+        </tr>
+        <tr>
+            <td><span style="font-size: 14px; color: green; text-shadow: 1px 1px 2px gray;">★</span>-</td>
+            <td><b>Madal</b></td>
+        </tr>
+        <tr>
+            <td><span style="font-size: 14px; color: gold; text-shadow: 1px 1px 2px gray;">★</span>-</td>
+            <td><b>Keskmine</b></td>
+        </tr>
+        <tr>
+            <td><span style="font-size: 14px; color: darkorange; text-shadow: 1px 1px 2px gray;">★</span>-</td>
+            <td><b>Kõrge</b></td>
+        </tr>
+        <tr>
+            <td><span style="font-size: 14px; color: red; text-shadow: 1px 1px 2px gray;">★</span>-</td>
+            <td><b>Eliit</b></td>
+        </tr>
+        <tr>
+            <td><span style="font-size: 14px; color: black; text-shadow: 1px 1px 2px gray;">★</span>-</td>
+            <td><b>Veteran</b></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table style="width: 100%;">
+        <tbody>
+        <tr>
+        </tr>
+        </tbody>
+    </table>
+    <table class="a">
+        <tbody>
+        <tr>
+            <th>#</th>
+            <th>
+                <a href="edetabel?jrk=fame&amp;asc=1">
+                    <span style="font-size: 14px; color: silver; text-shadow: 1px 1px 2px gray;">★</span> </a>
+                <a href="edetabel?jrk=name&amp;asc=1">
+                    Nimi </a>
+            </th>
+            <th>
+                <a href="edetabel?jrk=score&amp;asc=1">
+                    Skoor </a>
+            </th>
+            <th>
+                Sularaha
+            </th>
+            <th>
+                <a href="edetabel?jrk=gang&amp;asc=1">
+                    Kamp </a>
+            </th>
+        </tr>
+        @foreach (var p in GetAllPlayers())
+        {
+            <tr>
+                <td>@p.LeaderboardRank</td>
+                <td>
+                    <span class="@GetFameClass(p.Fame)" style="font-size: 14px; text-shadow: 1px 1px 2px gray;">★</span>
+                    <a href="profiil/@p.Name" class="@GetClass(p.Name)">@p.Name</a>
+                </td>
+                <td>@Utils.SepThousands(p.Score)</td>
+                <td>@Utils.SepThousands(p.Money)</td>
+                <td>
+                    @if (p.Gang is { } gang)
+                    {
+                        <a href="kambad/kamp/@gang">@gang</a>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

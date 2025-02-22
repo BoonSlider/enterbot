@@ -1,0 +1,197 @@
+@page "/turg"
+@using GameEngine
+@using Player
+@using UI.Services
+<PageTitle>Turg</PageTitle>
+@inject Engine Engine
+@inject ChangeNotifier ChangeNotifier
+@inject AlertService Alerts
+
+@code {
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
+    private long? _foodAmount;
+
+    readonly Dictionary<MoonshineItem, long?> _moonshineAmounts = new()
+    {
+        { MoonshineItem.Teravili, null },
+        { MoonshineItem.Suhkur, null },
+        { MoonshineItem.Pärm, null },
+        { MoonshineItem.Puskar, null },
+    };
+
+    protected override void OnInitialized()
+    {
+        ChangeNotifier.OnChange += StateHasChanged;
+    }
+
+    async Task BuyFoodItems()
+    {
+        Dictionary<MoonshineItem, long> willBuy = new();
+        foreach (var item in Enum.GetValues<MoonshineItem>())
+        {
+            if (item != MoonshineItem.Puskar && _moonshineAmounts[item] is { } v)
+            {
+                willBuy[item] = v;
+                _moonshineAmounts[item] = null;
+            }
+        }
+
+        Alerts.ShowAlert(P.BuyFood(_foodAmount ?? 0, willBuy));
+        _foodAmount = null;
+        await ChangeNotifier.Notify();
+    }
+
+}
+
+
+
+<div class="contentWindow maincontent">
+    <h1>Turg</h1>
+    <div class="content">
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    Ühe relva ostmine võtab 2 käiku. <br><br>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <h2>Osta kaupu</h2>
+    <form @onsubmit="BuyFoodItems">
+        <div class="content">
+            <table class="a">
+                <tbody>
+                <tr>
+                    <th>Ühik</th>
+                    <th>Sul on</th>
+                    <th>Ühiku hind</th>
+                    <th>Palju osta</th>
+                </tr>
+                <tr>
+                    <td>Toit</td>
+                    <td class="toit">@Utils.SepThousands(D.Food)</td>
+                    <td>@Constants.FoodPrice EEK</td>
+                    <td><input name="toitosta" type="number" @bind="_foodAmount"></td>
+                </tr>
+                @foreach (var item in Enum.GetValues<MoonshineItem>().Where(x => x != MoonshineItem.Puskar))
+                {
+                    <tr>
+                        <td>@item.ToString()</td>
+                        <td>@Utils.SepThousands(D.MoonshineItemCounts[item])</td>
+                        <td>@Constants.MoonshinePrices[item] EEK</td>
+                        <td><input type="number" @bind="_moonshineAmounts[item]"></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <p><input type="submit" name="submit" value="Ok"></p>
+        </div>
+    </form>
+    <h2>Relvad</h2>
+    <div class="content">
+        <table class="a">
+            <tbody>
+            <tr>
+                <th>Ühik</th>
+                <th>Kaitse</th>
+                <th>Rünne</th>
+                <th>Sul on</th>
+                <th>Ostu hind</th>
+                <th>Palju osta</th>
+            </tr>
+            <tr>
+                <td>Kurikas</td>
+                <td>56</td>
+                <td>24</td>
+                <td>0</td>
+                <td>
+                    3 600 EEK
+                </td>
+                <td>
+                    <input type="number" name="myykurikas">
+                </td>
+            </tr>
+            <tr>
+                <td>Automaat</td>
+                <td>41</td>
+                <td>82</td>
+                <td>0</td>
+                <td>
+                    18 600 EEK
+                </td>
+                <td>
+                    <input type="number" name="myyautomaat">
+                </td>
+            </tr>
+            <tr>
+                <td>Nuga</td>
+                <td>47</td>
+                <td>45</td>
+                <td>0</td>
+                <td>
+                    5 200 EEK
+                </td>
+                <td>
+                    <input type="number" name="myynuga">
+                </td>
+            </tr>
+            <tr>
+                <td>Kuulivest</td>
+                <td>85</td>
+                <td>26</td>
+                <td>0</td>
+                <td>
+                    11 200 EEK
+                </td>
+                <td>
+                    <input type="number" name="myykuulivest">
+                </td>
+            </tr>
+            <tr>
+                <td>Kirves</td>
+                <td>56</td>
+                <td>46</td>
+                <td>0</td>
+                <td>
+                    9 500 EEK
+                </td>
+                <td>
+                    <input type="number" name="myykirves">
+                </td>
+            </tr>
+            <tr>
+                <td>Püstol</td>
+                <td>51</td>
+                <td>67</td>
+                <td>0</td>
+                <td>12 600 EEK</td>
+                <td><input type="number" name="myypystol"></td>
+            </tr>
+            </tbody>
+        </table>
+        <p><input type="submit" name="submit" value="Ok"></p>
+    </div>
+    <h2>Müü kaupu</h2>
+    <div class="content last">
+        <table class="a">
+            <tbody>
+            <tr>
+                <th>Ühik</th>
+                <th>Müügi hind</th>
+                <th>Sul on</th>
+                <th>Palju müüa</th>
+            </tr>
+            <tr>
+                <td>Puskar</td>
+                <td>67 EEK</td>
+                <td class="puskar">0</td>
+                <td><input name="puskarmuu" type="number"></td>
+            </tr>
+            </tbody>
+        </table>
+        <p><input type="submit" name="submit" value="Ok"></p>
+    </div>
+</div>

@@ -1,0 +1,155 @@
+.messagebox {
+    width: 100%;
+    margin-bottom: 25px;
+    padding-bottom: 13px;
+    padding-top: 12px;
+    background: url(messagebg.png);
+    background-repeat: repeat;
+    text-align: center;
+    padding-left: 5px;
+}
+
+.errorbox {
+    width: 100%;
+    margin-bottom: 25px;
+    padding-bottom: 13px;
+    padding-top: 12px;
+    background: url(errorbg.png);
+    background-repeat: repeat;
+    text-align: center;
+    padding-left: 5px;
+}
+
+.autofill {
+    background: url(../images/icons/maagiapulk.png) no-repeat;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+
+.hide, .ehide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.jutukarida {
+    width: 100%;
+}
+
+.jutukarida.context-menu-active {
+    background-color: #0A8FD0;
+}
+
+.red {
+    color: red !important;
+}
+
+.blue {
+    color: blue !important;
+}
+
+.gray {
+    color: gray !important;
+}
+
+.EB6C2C {
+    color: #EB6C2C !important;
+}
+
+#chat {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+img.emoji {
+    height: 1.1em;
+    width: 1.2em;
+    margin: 0 .05em 0 .1em;
+    vertical-align: -0.1em;
+}
+
+.widthOfContent {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.padLeft15 {
+    margin-left: 15px;
+}
+
+.left {
+    float: left;
+}
+
+.homePageImage {
+    float: left;
+    margin: 0 10px 10px 0;
+}
+
+.commentCell {
+    border: 1px solid #878787;
+    padding: 2px 2px 2px 2px;
+}
+
+.commentCell.time {
+    width: 140px;
+}
+
+.gymSelect {
+    width: 200px;
+}
+
+.mobile-only {
+    display: none;
+}
+
+#chatContextMenu {
+    position: fixed;
+    visibility: hidden;
+    background: #fff;
+    border: 1px solid #c6c6c6;
+}
+
+#chatContextMenu .option {
+    padding: 5px 10px;
+}
+
+#chatContextMenu .option:hover {
+    color: #fff;
+    background: #3879D9;
+    cursor: pointer;
+}
+
+.contextMenuDownArrow {
+    float: right;
+}
+
+textarea {
+    min-height: 150px;
+    width: 100%;
+    resize: vertical
+}
+
+.tallTextarea {
+    min-height: 250px;
+}
+
+.halfPage {
+    width: 50%;
+    max-width: 50%;
+}
+
+.padY2 {
+    padding: 2px 0;
+}
+
+.padRight5 {
+    padding-right: 5px;
+}
+
+.content-collapse {
+    cursor: pointer;
+}
