@@ -22,12 +22,24 @@ public static class Calculator
 
     public static long PlayerSoloTotalAtk(IPlayerData playerData)
     {
-        return playerData.AtkLevel * playerData.Mobsters;
+        var ret = playerData.AtkLevel * playerData.Mobsters;
+        foreach (var stat in Enum.GetValues<GymStat>())
+        {
+            ret += Constants.GymStatAtk[stat] * playerData.GymStats[stat];
+        }
+
+        return ret;
     }
 
     public static long PlayerSoloTotalDef(IPlayerData playerData)
     {
-        return playerData.DefLevel * playerData.Guards;
+        var ret = playerData.DefLevel * playerData.Guards;
+        foreach (var stat in Enum.GetValues<GymStat>())
+        {
+            ret += Constants.GymStatDef[stat] * playerData.GymStats[stat];
+        }
+
+        return ret;
     }
 
     public static long CanHireMobsters(IPlayerData playerData)

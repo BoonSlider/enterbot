@@ -17,11 +17,26 @@ public class Constants
     public const int AtkMoves = 20;
     public const int FoodPrice = 5;
     public const int MinimumMobstersToAttack = 25;
+
     public static readonly Dictionary<MoonshineItem, long> MoonshinePrices = new()
     {
         { MoonshineItem.Teravili, 2 },
         { MoonshineItem.Suhkur, 3 },
         { MoonshineItem.Pärm, 4 },
         { MoonshineItem.Puskar, 67 },
+    };
+
+    public static readonly Dictionary<GymStat, long> GymStatAtk = new()
+    {
+        { GymStat.Skill, 60 },
+        { GymStat.Strength, 53 },
+        { GymStat.Agility, 48 },
+    };
+
+    public static readonly Dictionary<GymStat, long> GymStatDef = new()
+    {
+        { GymStat.Skill, 46 },
+        { GymStat.Strength, 53 },
+        { GymStat.Agility, 58 },
     };
 }

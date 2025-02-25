@@ -8,13 +8,21 @@ public class PlayerData : IPlayerData
     public int AtkLevel { get; set; } = 1;
     public int DefLevel { get; set; } = 1;
 
-    public IDictionary<MoonshineItem, long> MoonshineItemCounts { get; set; } = new Dictionary<MoonshineItem, long>()
+    public IDictionary<MoonshineItem, long> MoonshineItemCounts { get; set; } = new Dictionary<MoonshineItem, long>
     {
         { MoonshineItem.Teravili, 0 },
         { MoonshineItem.Suhkur, 0 },
         { MoonshineItem.Pärm, 0 },
         { MoonshineItem.Puskar, 0 },
     };
+
+    public IDictionary<GymStat, long> GymStats { get; set; } = new Dictionary<GymStat, long>
+    {
+        { GymStat.Skill, 10 },
+        { GymStat.Strength, 10 },
+        { GymStat.Agility, 10 },
+    };
+    
     public IList<long> JobExp { get; set; } = Enumerable.Repeat(0L, (int)Constants.JobCount).ToList();
     public int JobLevel { get; set; } = 1;
     public long Education { get; set; } = 20;
