@@ -1,0 +1,96 @@
+.upd-button {
+    padding: 0 6px;
+    font-size: 12px;
+}
+
+.update-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+.update-list {
+    padding: 2px;
+}
+
+.update-list ul {
+    padding-left: 20px;
+}
+
+.update-list li {
+    list-style-type: number;
+}
+
+.leaderboard td {
+    vertical-align: unset;
+}
+
+.leaderboard .fame-text {
+    vertical-align: top;
+    padding: 0 4px;
+}
+
+.leaderboard-my-name {
+    font-weight: bold;
+}
+
+.fame-gray {
+    color: gray;
+}
+
+.fame-green {
+    color: green;
+}
+
+.fame-gold {
+    color: gold;
+}
+
+.fame-darkorange {
+    color: darkorange;
+}
+
+.fame-red {
+    color: red;
+}
+
+.fame-black {
+    color: black;
+}
+
+.update-until input[type="number"] {
+    width: 135px;
+}
+
+body {
+    zoom: 1.6;
+}
+
+.house-img {
+    position: absolute;
+    max-width: 150px;
+    max-height: 150px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+
+.house-img-container {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    margin-left: auto;
+}
+
+.house-flex {
+    display: flex;
+}
+
+.house-info-table {
+    table-layout: fixed;
+}
