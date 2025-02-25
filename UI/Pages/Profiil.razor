@@ -1,6 +1,7 @@
 @page "/profiil/{UserId}"
 @using GameEngine
 @using Player
+@using Player.House
 @using UI.Services
 <PageTitle>@UserId profiil</PageTitle>
 @inject Engine Engine
@@ -25,7 +26,6 @@
     <h1>@C.Id</h1>
 </span>
 <div class="content">
-    <p><a href="postkast?send=1&amp;kasutaja=Flow">Saada talle kiri</a></p>
     <table>
         <tbody>
         <tr>
@@ -47,15 +47,11 @@
         </tr>
         <tr>
             <td><b>Elamu</b></td>
-            <td>Korter lvl 1</td>
-        </tr>
-        <tr>
-            <td><b>Asukoht hetkel</b></td>
-            <td>Tallinn</td>
+            <td>@HouseData.GetHouseName(C.HouseLevel)</td>
         </tr>
         <tr>
             <td><b>Kamp</b></td>
-            <td><a href="kambad?kamp=22" style="color:red;">Puudub</a></td>
+            <td><a href="kambad?kamp=22" style="color:red;"></a></td>
         </tr>
         </tbody>
     </table>
