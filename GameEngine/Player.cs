@@ -174,4 +174,34 @@ public class Player(string id, Data data) : IPlayer
         Mut.Money -= cumPrice;
         return OperationResult.Ok("Ostsid uue hoone.");
     }
+
+    public IAttackResult AttackPlayer(string victimId, bool withGang)
+    {
+        if (Mut.Mobsters < Constants.MinimumMobstersToAttack)
+            return AttackResult.DidNotAttempt(OperationResult.NotEnoughMobsters);
+        if (Mut.Moves < Constants.AtkMoves)
+            return AttackResult.DidNotAttempt(OperationResult.NotEnoughMoves);
+        if (Mut.Id == victimId)
+            return AttackResult.DidNotAttempt(OperationResult.StopPlayingWithYourself);
+        var victim = data[victimId];
+        var atk = withGang ? Calculator.PlayerGangTotalAtk(MyData) : Calculator.PlayerSoloTotalAtk(MyData);
+        var def = Calculator.PlayerGangTotalDef(victim);
+        Mut.Moves -= Constants.AtkMoves;
+        if (atk > def)
+        {
+            var cash = Calculator.GetCash(victim);
+            var moneyStolen = cash * atk / (atk + def);
+            var unprotectedGuards = Calculator.GetUnprotectedGuards(victim);
+            var guardsKilled = Math.Min(atk / def, unprotectedGuards);
+            Mut.Money += moneyStolen;
+            victim.Money -= moneyStolen;
+            victim.Guards -= guardsKilled;
+            return new AttackResult
+                { Success = true, AttackSucceeded = true, MoneyStolen = moneyStolen, GuardsKilled = guardsKilled };
+        }
+
+        var menLost = Math.Min(def / atk, Mut.Mobsters);
+        Mut.Mobsters -= menLost;
+        return new AttackResult { Success = true, AttackSucceeded = false, MenLost = menLost };
+    }
 }

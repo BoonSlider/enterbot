@@ -4,7 +4,7 @@
 @using UI.Services
 <PageTitle>Turg</PageTitle>
 @inject Engine Engine
-@inject ChangeNotifier ChangeNotifier
+@inject ChangeNotifier Changes
 @inject AlertService Alerts
 
 @code {
@@ -22,7 +22,7 @@
 
     protected override void OnInitialized()
     {
-        ChangeNotifier.OnChange += StateHasChanged;
+        Changes.OnChange += StateHasChanged;
     }
 
     async Task BuyFoodItems()
@@ -39,7 +39,7 @@
 
         Alerts.ShowAlert(P.BuyFood(_foodAmount ?? 0, willBuy));
         _foodAmount = null;
-        await ChangeNotifier.Notify();
+        await Changes.Notify();
     }
 
 }

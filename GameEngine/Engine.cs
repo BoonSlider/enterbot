@@ -7,17 +7,17 @@ namespace GameEngine;
 public class Engine
 {
     private readonly LocalStorageService _storage;
-    private readonly ChangeNotifier _changeNotifier;
-    public const string HumanPlayerId = "mina";
+    private readonly ChangeNotifier _changes;
+    private const string HumanPlayerId = "mina";
     public IPlayer HumanPlayer => _humanPlayer;
     private readonly Player _humanPlayer;
     private readonly Data _data = new();
     private readonly List<BotWithData> _bots = [];
 
-    public Engine(LocalStorageService storage, ChangeNotifier changeNotifier)
+    public Engine(LocalStorageService storage, ChangeNotifier changes)
     {
         _storage = storage;
-        _changeNotifier = changeNotifier;
+        _changes = changes;
         _data.AddPlayer(HumanPlayerId);
         _humanPlayer = new Player(HumanPlayerId, _data);
     }
@@ -51,7 +51,7 @@ public class Engine
         }
 
         await UpdatePlayerData(_humanPlayer.Mut);
-        _changeNotifier.OnChangeAsync += SaveAll;
+        _changes.OnChangeAsync += SaveAll;
     }
 
     private async Task UpdatePlayerData(PlayerData playerData)
@@ -74,7 +74,7 @@ public class Engine
 
         BeginNextTurn(_humanPlayer.Mut);
         if (notifyChanges)
-            await _changeNotifier.Notify();
+            await _changes.Notify();
     }
 
     private async Task SaveAll()

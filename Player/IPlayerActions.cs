@@ -10,4 +10,5 @@ public interface IPlayerActions
     public IOperationResult UpdateDefLevel(int desiredLevel);
     public IOperationResult BuyFood(long foodAmount, Dictionary<MoonshineItem, long> moonshineItemCounts);
     public IOperationResult BuyHouse(long selectedHouseLevel);
+    public IAttackResult AttackPlayer(string victimId, bool withGang);
 }

@@ -87,6 +87,22 @@ public static class Calculator
             ++nxt;
         }
 
-        return nxt-1;
+        return nxt - 1;
+    }
+
+    public static long GetBankLimit(IPlayerData p)
+    {
+        return Jobs.GetJobData(p.JobLevel).BankLimit;
+    }
+
+    public static long GetCash(IPlayerData p)
+    {
+        return Math.Max(p.Money - GetBankLimit(p), 0L);
+    }
+
+    public static long GetUnprotectedGuards(IPlayerData victim)
+    {
+        var underProtection = Houses.GetHouseData(victim.HouseLevel).ProtectedGuards;
+        return Math.Max(0L, victim.Guards - underProtection);
     }
 }

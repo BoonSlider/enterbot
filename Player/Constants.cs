@@ -16,6 +16,7 @@ public class Constants
     public const int GuardTax = 2;
     public const int AtkMoves = 20;
     public const int FoodPrice = 5;
+    public const int MinimumMobstersToAttack = 25;
     public static readonly Dictionary<MoonshineItem, long> MoonshinePrices = new()
     {
         { MoonshineItem.Teravili, 2 },

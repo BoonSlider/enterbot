@@ -4,7 +4,7 @@
 @using UI.Services
 <PageTitle>Edetabel</PageTitle>
 @inject Engine Engine
-@inject ChangeNotifier ChangeNotifier
+@inject ChangeNotifier Changes
 @inject AlertService Alerts
 
 @code {
@@ -13,7 +13,7 @@
 
     protected override void OnInitialized()
     {
-        ChangeNotifier.OnChange += StateHasChanged;
+        Changes.OnChange += StateHasChanged;
     }
 
     public class PlayerLeaderboardData

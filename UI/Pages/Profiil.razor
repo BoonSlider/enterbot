@@ -5,7 +5,7 @@
 @using UI.Services
 <PageTitle>@UserId profiil</PageTitle>
 @inject Engine Engine
-@inject ChangeNotifier ChangeNotifier
+@inject ChangeNotifier Changes
 @inject AlertService Alerts
 
 @code {
@@ -17,7 +17,13 @@
 
     protected override void OnInitialized()
     {
-        ChangeNotifier.OnChange += StateHasChanged;
+        Changes.OnChange += StateHasChanged;
+    }
+
+    private async Task AttackPlayer(IPlayerPublicData victim, bool withGang)
+    {
+        Alerts.ShowAlert(P.AttackPlayer(victim.Id, withGang));
+        await Changes.Notify();
     }
 
 }
@@ -68,11 +74,11 @@
                 <td>Ebaõnnestunud ründe korral üksikud mafioosod surevad, enamus põgenevad.</td>
             </tr>
             <tr>
-                <td>Omades vähem kui 100 mafioosot ei ole võimalik rünnata.</td>
+                <td>Omades vähem kui @Constants.MinimumMobstersToAttack mafioosot ei ole võimalik rünnata.</td>
             </tr>
             <tr>
                 <td>
-                    <input type="submit" value="Röövi" name="roovi" id="roovi">
+                    <input type="button" value="Röövi" @onclick="async () => await AttackPlayer(C,false)">
                 </td>
             </tr>
             <tr>
@@ -80,7 +86,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" value="Röövi kambaga" name="roovi" id="roovi">
+                    <input type="button" value="Röövi kambaga" @onclick="async () => await AttackPlayer(C,true)">
                 </td>
             </tr>
             </tbody>

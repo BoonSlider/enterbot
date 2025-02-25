@@ -4,7 +4,7 @@
 @using UI.Services
 <PageTitle>Maffia</PageTitle>
 @inject Engine Engine
-@inject ChangeNotifier ChangeNotifier
+@inject ChangeNotifier Changes
 @inject AlertService Alerts
 
 @code {
@@ -15,7 +15,7 @@
 
     protected override void OnInitialized()
     {
-        ChangeNotifier.OnChange += StateHasChanged;
+        Changes.OnChange += StateHasChanged;
         _desiredLevel = D.AtkLevel + 1;
     }
 
@@ -29,7 +29,7 @@
         if (_mobstersAmount is null) return;
         Alerts.ShowAlert(P.HireMobsters(_mobstersAmount.Value));
         _mobstersAmount = null;
-        await ChangeNotifier.Notify();
+        await Changes.Notify();
     }
 
     private async Task UpdateLevel()
@@ -37,7 +37,7 @@
         if (_desiredLevel is null) return;
         Alerts.ShowAlert(P.UpdateAtkLevel(_desiredLevel.Value));
         _desiredLevel = null;
-        await ChangeNotifier.Notify();
+        await Changes.Notify();
     }
 
     private long GetCumulativePrice(int upToLvl)

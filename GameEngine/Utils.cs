@@ -1,4 +1,4 @@
-namespace UI.Services;
+namespace GameEngine;
 
 public static class Utils
 {
