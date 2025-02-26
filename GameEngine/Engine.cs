@@ -98,8 +98,18 @@ public class Engine
     {
         p.Moves += 15;
         p.TurnsPlayed += 1;
+        if (p.TurnsPlayed % 96 == 0)
+        {
+            RunEndOfDayEvents(p);
+        }
         p.Money += Jobs.GetExperiencedIncome(p.JobLevel, p.JobExp[p.JobLevel]);
         p.JobExp[p.JobLevel] += 1;
+    }
+
+    private static void RunEndOfDayEvents(PlayerData p)
+    {
+        p.Fame -= 10;
+        p.Fame = Math.Max(p.Fame, 0L);
     }
 
     public async Task ResetWorld()

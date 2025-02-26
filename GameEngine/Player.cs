@@ -201,9 +201,29 @@ public class Player(string id, Data data) : IPlayer
             Mut.Money += moneyStolen;
             victim.Money -= moneyStolen;
             victim.Guards -= guardsKilled;
+            if (victim.Fame > Mut.Fame)
+            {
+                Mut.Fame += 2;
+            }
+            else
+            {
+                Mut.Fame += 1;
+            }
+
             return new AttackResult
                 { Success = true, AttackSucceeded = true, MoneyStolen = moneyStolen, GuardsKilled = guardsKilled };
         }
+
+        if (victim.Fame > Mut.Fame)
+        {
+            Mut.Fame -= 2;
+        }
+        else
+        {
+            Mut.Fame -= 1;
+        }
+
+        Mut.Fame = Math.Max(Mut.Fame, 0L);
 
         var menLost = Math.Min(def / atk, Mut.Mobsters);
         Mut.Mobsters -= menLost;
