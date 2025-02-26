@@ -21,7 +21,7 @@
 
     private void AutofillMobsters()
     {
-        _mobstersAmount = Calculator.CanHireMobsters(D);
+        _mobstersAmount = Calc.CanHireMobsters(D);
     }
 
     private async Task HireMobsters()
@@ -53,7 +53,7 @@
 
     private void SetMaxAffordableLevel()
     {
-        var maxAffordable = Calculator.MaxAffordableAtkLvl(D);
+        var maxAffordable = Calc.MaxAffordableAtkLvl(D);
         _desiredLevel = maxAffordable == D.AtkLevel ? null : maxAffordable;
         StateHasChanged();
     }
@@ -128,10 +128,10 @@
             <td>Maffia meestest: @(Utils.SepThousands(D.AtkLevel * D.Mobsters))</td>
         </tr>
         <tr>
-            <td>Sinu maffiapunkte kokku: @Utils.SepThousands(Calculator.PlayerSoloTotalAtk(D))</td>
+            <td>Sinu maffiapunkte kokku: @Utils.SepThousands(Calc.PlayerSoloTotalAtk(D))</td>
         </tr>
         <tr>
-            <td>Sinu ja kamba maffiapunkte kokku: @Utils.SepThousands(Calculator.PlayerGangTotalAtk(D))</td>
+            <td>Sinu ja kamba maffiapunkte kokku: @Utils.SepThousands(Calc.PlayerGangTotalAtk(D))</td>
         </tr>
         </tbody>
     </table>

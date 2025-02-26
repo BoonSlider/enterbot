@@ -87,7 +87,7 @@ public class PlayerData : IPlayerData
 
     public long GetCash()
     {
-        return Math.Max(Money - Calculator.GetBankLimit(this), 0L);
+        return Math.Max(Money - Calc.GetBankLimit(this), 0L);
     }
     public FameLevel GetFameLevel()
     {

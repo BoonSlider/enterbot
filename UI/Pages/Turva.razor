@@ -21,7 +21,7 @@
 
     private void AutofillGuards()
     {
-        _guardsAmount = Calculator.CanHireGuards(D);
+        _guardsAmount = Calc.CanHireGuards(D);
     }
 
     private async Task HireGuards()
@@ -53,7 +53,7 @@
 
     private void SetMaxAffordableLevel()
     {
-        var setTo = Calculator.MaxAffordableDefLvl(D);
+        var setTo = Calc.MaxAffordableDefLvl(D);
         _desiredLevel = setTo == D.DefLevel ? null : setTo;
         StateHasChanged();
     }
@@ -119,7 +119,7 @@
         <tbody>
         <tr>
             <td>Turvamehi: <span class="turvamees">@Utils.SepThousands(D.Guards)</span>
-                (kaitse all kuni <span class="maxGuards">@Utils.SepThousands(Calculator.MaxProtectedGuards(D))</span>
+                (kaitse all kuni <span class="maxGuards">@Utils.SepThousands(Calc.MaxProtectedGuards(D))</span>
                 meest)
             </td>
         </tr>
@@ -133,10 +133,10 @@
             <td>Turva meestest: @(Utils.SepThousands(D.Guards * D.DefLevel))</td>
         </tr>
         <tr>
-            <td>Enda turva kokku: @Utils.SepThousands(Calculator.PlayerSoloTotalDef(D))</td>
+            <td>Enda turva kokku: @Utils.SepThousands(Calc.PlayerSoloTotalDef(D))</td>
         </tr>
         <tr>
-            <td>Enda ja kamba turva kokku: @Utils.SepThousands(Calculator.PlayerGangTotalDef(D))</td>
+            <td>Enda ja kamba turva kokku: @Utils.SepThousands(Calc.PlayerGangTotalDef(D))</td>
         </tr>
         </tbody>
     </table>

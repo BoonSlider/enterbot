@@ -3,7 +3,7 @@ using Player.Job;
 
 namespace Player;
 
-public static class Calculator
+public static class Calc
 {
     public static long HowManyMovesCanSpendOnEdu(IPlayerData d)
     {

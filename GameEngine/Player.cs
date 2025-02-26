@@ -168,7 +168,7 @@ public class Player(string id, Data data) : IPlayer
             return OperationResult.ChosenLevelAboveMax;
         if (Mut.Fame < Houses.GetHouseData(lvl).RequiredFame)
             return OperationResult.NotEnoughFame;
-        var cumPrice = Calculator.GetHouseCumulativePrices(Mut.HouseLevel + 1, lvl);
+        var cumPrice = Calc.GetHouseCumulativePrices(Mut.HouseLevel + 1, lvl);
         if (Mut.Money < cumPrice)
         {
             return OperationResult.NotEnoughMoney;
@@ -188,15 +188,15 @@ public class Player(string id, Data data) : IPlayer
         if (Mut.Id == victimId)
             return AttackResult.DidNotAttempt(OperationResult.StopPlayingWithYourself);
         var victim = data[victimId];
-        var atk = withGang ? Calculator.PlayerGangTotalAtk(MyData) : Calculator.PlayerSoloTotalAtk(MyData);
-        var def = Calculator.PlayerGangTotalDef(victim);
+        var atk = withGang ? Calc.PlayerGangTotalAtk(MyData) : Calc.PlayerSoloTotalAtk(MyData);
+        var def = Calc.PlayerGangTotalDef(victim);
         Mut.Moves -= Constants.AtkMoves;
         if (atk > def)
         {
             var cash = victim.GetCash();
             var takeRatio = (double)atk / (atk + def);
             var moneyStolen = (long)Math.Floor(cash * takeRatio);
-            var unprotectedGuards = Calculator.GetUnprotectedGuards(victim);
+            var unprotectedGuards = Calc.GetUnprotectedGuards(victim);
             var guardsKilled = Math.Min(atk / def, unprotectedGuards);
             Mut.Money += moneyStolen;
             victim.Money -= moneyStolen;

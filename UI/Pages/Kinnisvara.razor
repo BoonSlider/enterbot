@@ -31,14 +31,14 @@
 
     private string GetHouseText(long lvl)
     {
-        var cumPrice = Calculator.GetHouseCumulativePrices(D.HouseLevel + 1, lvl);
+        var cumPrice = Calc.GetHouseCumulativePrices(D.HouseLevel + 1, lvl);
         var nameText = $"{lvl}. {HouseData.GetHouseName(lvl)}";
         return $"{nameText} | {Utils.SepThousands(cumPrice)} EEK";
     }
 
     private void AutofillHouseLevel()
     {
-        _selectedHouseLevel = Calculator.MaxHouseThatCanBeBought(D);
+        _selectedHouseLevel = Calc.MaxHouseThatCanBeBought(D);
         StateHasChanged();
     }
 
