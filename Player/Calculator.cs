@@ -134,6 +134,10 @@ public static class Calculator
         return setTo;
     }
 
+    public static bool CanAttack(IPlayerData d)
+    {
+        return d.Mobsters >= Constants.MinimumMobstersToAttack && d.Moves >= Constants.AtkMoves;
+    }
     public static int MaxAffordableDefLvl(IPlayerData d)
     {
         var money = d.Money;

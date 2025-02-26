@@ -3,6 +3,7 @@ namespace GameEngine;
 public class Data
 {
     private readonly Dictionary<string, PlayerData> _allPlayerData = new();
+
     public List<string> GetAllPlayers() => _allPlayerData.Keys.ToList();
 
     public void AddPlayer(string id)

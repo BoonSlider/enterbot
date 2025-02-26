@@ -2,6 +2,7 @@ namespace Player;
 
 public interface IPlayerPrivateData
 {
+    public long TurnsPlayed { get; }
     public long Money { get; }
     public int JobLevel { get; }
     public IList<long> JobExp { get; }

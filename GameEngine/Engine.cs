@@ -31,6 +31,7 @@ public class Engine
             new DoNothing(3),
             new OnlyEducation(1),
             new GreedyDefense(1),
+            new AttackEveryone(1),
         ];
         foreach (var bot in botList)
         {
@@ -93,9 +94,10 @@ public class Engine
         await _storage.SetItemAsync(GetStorageKey(_humanPlayer.Mut), _humanPlayer.Mut);
     }
 
-    private void BeginNextTurn(PlayerData p)
+    private static void BeginNextTurn(PlayerData p)
     {
         p.Moves += 15;
+        p.TurnsPlayed += 1;
         p.Money += Jobs.GetExperiencedIncome(p.JobLevel, p.JobExp[p.JobLevel]);
         p.JobExp[p.JobLevel] += 1;
     }

@@ -54,6 +54,7 @@ public class PlayerData : IPlayerData
 
     public long Guards { get; set; }
     public long Mobsters { get; set; }
+    public long TurnsPlayed { get; set; } = 0;
     public long Money { get; set; } = 30_000;
     public long Moves { get; set; } = 700;
 
@@ -71,6 +72,7 @@ public class PlayerData : IPlayerData
         Mobsters = saved.Mobsters;
         Money = saved.Money;
         Moves = saved.Moves;
+        TurnsPlayed = saved.TurnsPlayed;
     }
 
     private void MoonshineItemsCountSaved(PlayerData saved)

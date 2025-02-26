@@ -7,7 +7,6 @@ namespace GameEngine;
 public class Player(string id, Data data) : IPlayer
 {
     public string Id { get; } = id;
-
     public IPlayerData MyData => data[Id];
     public IPlayerPublicData GetPlayerData(string playerId) => data[playerId];
 
