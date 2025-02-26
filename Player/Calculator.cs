@@ -5,9 +5,11 @@ namespace Player;
 
 public static class Calculator
 {
-    public static long HowManyMovesCanSpendOnEdu(IPlayerData playerData)
+    public static long HowManyMovesCanSpendOnEdu(IPlayerData d)
     {
-        return Math.Min(playerData.Money / Constants.EduCost, playerData.Moves);
+        var ret = Math.Min(d.Money / Constants.EduCost, d.Moves);
+        var upToLimit = (Math.Max(MaxEducation - d.Education,0L) + Constants.EduRate - 1) / Constants.EduRate;
+        return Math.Min(ret, upToLimit);
     }
 
     public static long PlayerGangTotalAtk(IPlayerData playerData)
@@ -138,6 +140,8 @@ public static class Calculator
     {
         return d.Mobsters >= Constants.MinimumMobstersToAttack && d.Moves >= Constants.AtkMoves;
     }
+
+    public static long MaxEducation => Jobs.GetJobData(Constants.MaxJob).RequiredEducation;
     public static int MaxAffordableDefLvl(IPlayerData d)
     {
         var money = d.Money;

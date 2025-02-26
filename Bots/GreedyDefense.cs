@@ -13,8 +13,8 @@ public class GreedyDefense(int nameSuffix) : IBot(nameSuffix)
         var canHireGuards = Calculator.CanHireGuards(d);
         if (canHireGuards > 0)
             p.HireGuards(canHireGuards).AssertOk();
-        Common.MaximizeHouseLvl(p, d);
-        Common.MaximizeDefLvl(p, d);
-        Common.MaximizeAtkLvl(p, d);
+        Common.MaximizeHouseLvl(p);
+        Common.MaximizeDefLvl(p);
+        Common.MaximizeAtkLvl(p);
     }
 }

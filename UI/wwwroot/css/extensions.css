@@ -100,11 +100,10 @@ body {
     display: flex;
     align-items: center;
     gap: 3px;
-    margin-left:2px;
+    margin-left: 2px;
     position: relative;
     z-index: 1000;
 }
-
 
 
 .human-info-value {
@@ -142,6 +141,19 @@ body {
 .cash-icon {
     filter: hue-rotate(-120deg) brightness(80%);
 }
+
 .bank-money-icon {
     filter: grayscale(100%) brightness(80%);
+}
+
+.nav-top-header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.nav-top-header div {
+    display: flex;
+    align-items: center;
+    gap: 3px;
 }
