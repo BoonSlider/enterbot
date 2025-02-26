@@ -30,6 +30,7 @@ public class Engine
             new DoNothing(2),
             new DoNothing(3),
             new OnlyEducation(1),
+            new GreedyDefense(1),
         ];
         foreach (var bot in botList)
         {

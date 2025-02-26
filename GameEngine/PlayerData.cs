@@ -47,6 +47,11 @@ public class PlayerData : IPlayerData
         return score;
     }
 
+    public long GetCash()
+    {
+        return Math.Max(Money - Calculator.GetBankLimit(this), 0L);
+    }
+
     public long Guards { get; set; }
     public long Mobsters { get; set; }
     public long Money { get; set; } = 30_000;

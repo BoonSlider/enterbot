@@ -64,6 +64,13 @@
         StateHasChanged();
     }
 
+    private long GetBankPercentage()
+    {
+        var cash = D.GetCash();
+        var bank = D.Money - cash;
+        return 100 * bank / (cash + bank);
+    }
+
 }
 
 <div class="alert-container">
@@ -93,7 +100,7 @@
                         </tr>
                         <tr>
                             <td><img src="images/icons/raha.gif" alt="Raha" title="Raha"/></td>
-                            <td>Raha: <span class="raha">@Utils.SepThousands(D.Money)</span></td>
+                            <td>Raha: <span class="raha">@Utils.SepThousands(D.Money) (pangas @GetBankPercentage()%)</span></td>
                         </tr>
                         <tr>
                             <td><img src="images/icons/haridus.gif" alt="Haridus" title="Haridus"/></td>
@@ -114,13 +121,13 @@
                         <tr>
                             <td><img src="images/icons/kaitse.gif" alt="Turva" title="Turva"/></td>
                             <td>Turva: <span
-                                    class="securityTotal">@Utils.SepThousands(Calculator.PlayerSoloTotalDef(D))</span>
+                                    class="securityTotal">@Utils.SepThousands(Calculator.PlayerGangTotalDef(D))</span>
                             </td>
                         </tr>
                         <tr>
                             <td><img src="images/icons/rynne.gif" alt="Maffia" title="Maffia"/></td>
                             <td>Maffia: <span
-                                    class="mafiaTotal">@Utils.SepThousands(Calculator.PlayerSoloTotalAtk(D))</span></td>
+                                    class="mafiaTotal">@Utils.SepThousands(Calculator.PlayerGangTotalAtk(D))</span></td>
                         </tr>
                     </table>
                 </div>

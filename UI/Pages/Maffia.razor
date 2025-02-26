@@ -53,23 +53,8 @@
 
     private void SetMaxAffordableLevel()
     {
-        var money = D.Money;
-        var setTo = D.AtkLevel;
-        for (var lvl = D.AtkLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
-        {
-            var price = Levels.LevelPrices[lvl];
-            if (money >= price)
-            {
-                money -= price;
-                setTo = lvl;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        _desiredLevel = setTo == D.AtkLevel ? null : setTo;
+        var maxAffordable = Calculator.MaxAffordableAtkLvl(D);
+        _desiredLevel = maxAffordable == D.AtkLevel ? null : maxAffordable;
         StateHasChanged();
     }
 

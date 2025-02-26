@@ -50,7 +50,7 @@ public static class Calculator
         return Math.Min(foodMax, Math.Min(movesMax, moneyMax));
     }
 
-    public static long? CanHireGuards(IPlayerData playerData)
+    public static long CanHireGuards(IPlayerData playerData)
     {
         var foodMax = playerData.Food / Constants.GuardFood;
         var movesMax = playerData.Moves / Constants.GuardMoves;
@@ -107,14 +107,51 @@ public static class Calculator
         return Jobs.GetJobData(p.JobLevel).BankLimit;
     }
 
-    public static long GetCash(IPlayerData p)
-    {
-        return Math.Max(p.Money - GetBankLimit(p), 0L);
-    }
-
     public static long GetUnprotectedGuards(IPlayerData victim)
     {
         var underProtection = Houses.GetHouseData(victim.HouseLevel).ProtectedGuards;
         return Math.Max(0L, victim.Guards - underProtection);
+    }
+
+    public static int MaxAffordableAtkLvl(IPlayerData d)
+    {
+        var money = d.Money;
+        var setTo = d.AtkLevel;
+        for (var lvl = d.AtkLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
+        {
+            var price = Levels.LevelPrices[lvl];
+            if (money >= price)
+            {
+                money -= price;
+                setTo = lvl;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return setTo;
+    }
+
+    public static int MaxAffordableDefLvl(IPlayerData d)
+    {
+        var money = d.Money;
+        var setTo = d.DefLevel;
+        for (var lvl = d.DefLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
+        {
+            var price = Levels.LevelPrices[lvl];
+            if (money >= price)
+            {
+                money -= price;
+                setTo = lvl;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return setTo;
     }
 }

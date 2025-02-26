@@ -1,4 +1,3 @@
-using Microsoft.VisualBasic.CompilerServices;
 using Player;
 
 namespace GameEngine;
@@ -41,7 +40,7 @@ public record AttackResult : IAttackResult
                 return string.Join(" ", notes);
             }
 
-            return $"Rünne ebaõnnestus. Kaotasid {GuardsKilled} mafioosot.";
+            return $"Rünne ebaõnnestus. Kaotasid {MenLost} mafioosot.";
         }
     }
 }

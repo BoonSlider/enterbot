@@ -126,6 +126,11 @@ public class Player(string id, Data data) : IPlayer
         return OperationResult.Ok("Turva level uuendatud.");
     }
 
+    public IOperationResult BuyFood(long foodAmount)
+    {
+        return BuyFood(foodAmount, new Dictionary<MoonshineItem, long>());
+    }
+
     public IOperationResult BuyFood(long foodAmount, Dictionary<MoonshineItem, long> moonshineItemCounts)
     {
         if (foodAmount < 0) return OperationResult.MustBeNonNegative;
@@ -189,8 +194,9 @@ public class Player(string id, Data data) : IPlayer
         Mut.Moves -= Constants.AtkMoves;
         if (atk > def)
         {
-            var cash = Calculator.GetCash(victim);
-            var moneyStolen = cash * atk / (atk + def);
+            var cash = victim.GetCash();
+            var takeRatio = (double)atk / (atk + def);
+            var moneyStolen = (long)Math.Floor(cash * takeRatio);
             var unprotectedGuards = Calculator.GetUnprotectedGuards(victim);
             var guardsKilled = Math.Min(atk / def, unprotectedGuards);
             Mut.Money += moneyStolen;

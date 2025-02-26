@@ -21,7 +21,7 @@
         public int LeaderboardRank { get; set; }
         public required string Name { get; set; }
         public long Score { get; set; }
-        public long Money { get; set; }
+        public long Cash { get; set; }
         public string? Gang { get; set; }
         public FameLevel Fame { get; set; }
     }
@@ -33,7 +33,7 @@
         var index = 1;
         foreach (var player in players)
         {
-            data.Add(new PlayerLeaderboardData { LeaderboardRank = index, Name = player.Id, Score = player.GetScore(), Money = player.Money, Gang = null, Fame = player.GetFameLevel() });
+            data.Add(new PlayerLeaderboardData { LeaderboardRank = index, Name = player.Id, Score = player.GetScore(), Cash = player.GetCash(), Gang = null, Fame = player.GetFameLevel() });
             index++;
         }
 
@@ -146,7 +146,7 @@
                     <a href="profiil/@p.Name" class="@GetClass(p.Name)">@p.Name</a>
                 </td>
                 <td>@Utils.SepThousands(p.Score)</td>
-                <td>@Utils.SepThousands(p.Money)</td>
+                <td>@Utils.SepThousands(p.Cash)</td>
                 <td>
                     @if (p.Gang is { } gang)
                     {
