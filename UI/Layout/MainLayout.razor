@@ -64,6 +64,13 @@
         StateHasChanged();
     }
 
+    private long GetBankPercentage()
+    {
+        var cash = D.GetCash();
+        var bank = D.Money - cash;
+        return 100 * bank / (cash + bank);
+    }
+
 }
 
 <div class="alert-container">
@@ -83,73 +90,124 @@
         <div id="header">
             <div id="notice">
                 <div id="noticetxt">
-                    <table>
+                    <table class="human-info-table">
                         <tr>
-                            <td style="width: 15%;"><img src="images/icons/kaigud.gif" alt="Käigud" title="Käigud"/>
+                            <td>
+                                <span class="human-info-value">@Utils.SepThousands(D.Moves)</span>
                             </td>
-                            <td style="width: 85%;">
-                                Käike: <span class="kaik">@Utils.SepThousands(D.Moves)</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><img src="images/icons/raha.gif" alt="Raha" title="Raha"/></td>
-                            <td>Raha: <span class="raha">@Utils.SepThousands(D.Money)</span></td>
-                        </tr>
-                        <tr>
-                            <td><img src="images/icons/haridus.gif" alt="Haridus" title="Haridus"/></td>
-                            <td>Haridust: <span class="haridus">@Utils.SepThousands(D.Education)</span></td>
-                        </tr>
-                        <tr>
-                            <td><img src="images/icons/toit.gif" alt="Toit" title="Toit"/></td>
-                            <td>Toitu: <span class="toit">@Utils.SepThousands(D.Food)</span></td>
-                        </tr>
-                        <tr>
-                            <td><img src="images/icons/tervis.gif" alt="Tervis" title="Tervis"/></td>
-                            <td>Tervis: <span class="tervis">100</span>%</td>
-                        </tr>
-                        <tr>
-                            <td><img src="images/icons/kuulsus.gif" alt="Kuulsus" title="Kuulsus"/></td>
-                            <td>Kuulsust: <span class="kuulsus">Puudub</span></td>
-                        </tr>
-                        <tr>
-                            <td><img src="images/icons/kaitse.gif" alt="Turva" title="Turva"/></td>
-                            <td>Turva: <span
-                                    class="securityTotal">@Utils.SepThousands(Calculator.PlayerSoloTotalDef(D))</span>
+                            <td>
+                                <div class="human-info-label">
+                                    <img src="images/icons/kaigud.gif" alt="Käigud" title="Käigud"/>
+                                    Käike
+                                </div>
                             </td>
                         </tr>
                         <tr>
-                            <td><img src="images/icons/rynne.gif" alt="Maffia" title="Maffia"/></td>
-                            <td>Maffia: <span
-                                    class="mafiaTotal">@Utils.SepThousands(Calculator.PlayerSoloTotalAtk(D))</span></td>
+                            <td><span class="human-info-value">@Utils.SepThousands(D.Money)</span></td>
+                            <td>
+                                <div class="human-info-label">
+                                    <img src="images/icons/raha.gif" alt="Raha" title="Raha"/>
+                                    Raha
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span
+                                    class="human-info-value">@Utils.SepThousands(D.GetCash())</span>
+                            </td>
+                            <td>
+                                <div class="human-info-label">
+                                    <img src="images/icons/raha.gif" alt="cash-icon" class="cash-icon"/>
+                                    Sularaha
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span
+                                    class="human-info-value">@Utils.SepThousands(D.Money - D.GetCash())</span>
+                            </td>
+                            <td>
+                                <div class="human-info-label">
+                                    <img src="images/icons/raha.gif" alt="bank-money-icon" class="bank-money-icon"/>
+                                    Pangas
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span
+                                    class="human-info-value">@Utils.SepThousands(Calculator.PlayerGangTotalDef(D))</span>
+                            </td>
+                            <td class="human-info-label">
+                                <img src="images/icons/kaitse.gif" alt="Turva" title="Turva"/>
+                                Turva
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span
+                                    class="human-info-value">@Utils.SepThousands(Calculator.PlayerGangTotalAtk(D))</span>
+                            </td>
+                            <td>
+                                <div class="human-info-label">
+                                    <img src="images/icons/rynne.gif" alt="Maffia" title="Maffia"/>
+                                    Maffia
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="human-info-value">@Utils.SepThousands(D.Education)</span></td>
+                            <td>
+                                <div class="human-info-label">
+                                    <img src="images/icons/haridus.gif" alt="Haridus" title="Haridus"/>
+                                    Haridust
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="human-info-value">100%</span></td>
+                            <td>
+                                <div class="human-info-label">
+                                    <img src="images/icons/tervis.gif" alt="Tervis" title="Tervis"/>
+                                    Tervis
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="human-info-value">Puudub</span></td>
+                            <td class="human-info-label">
+                                <img src="images/icons/kuulsus.gif" alt="Kuulsus" title="Kuulsus"/>
+                                Kuulsust
+                            </td>
                         </tr>
                     </table>
                 </div>
             </div>
         </div>
-        <div id="headermenu">
-            <img src="images/icons/avaleht.gif" alt="Avaleht" title="Avaleht"/>
-            <NavLink href="avaleht">Avaleht</NavLink>
-            <img src="images/icons/edetabel.gif" alt="Edetabel" title="Edetabel"/>
-            <NavLink
-                href="edetabel">Edetabel
-            </NavLink>
-            <img src="images/icons/tegevused.gif" alt="Sündmused" title="Sündmused"/>
-            <NavLink href="sündmused">Sündmused
-                (<span class="events_unread_html">0</span>)
-            </NavLink>
-            <img src="images/icons/postkast.gif" alt="Postkast" title="Postkast"/>
-            <NavLink href="postkast?loe1">Postkast
-                (<span class="unread_messages_html"><span style="color: #C00000;"><b>1</b></span></span>)
-            </NavLink>
-            <img src="images/icons/seaded.gif" alt="Konto seaded" title="Konto seaded"/>
-            <NavLink href="seaded">Konto
-                seaded
-            </NavLink>
-            <img src="images/icons/foorum.gif" alt="Foorum" title="Foorum"/>
-            <NavLink href="foorum">Foorum <span
-                    class="forum_unread_html"></span></NavLink>
-            <img src="images/icons/logout.gif" alt="Logi välja" title="Logi välja"/>
-            <NavLink href="uus_mäng">Uus mäng</NavLink>
+        <div id="headermenu" class="nav-top-header">
+            <div>
+                <img src="images/icons/avaleht.gif" alt="Avaleht" title="Avaleht"/>
+                <NavLink href="avaleht">Avaleht</NavLink>
+            </div>
+            <div>
+                <img src="images/icons/edetabel.gif" alt="Edetabel" title="Edetabel"/>
+                <NavLink href="edetabel">Edetabel</NavLink>
+            </div>
+
+            <div>
+                <img src="images/icons/tegevused.gif" alt="Sündmused" title="Sündmused"/>
+                <NavLink href="sündmused">Sündmused (<span class="events_unread_html">0</span>)</NavLink>
+            </div>
+            <div>
+                <img src="images/icons/seaded.gif" alt="Konto seaded" title="Konto seaded"/>
+                <NavLink href="seaded">Seaded</NavLink>
+            </div>
+            <div>
+
+                <img src="images/icons/logout.gif" alt="Logi välja" title="Logi välja"/>
+                <NavLink href="uus_mäng">Uus mäng</NavLink>
+            </div>
         </div>
         <div id="leftcolumn">
             <!-- Start Box -->

@@ -10,6 +10,7 @@ public record OperationResult : IOperationResult
 
     public static OperationResult Ok(string? message) => new() { Success = true, Message = message };
     public static OperationResult Error(string message) => new() { Success = false, Message = message };
+    public static IOperationResult Todo => Error("Oih, see pole veel implementeeritud, oota natuke.");
     public static OperationResult MustBePositive => Error("Lubatud ainult positiivsed täisarvud.");
     public static OperationResult MustBeNonNegative => Error("Lubatud ainult mitte-negatiivsed täisarvud.");
     public static OperationResult NotEnoughMoves => Error("Pole piisavalt käike.");
@@ -21,4 +22,6 @@ public record OperationResult : IOperationResult
     public static OperationResult ChosenLevelAboveMax => Error("Nii suurt levelit pole olemas.");
     public static OperationResult NotEnoughFame => Error("Pole piisavalt kuulsust.");
     public static OperationResult AlreadyHave => Error("Juba olemas, ei saa osta.");
+    public static IOperationResult NotEnoughMobsters => Error("Pole piisavalt mafioososid.");
+    public static IOperationResult StopPlayingWithYourself => Error("Seda tegevust ei saa iseendaga teha.");
 }

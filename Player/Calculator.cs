@@ -5,9 +5,11 @@ namespace Player;
 
 public static class Calculator
 {
-    public static long HowManyMovesCanSpendOnEdu(IPlayerData playerData)
+    public static long HowManyMovesCanSpendOnEdu(IPlayerData d)
     {
-        return Math.Min(playerData.Money / Constants.EduCost, playerData.Moves);
+        var ret = Math.Min(d.Money / Constants.EduCost, d.Moves);
+        var upToLimit = (Math.Max(MaxEducation - d.Education,0L) + Constants.EduRate - 1) / Constants.EduRate;
+        return Math.Min(ret, upToLimit);
     }
 
     public static long PlayerGangTotalAtk(IPlayerData playerData)
@@ -22,12 +24,24 @@ public static class Calculator
 
     public static long PlayerSoloTotalAtk(IPlayerData playerData)
     {
-        return playerData.AtkLevel * playerData.Mobsters;
+        var ret = playerData.AtkLevel * playerData.Mobsters;
+        foreach (var stat in Enum.GetValues<GymStat>())
+        {
+            ret += Constants.GymStatAtk[stat] * playerData.GymStats[stat];
+        }
+
+        return ret;
     }
 
     public static long PlayerSoloTotalDef(IPlayerData playerData)
     {
-        return playerData.DefLevel * playerData.Guards;
+        var ret = playerData.DefLevel * playerData.Guards;
+        foreach (var stat in Enum.GetValues<GymStat>())
+        {
+            ret += Constants.GymStatDef[stat] * playerData.GymStats[stat];
+        }
+
+        return ret;
     }
 
     public static long CanHireMobsters(IPlayerData playerData)
@@ -38,7 +52,7 @@ public static class Calculator
         return Math.Min(foodMax, Math.Min(movesMax, moneyMax));
     }
 
-    public static long? CanHireGuards(IPlayerData playerData)
+    public static long CanHireGuards(IPlayerData playerData)
     {
         var foodMax = playerData.Food / Constants.GuardFood;
         var movesMax = playerData.Moves / Constants.GuardMoves;
@@ -76,7 +90,7 @@ public static class Calculator
         var moneyLeft = p.Money;
         while (true)
         {
-            if (nxt > Constants.HouseLevels)
+            if (nxt > Constants.MaxHouseLvl)
                 break;
             var houseData = Houses.GetHouseData(nxt);
             if (houseData.RequiredFame > p.Fame)
@@ -87,6 +101,65 @@ public static class Calculator
             ++nxt;
         }
 
-        return nxt-1;
+        return nxt - 1;
+    }
+
+    public static long GetBankLimit(IPlayerData p)
+    {
+        return Jobs.GetJobData(p.JobLevel).BankLimit;
+    }
+
+    public static long GetUnprotectedGuards(IPlayerData victim)
+    {
+        var underProtection = Houses.GetHouseData(victim.HouseLevel).ProtectedGuards;
+        return Math.Max(0L, victim.Guards - underProtection);
+    }
+
+    public static int MaxAffordableAtkLvl(IPlayerData d)
+    {
+        var money = d.Money;
+        var setTo = d.AtkLevel;
+        for (var lvl = d.AtkLevel + 1; lvl <= Constants.MaxAtkDefLvl; ++lvl)
+        {
+            var price = Levels.LevelPrices[lvl];
+            if (money >= price)
+            {
+                money -= price;
+                setTo = lvl;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return setTo;
+    }
+
+    public static bool CanAttack(IPlayerData d)
+    {
+        return d.Mobsters >= Constants.MinimumMobstersToAttack && d.Moves >= Constants.AtkMoves;
+    }
+
+    public static long MaxEducation => Jobs.GetJobData(Constants.MaxJob).RequiredEducation;
+    public static int MaxAffordableDefLvl(IPlayerData d)
+    {
+        var money = d.Money;
+        var setTo = d.DefLevel;
+        for (var lvl = d.DefLevel + 1; lvl <= Constants.MaxAtkDefLvl; ++lvl)
+        {
+            var price = Levels.LevelPrices[lvl];
+            if (money >= price)
+            {
+                money -= price;
+                setTo = lvl;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return setTo;
     }
 }

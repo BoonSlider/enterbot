@@ -39,12 +39,11 @@ h3
     background-color: #819050;
     background-image:url(../images/headermenubg.png);
     margin: 0px 4px 0px 4px;
-    padding-top:6px;
     padding-left:9px;
     font-family:Verdana,Arial,Helvetica;
     font-size:11px;
     position:relative;
-    table-layout:fixed;
+    background-position: center;
 }
 
 #headermenu a:link {

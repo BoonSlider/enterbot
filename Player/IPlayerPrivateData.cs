@@ -2,6 +2,8 @@ namespace Player;
 
 public interface IPlayerPrivateData
 {
+    public long TurnsPlayed { get; }
+    public long Money { get; }
     public int JobLevel { get; }
     public IList<long> JobExp { get; }
     public long Moves { get; }
@@ -11,4 +13,5 @@ public interface IPlayerPrivateData
     public int DefLevel { get; }
     public long Fame { get; }
     public IDictionary<MoonshineItem, long> MoonshineItemCounts { get; }
+    public IDictionary<GymStat, long> GymStats { get; }
 }

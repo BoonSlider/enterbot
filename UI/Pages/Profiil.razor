@@ -1,10 +1,11 @@
 @page "/profiil/{UserId}"
 @using GameEngine
 @using Player
+@using Player.House
 @using UI.Services
 <PageTitle>@UserId profiil</PageTitle>
 @inject Engine Engine
-@inject ChangeNotifier ChangeNotifier
+@inject ChangeNotifier Changes
 @inject AlertService Alerts
 
 @code {
@@ -16,7 +17,13 @@
 
     protected override void OnInitialized()
     {
-        ChangeNotifier.OnChange += StateHasChanged;
+        Changes.OnChange += StateHasChanged;
+    }
+
+    private async Task AttackPlayer(IPlayerPublicData victim, bool withGang)
+    {
+        Alerts.ShowAlert(P.AttackPlayer(victim.Id, withGang));
+        await Changes.Notify();
     }
 
 }
@@ -25,7 +32,6 @@
     <h1>@C.Id</h1>
 </span>
 <div class="content">
-    <p><a href="postkast?send=1&amp;kasutaja=Flow">Saada talle kiri</a></p>
     <table>
         <tbody>
         <tr>
@@ -35,7 +41,7 @@
         </tr>
         <tr>
             <td><b>Raha</b></td>
-            <td>@Utils.SepThousands(C.Money) EEK</td>
+            <td>@Utils.SepThousands(C.GetCash()) EEK</td>
         </tr>
         <tr>
             <td><b>Toit</b></td>
@@ -47,15 +53,11 @@
         </tr>
         <tr>
             <td><b>Elamu</b></td>
-            <td>Korter lvl 1</td>
-        </tr>
-        <tr>
-            <td><b>Asukoht hetkel</b></td>
-            <td>Tallinn</td>
+            <td>@HouseData.GetHouseName(C.HouseLevel)</td>
         </tr>
         <tr>
             <td><b>Kamp</b></td>
-            <td><a href="kambad?kamp=22" style="color:red;">Puudub</a></td>
+            <td><a href="kambad?kamp=22" style="color:red;"></a></td>
         </tr>
         </tbody>
     </table>
@@ -72,11 +74,11 @@
                 <td>Ebaõnnestunud ründe korral üksikud mafioosod surevad, enamus põgenevad.</td>
             </tr>
             <tr>
-                <td>Omades vähem kui 100 mafioosot ei ole võimalik rünnata.</td>
+                <td>Omades vähem kui @Constants.MinimumMobstersToAttack mafioosot ei ole võimalik rünnata.</td>
             </tr>
             <tr>
                 <td>
-                    <input type="submit" value="Röövi" name="roovi" id="roovi">
+                    <input type="button" value="Röövi" @onclick="async () => await AttackPlayer(C,false)">
                 </td>
             </tr>
             <tr>
@@ -84,7 +86,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" value="Röövi kambaga" name="roovi" id="roovi">
+                    <input type="button" value="Röövi kambaga" @onclick="async () => await AttackPlayer(C,true)">
                 </td>
             </tr>
             </tbody>

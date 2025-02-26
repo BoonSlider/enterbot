@@ -7,7 +7,6 @@ namespace GameEngine;
 public class Player(string id, Data data) : IPlayer
 {
     public string Id { get; } = id;
-
     public IPlayerData MyData => data[Id];
     public IPlayerPublicData GetPlayerData(string playerId) => data[playerId];
 
@@ -88,7 +87,7 @@ public class Player(string id, Data data) : IPlayer
             return OperationResult.AlreadyHave;
         if (desiredLevel < Mut.AtkLevel)
             return OperationResult.LevelCantBeReduced;
-        if (desiredLevel > Constants.AtkDefLevels)
+        if (desiredLevel > Constants.MaxAtkDefLvl)
             return OperationResult.LevelAlreadyMaxed;
 
         var cost = 0L;
@@ -110,7 +109,7 @@ public class Player(string id, Data data) : IPlayer
             return OperationResult.AlreadyHave;
         if (desiredLevel < Mut.DefLevel)
             return OperationResult.LevelCantBeReduced;
-        if (desiredLevel > Constants.AtkDefLevels)
+        if (desiredLevel > Constants.MaxAtkDefLvl)
             return OperationResult.LevelAlreadyMaxed;
 
         var cost = 0L;
@@ -124,6 +123,11 @@ public class Player(string id, Data data) : IPlayer
         Mut.Money -= cost;
         Mut.DefLevel = desiredLevel;
         return OperationResult.Ok("Turva level uuendatud.");
+    }
+
+    public IOperationResult BuyFood(long foodAmount)
+    {
+        return BuyFood(foodAmount, new Dictionary<MoonshineItem, long>());
     }
 
     public IOperationResult BuyFood(long foodAmount, Dictionary<MoonshineItem, long> moonshineItemCounts)
@@ -160,7 +164,7 @@ public class Player(string id, Data data) : IPlayer
             return OperationResult.AlreadyHave;
         if (lvl < Mut.HouseLevel)
             return OperationResult.LevelCantBeReduced;
-        if (lvl > Constants.HouseLevels)
+        if (lvl > Constants.MaxHouseLvl)
             return OperationResult.ChosenLevelAboveMax;
         if (Mut.Fame < Houses.GetHouseData(lvl).RequiredFame)
             return OperationResult.NotEnoughFame;
@@ -173,5 +177,56 @@ public class Player(string id, Data data) : IPlayer
         Mut.HouseLevel = lvl;
         Mut.Money -= cumPrice;
         return OperationResult.Ok("Ostsid uue hoone.");
+    }
+
+    public IAttackResult AttackPlayer(string victimId, bool withGang)
+    {
+        if (Mut.Mobsters < Constants.MinimumMobstersToAttack)
+            return AttackResult.DidNotAttempt(OperationResult.NotEnoughMobsters);
+        if (Mut.Moves < Constants.AtkMoves)
+            return AttackResult.DidNotAttempt(OperationResult.NotEnoughMoves);
+        if (Mut.Id == victimId)
+            return AttackResult.DidNotAttempt(OperationResult.StopPlayingWithYourself);
+        var victim = data[victimId];
+        var atk = withGang ? Calculator.PlayerGangTotalAtk(MyData) : Calculator.PlayerSoloTotalAtk(MyData);
+        var def = Calculator.PlayerGangTotalDef(victim);
+        Mut.Moves -= Constants.AtkMoves;
+        if (atk > def)
+        {
+            var cash = victim.GetCash();
+            var takeRatio = (double)atk / (atk + def);
+            var moneyStolen = (long)Math.Floor(cash * takeRatio);
+            var unprotectedGuards = Calculator.GetUnprotectedGuards(victim);
+            var guardsKilled = Math.Min(atk / def, unprotectedGuards);
+            Mut.Money += moneyStolen;
+            victim.Money -= moneyStolen;
+            victim.Guards -= guardsKilled;
+            if (victim.Fame > Mut.Fame)
+            {
+                Mut.Fame += 2;
+            }
+            else
+            {
+                Mut.Fame += 1;
+            }
+
+            return new AttackResult
+                { Success = true, AttackSucceeded = true, MoneyStolen = moneyStolen, GuardsKilled = guardsKilled };
+        }
+
+        if (victim.Fame > Mut.Fame)
+        {
+            Mut.Fame -= 2;
+        }
+        else
+        {
+            Mut.Fame -= 1;
+        }
+
+        Mut.Fame = Math.Max(Mut.Fame, 0L);
+
+        var menLost = Math.Min(def / atk, Mut.Mobsters);
+        Mut.Mobsters -= menLost;
+        return new AttackResult { Success = true, AttackSucceeded = false, MenLost = menLost };
     }
 }

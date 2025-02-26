@@ -7,17 +7,17 @@ namespace GameEngine;
 public class Engine
 {
     private readonly LocalStorageService _storage;
-    private readonly ChangeNotifier _changeNotifier;
-    public const string HumanPlayerId = "mina";
+    private readonly ChangeNotifier _changes;
+    private const string HumanPlayerId = "mina";
     public IPlayer HumanPlayer => _humanPlayer;
     private readonly Player _humanPlayer;
     private readonly Data _data = new();
     private readonly List<BotWithData> _bots = [];
 
-    public Engine(LocalStorageService storage, ChangeNotifier changeNotifier)
+    public Engine(LocalStorageService storage, ChangeNotifier changes)
     {
         _storage = storage;
-        _changeNotifier = changeNotifier;
+        _changes = changes;
         _data.AddPlayer(HumanPlayerId);
         _humanPlayer = new Player(HumanPlayerId, _data);
     }
@@ -28,8 +28,14 @@ public class Engine
         [
             new DoNothing(1),
             new DoNothing(2),
-            new DoNothing(3),
             new OnlyEducation(1),
+            new OnlyEducation(2),
+            new GreedyDefense(1),
+            new GreedyDefense(2),
+            new AttackEveryone(1),
+            new AttackEveryone(2),
+            new RandomMover(1),
+            new RandomMover(2),
         ];
         foreach (var bot in botList)
         {
@@ -51,7 +57,7 @@ public class Engine
         }
 
         await UpdatePlayerData(_humanPlayer.Mut);
-        _changeNotifier.OnChangeAsync += SaveAll;
+        _changes.OnChangeAsync += SaveAll;
     }
 
     private async Task UpdatePlayerData(PlayerData playerData)
@@ -74,7 +80,7 @@ public class Engine
 
         BeginNextTurn(_humanPlayer.Mut);
         if (notifyChanges)
-            await _changeNotifier.Notify();
+            await _changes.Notify();
     }
 
     private async Task SaveAll()
@@ -92,11 +98,22 @@ public class Engine
         await _storage.SetItemAsync(GetStorageKey(_humanPlayer.Mut), _humanPlayer.Mut);
     }
 
-    private void BeginNextTurn(PlayerData p)
+    private static void BeginNextTurn(PlayerData p)
     {
         p.Moves += 15;
+        p.TurnsPlayed += 1;
+        if (p.TurnsPlayed % 96 == 0)
+        {
+            RunEndOfDayEvents(p);
+        }
         p.Money += Jobs.GetExperiencedIncome(p.JobLevel, p.JobExp[p.JobLevel]);
         p.JobExp[p.JobLevel] += 1;
+    }
+
+    private static void RunEndOfDayEvents(PlayerData p)
+    {
+        p.Fame -= 10;
+        p.Fame = Math.Max(p.Fame, 0L);
     }
 
     public async Task ResetWorld()

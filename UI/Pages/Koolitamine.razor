@@ -4,7 +4,7 @@
 @using UI.Services
 <PageTitle>Koolitamine</PageTitle>
 @inject Engine Engine
-@inject ChangeNotifier ChangeNotifier
+@inject ChangeNotifier Changes
 @inject AlertService Alerts
 
 @code {
@@ -14,7 +14,7 @@
 
     protected override void OnInitialized()
     {
-        ChangeNotifier.OnChange += StateHasChanged;
+        Changes.OnChange += StateHasChanged;
     }
 
     private async Task UpdateEducation()
@@ -22,7 +22,7 @@
         if (_eduMoves == null) return;
         Alerts.ShowAlert(P.IncreaseEducation(_eduMoves.Value));
         _eduMoves = null;
-        await ChangeNotifier.Notify();
+        await Changes.Notify();
     }
 
     private void AutofillEducation()

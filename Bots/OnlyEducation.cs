@@ -5,15 +5,17 @@ namespace Bots;
 public class OnlyEducation(int nameSuffix) : IBot(nameSuffix)
 {
     public override string NamePrefix => "tarkpea";
+
     public override void PlayTurn(IPlayer p)
     {
         var d = p.MyData;
-        var canGetEdu = Calculator.HowManyMovesCanSpendOnEdu(d);
-        p.IncreaseEducation(canGetEdu).AssertOk();
-        var maxJob = Calculator.GetMaxJobLevel(d);
-        if (d.JobLevel != maxJob)
+        Common.AllMovesEducation(p);
+        Common.AllMovesGuards(p);
+        Common.MaximizeDefLvl(p);
+        Common.MaximizeHouseLvl(p);
+        if (d.HouseLevel == Constants.MaxHouseLvl && d.DefLevel == Constants.MaxAtkDefLvl)
         {
-            p.AcceptJob(maxJob).AssertOk();
+            Common.MaximizeAtkLvl(p);
         }
     }
 }

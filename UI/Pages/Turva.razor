@@ -4,7 +4,7 @@
 @using UI.Services
 <PageTitle>Turva</PageTitle>
 @inject Engine Engine
-@inject ChangeNotifier ChangeNotifier
+@inject ChangeNotifier Changes
 @inject AlertService Alerts
 
 @code {
@@ -15,7 +15,7 @@
 
     protected override void OnInitialized()
     {
-        ChangeNotifier.OnChange += StateHasChanged;
+        Changes.OnChange += StateHasChanged;
         _desiredLevel = D.DefLevel + 1;
     }
 
@@ -29,7 +29,7 @@
         if (_guardsAmount is null) return;
         Alerts.ShowAlert(P.HireGuards(_guardsAmount.Value));
         _guardsAmount = null;
-        await ChangeNotifier.Notify();
+        await Changes.Notify();
     }
 
     private async Task UpdateLevel()
@@ -37,7 +37,7 @@
         if (_desiredLevel is null) return;
         Alerts.ShowAlert(P.UpdateDefLevel(_desiredLevel.Value));
         _desiredLevel = null;
-        await ChangeNotifier.Notify();
+        await Changes.Notify();
     }
 
     private long GetCumulativePrice(int upToLvl)
@@ -53,22 +53,7 @@
 
     private void SetMaxAffordableLevel()
     {
-        var money = D.Money;
-        var setTo = D.DefLevel;
-        for (var lvl = D.DefLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
-        {
-            var price = Levels.LevelPrices[lvl];
-            if (money >= price)
-            {
-                money -= price;
-                setTo = lvl;
-            }
-            else
-            {
-                break;
-            }
-        }
-
+        var setTo = Calculator.MaxAffordableDefLvl(D);
         _desiredLevel = setTo == D.DefLevel ? null : setTo;
         StateHasChanged();
     }
@@ -104,12 +89,12 @@
             </td>
         </tr>
         <tr>
-            @if (D.DefLevel < Constants.AtkDefLevels)
+            @if (D.DefLevel < Constants.MaxAtkDefLvl)
             {
                 <td>
                     <select name="level" @bind="_desiredLevel">
                         <option></option>
-                        @for (var lvl = D.DefLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
+                        @for (var lvl = D.DefLevel + 1; lvl <= Constants.MaxAtkDefLvl; ++lvl)
                         {
                             <option value="@lvl">
                                 Level @lvl | @Utils.SepThousands(GetCumulativePrice(lvl)) EEK
