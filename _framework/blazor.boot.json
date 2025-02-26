@@ -1,10 +1,10 @@
 {
   "mainAssemblyName": "ui",
   "resources": {
-    "hash": "sha256-1Fyb1nTivSSkhIh1pe927GqA/2D4SC5kMDtpaH+BCww=",
+    "hash": "sha256-19bulbJpfah2ooebjr55M6phPVtZrhQKolH2GDs7DKQ=",
     "fingerprinting": {
-      "Bots.4qy7696fa8.wasm": "Bots.wasm",
-      "GameEngine.gqnjk9ylka.wasm": "GameEngine.wasm",
+      "Bots.4w84z2bbnf.wasm": "Bots.wasm",
+      "GameEngine.sm23ldo16z.wasm": "GameEngine.wasm",
       "Microsoft.AspNetCore.Components.yxwndecr2c.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Web.5fnpqqr84r.wasm": "Microsoft.AspNetCore.Components.Web.wasm",
       "Microsoft.AspNetCore.Components.WebAssembly.0prlth0hc4.wasm": "Microsoft.AspNetCore.Components.WebAssembly.wasm",
@@ -19,7 +19,7 @@
       "Microsoft.Extensions.Primitives.geznw6vy35.wasm": "Microsoft.Extensions.Primitives.wasm",
       "Microsoft.JSInterop.bdr89uoxtd.wasm": "Microsoft.JSInterop.wasm",
       "Microsoft.JSInterop.WebAssembly.p386u0jty9.wasm": "Microsoft.JSInterop.WebAssembly.wasm",
-      "Player.0g7b434kpk.wasm": "Player.wasm",
+      "Player.q29d9aj093.wasm": "Player.wasm",
       "System.Collections.Concurrent.mj1jnq77o3.wasm": "System.Collections.Concurrent.wasm",
       "System.Collections.Immutable.klyn5a23z2.wasm": "System.Collections.Immutable.wasm",
       "System.Collections.1vkh0rynry.wasm": "System.Collections.wasm",
@@ -39,7 +39,7 @@
       "System.Text.Json.krrbdixutx.wasm": "System.Text.Json.wasm",
       "System.Text.RegularExpressions.0e9rlv7vxy.wasm": "System.Text.RegularExpressions.wasm",
       "System.Threading.9awl0tu40j.wasm": "System.Threading.wasm",
-      "ui.vs7yr07dfu.wasm": "ui.wasm",
+      "ui.n734pafdko.wasm": "ui.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.8bti36lthm.js": "dotnet.native.js",
       "dotnet.native.tr0cyonrwt.wasm": "dotnet.native.wasm",
@@ -67,8 +67,8 @@
       "System.Runtime.InteropServices.JavaScript.2qzse51b5r.wasm": "sha256-2nWN1zwezK82JRmcnLLcKzdroP7qZRNl6DW0r2jhKe4="
     },
     "assembly": {
-      "Bots.4qy7696fa8.wasm": "sha256-dKrm3Y5kEyXA72wJ7fz9OR+8quLLx+3Hyk/XLVR0mI0=",
-      "GameEngine.gqnjk9ylka.wasm": "sha256-GEk6Ru9K44e3YExUJetTLv++75ePZ+tD0QuOlmLz+Tg=",
+      "Bots.4w84z2bbnf.wasm": "sha256-BMHe56HC9g1LZrWOa/ppP5gbU8PPWAY1n2Q3G1Zpf4Y=",
+      "GameEngine.sm23ldo16z.wasm": "sha256-FHmwYfwp04pAE89j8pjhZh8OWnWzZXjnJrZ6vmbfV+g=",
       "Microsoft.AspNetCore.Components.yxwndecr2c.wasm": "sha256-elRlmn4MWj2BC+Xirhma0AnEcU+q2VTF2+DsY9j/kFc=",
       "Microsoft.AspNetCore.Components.Web.5fnpqqr84r.wasm": "sha256-0fT5DLMa1voamFmX5/f/aY8oct7a5CLEOHu2Tdn6oCA=",
       "Microsoft.AspNetCore.Components.WebAssembly.0prlth0hc4.wasm": "sha256-jB/Gf1i7eXuQqAzqY/ZONe+hrW3x94pYZlL+G0Cv7Co=",
@@ -83,7 +83,7 @@
       "Microsoft.Extensions.Primitives.geznw6vy35.wasm": "sha256-+HoDX+e0bGwi8OjZvR5ZpN4OxMMBE8OX4f2wu++wdqE=",
       "Microsoft.JSInterop.bdr89uoxtd.wasm": "sha256-j93883TLWrUsylBnXBVb1aCW34uImOVFvkmgV7v8tx0=",
       "Microsoft.JSInterop.WebAssembly.p386u0jty9.wasm": "sha256-hbzWuXrlepIqY/y+nQ2ZAFer2/njy1dc+Y4LUaAaL5E=",
-      "Player.0g7b434kpk.wasm": "sha256-kFUvZJnzhMjlpufd2VC7ZxIAMsVRWgPjXvDQpLJfE+0=",
+      "Player.q29d9aj093.wasm": "sha256-MrAdA5NudJsdaaiB5PVntvcCw8cGn7A95iasTsRPgvA=",
       "System.Collections.Concurrent.mj1jnq77o3.wasm": "sha256-kt1wDt6UPuEhUinM0JZEqeZvRPtRsj3pgqZAxcIl81E=",
       "System.Collections.Immutable.klyn5a23z2.wasm": "sha256-GIRwmt9/T2aTko19eSFpQpmk3tDqOo9LobtYcqIfP2A=",
       "System.Collections.1vkh0rynry.wasm": "sha256-3a+mjBnQMjsio5BMZm0WEzHJOJvBW8XlH0BY1tDmJgI=",
@@ -101,7 +101,7 @@
       "System.Text.Json.krrbdixutx.wasm": "sha256-UKbSi4kUlJFh0JXpsAWQ91sdjuuEBVBv9ivK7NVaNQc=",
       "System.Text.RegularExpressions.0e9rlv7vxy.wasm": "sha256-SKkTQL9D0Loskr+NX705/WITcRNb/8VQlQorMrz5S6M=",
       "System.Threading.9awl0tu40j.wasm": "sha256-sQqdAQ9ilL89LZ1mSKDpn6zX4LqrL8s6DUCBQwLVvj8=",
-      "ui.vs7yr07dfu.wasm": "sha256-Afnp+oXuDGSVVCW3w1tYHI3cca1AOH9wX6GGzuZ2lxg="
+      "ui.n734pafdko.wasm": "sha256-vcXiYfE727SCzdkKTlLb/eCUL53EEGIb6pzjRHok0uU="
     }
   },
   "cacheBootResources": true,
