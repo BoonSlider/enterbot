@@ -26,8 +26,8 @@ public class Engine
     {
         List<IBot> botList =
         [
-            new DoNothing(1),
-            new DoNothing(2),
+            // new DoNothing(1),
+            // new DoNothing(2),
             new OnlyEducation(1),
             new OnlyEducation(2),
             new GreedyDefense(1),
