@@ -70,8 +70,6 @@
         var bank = D.Money - cash;
         return 100 * bank / (cash + bank);
     }
-    
-    string CacheBuster => DateTime.UtcNow.Ticks.ToString();
 }
 
 <div class="alert-container">
@@ -339,22 +337,22 @@
 
 <style>
     body {
-        background-image: url(images/bg.jpg?v=@CacheBuster);
+        background-image: url(images/bg.jpg?v=0);
     }
 
     #headermenu {
-        background-image: url(images/headermenubg.png?v=@CacheBuster);
+        background-image: url(images/headermenubg.png?v=0);
     }
 
     #notice {
-        background-image: url(images/headertaust.png?v=@CacheBuster);
+        background-image: url(images/headertaust.png?v=0);
     }
 
     #header {
-        background-image: url(images/header.jpg?v=@CacheBuster);
+        background-image: url(images/header.jpg?v=0);
     }
 
     .left1h {
-        background-image: url(images/left1.png?v=@CacheBuster);
+        background-image: url(images/left1.png?v=0);
     }
 </style>
