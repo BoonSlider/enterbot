@@ -28,11 +28,14 @@ public class Engine
         [
             new DoNothing(1),
             new DoNothing(2),
-            new DoNothing(3),
             new OnlyEducation(1),
+            new OnlyEducation(2),
             new GreedyDefense(1),
+            new GreedyDefense(2),
             new AttackEveryone(1),
+            new AttackEveryone(2),
             new RandomMover(1),
+            new RandomMover(2),
         ];
         foreach (var bot in botList)
         {

@@ -87,7 +87,7 @@ public class Player(string id, Data data) : IPlayer
             return OperationResult.AlreadyHave;
         if (desiredLevel < Mut.AtkLevel)
             return OperationResult.LevelCantBeReduced;
-        if (desiredLevel > Constants.AtkDefLevels)
+        if (desiredLevel > Constants.MaxAtkDefLvl)
             return OperationResult.LevelAlreadyMaxed;
 
         var cost = 0L;
@@ -109,7 +109,7 @@ public class Player(string id, Data data) : IPlayer
             return OperationResult.AlreadyHave;
         if (desiredLevel < Mut.DefLevel)
             return OperationResult.LevelCantBeReduced;
-        if (desiredLevel > Constants.AtkDefLevels)
+        if (desiredLevel > Constants.MaxAtkDefLvl)
             return OperationResult.LevelAlreadyMaxed;
 
         var cost = 0L;
@@ -164,7 +164,7 @@ public class Player(string id, Data data) : IPlayer
             return OperationResult.AlreadyHave;
         if (lvl < Mut.HouseLevel)
             return OperationResult.LevelCantBeReduced;
-        if (lvl > Constants.HouseLevels)
+        if (lvl > Constants.MaxHouseLvl)
             return OperationResult.ChosenLevelAboveMax;
         if (Mut.Fame < Houses.GetHouseData(lvl).RequiredFame)
             return OperationResult.NotEnoughFame;

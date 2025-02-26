@@ -89,12 +89,12 @@
             </td>
         </tr>
         <tr>
-            @if (D.DefLevel < Constants.AtkDefLevels)
+            @if (D.DefLevel < Constants.MaxAtkDefLvl)
             {
                 <td>
                     <select name="level" @bind="_desiredLevel">
                         <option></option>
-                        @for (var lvl = D.DefLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
+                        @for (var lvl = D.DefLevel + 1; lvl <= Constants.MaxAtkDefLvl; ++lvl)
                         {
                             <option value="@lvl">
                                 Level @lvl | @Utils.SepThousands(GetCumulativePrice(lvl)) EEK

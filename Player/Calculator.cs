@@ -90,7 +90,7 @@ public static class Calculator
         var moneyLeft = p.Money;
         while (true)
         {
-            if (nxt > Constants.HouseLevels)
+            if (nxt > Constants.MaxHouseLvl)
                 break;
             var houseData = Houses.GetHouseData(nxt);
             if (houseData.RequiredFame > p.Fame)
@@ -119,7 +119,7 @@ public static class Calculator
     {
         var money = d.Money;
         var setTo = d.AtkLevel;
-        for (var lvl = d.AtkLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
+        for (var lvl = d.AtkLevel + 1; lvl <= Constants.MaxAtkDefLvl; ++lvl)
         {
             var price = Levels.LevelPrices[lvl];
             if (money >= price)
@@ -146,7 +146,7 @@ public static class Calculator
     {
         var money = d.Money;
         var setTo = d.DefLevel;
-        for (var lvl = d.DefLevel + 1; lvl <= Constants.AtkDefLevels; ++lvl)
+        for (var lvl = d.DefLevel + 1; lvl <= Constants.MaxAtkDefLvl; ++lvl)
         {
             var price = Levels.LevelPrices[lvl];
             if (money >= price)
