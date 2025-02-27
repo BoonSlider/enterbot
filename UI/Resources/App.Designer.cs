@@ -60,11 +60,227 @@ namespace UI.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to test english.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string test {
+        internal static string MessageType_AlreadyHave {
             get {
-                return ResourceManager.GetString("test", resourceCulture);
+                return ResourceManager.GetString("MessageType_AlreadyHave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_AtkLevelIncreased {
+            get {
+                return ResourceManager.GetString("MessageType_AtkLevelIncreased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_AttackAttempted {
+            get {
+                return ResourceManager.GetString("MessageType_AttackAttempted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_BoughtIngredients {
+            get {
+                return ResourceManager.GetString("MessageType_BoughtIngredients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_BoughtNewBuilding {
+            get {
+                return ResourceManager.GetString("MessageType_BoughtNewBuilding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_ChosenLevelAboveMax {
+            get {
+                return ResourceManager.GetString("MessageType_ChosenLevelAboveMax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_DefLevelIncreased {
+            get {
+                return ResourceManager.GetString("MessageType_DefLevelIncreased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_EducationIncreased {
+            get {
+                return ResourceManager.GetString("MessageType_EducationIncreased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_GotHired {
+            get {
+                return ResourceManager.GetString("MessageType_GotHired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_HiredGuards {
+            get {
+                return ResourceManager.GetString("MessageType_HiredGuards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_HiredMobsters {
+            get {
+                return ResourceManager.GetString("MessageType_HiredMobsters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_LevelAlreadyMaxed {
+            get {
+                return ResourceManager.GetString("MessageType_LevelAlreadyMaxed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_LevelCantBeReduced {
+            get {
+                return ResourceManager.GetString("MessageType_LevelCantBeReduced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_MoonshineCantBeBought {
+            get {
+                return ResourceManager.GetString("MessageType_MoonshineCantBeBought", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_MustBeNonNegative {
+            get {
+                return ResourceManager.GetString("MessageType_MustBeNonNegative", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_MustBePositive {
+            get {
+                return ResourceManager.GetString("MessageType_MustBePositive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_NotEnoughEducation {
+            get {
+                return ResourceManager.GetString("MessageType_NotEnoughEducation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_NotEnoughFame {
+            get {
+                return ResourceManager.GetString("MessageType_NotEnoughFame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_NotEnoughFood {
+            get {
+                return ResourceManager.GetString("MessageType_NotEnoughFood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_NotEnoughMobsters {
+            get {
+                return ResourceManager.GetString("MessageType_NotEnoughMobsters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_NotEnoughMoney {
+            get {
+                return ResourceManager.GetString("MessageType_NotEnoughMoney", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_NotEnoughMoves {
+            get {
+                return ResourceManager.GetString("MessageType_NotEnoughMoves", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_StopPlayingWithYourself {
+            get {
+                return ResourceManager.GetString("MessageType_StopPlayingWithYourself", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_Todo {
+            get {
+                return ResourceManager.GetString("MessageType_Todo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MessageType_WorldRestarted {
+            get {
+                return ResourceManager.GetString("MessageType_WorldRestarted", resourceCulture);
             }
         }
     }

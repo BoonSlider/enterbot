@@ -18,7 +18,79 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="test" xml:space="preserve">
-        <value>test estonian</value>
+    <data name="MessageType_AlreadyHave" xml:space="preserve">
+        <value>Juba omad seda, ei saa uuesti soetada.</value>
+    </data>
+    <data name="MessageType_ChosenLevelAboveMax" xml:space="preserve">
+        <value>Valitud tase ületab ülempiiri.</value>
+    </data>
+    <data name="MessageType_LevelAlreadyMaxed" xml:space="preserve">
+        <value>Level on juba maksimaalne võimalik.</value>
+    </data>
+    <data name="MessageType_LevelCantBeReduced" xml:space="preserve">
+        <value>Levelit ei saa vähendada.</value>
+    </data>
+    <data name="MessageType_MustBeNonNegative" xml:space="preserve">
+        <value>Lubatud ainult mitte-negatiivsed täisarvud.</value>
+    </data>
+    <data name="MessageType_MustBePositive" xml:space="preserve">
+        <value>Lubatud ainult positiivsed täisarvud.</value>
+    </data>
+    <data name="MessageType_NotEnoughEducation" xml:space="preserve">
+        <value>Pole piisavalt haridust.</value>
+    </data>
+    <data name="MessageType_NotEnoughFame" xml:space="preserve">
+        <value>Pole piisavalt kuulsust.</value>
+    </data>
+    <data name="MessageType_NotEnoughFood" xml:space="preserve">
+        <value>Pole piisavalt toitu.</value>
+    </data>
+    <data name="MessageType_NotEnoughMobsters" xml:space="preserve">
+        <value>Pole piisavalt mafioososid.</value>
+    </data>
+    <data name="MessageType_NotEnoughMoney" xml:space="preserve">
+        <value>Pole piisavalt raha.</value>
+    </data>
+    <data name="MessageType_NotEnoughMoves" xml:space="preserve">
+        <value>Pole piisavalt käike.</value>
+    </data>
+    <data name="MessageType_StopPlayingWithYourself" xml:space="preserve">
+        <value>Seda tegevust ei saa iseendaga teha.</value>
+    </data>
+    <data name="MessageType_Todo" xml:space="preserve">
+        <value>Seda funktsionaalsust pole veel implementeeritud.</value>
+    </data>
+    <data name="MessageType_BoughtNewBuilding" xml:space="preserve">
+        <value>Ostsid uue hoone.</value>
+    </data>
+    <data name="MessageType_AtkLevelIncreased" xml:space="preserve">
+        <value>Maffia level uuendatud.</value>
+    </data>
+    <data name="MessageType_AttackAttempted" xml:space="preserve">
+        <value>Ründasid.</value>
+    </data>
+    <data name="MessageType_BoughtIngredients" xml:space="preserve">
+        <value>Ostsid toiduained.</value>
+    </data>
+    <data name="MessageType_DefLevelIncreased" xml:space="preserve">
+        <value>Turva level uuendatud.</value>
+    </data>
+    <data name="MessageType_EducationIncreased" xml:space="preserve">
+        <value>Said targemaks.</value>
+    </data>
+    <data name="MessageType_GotHired" xml:space="preserve">
+        <value>Võeti tööle!</value>
+    </data>
+    <data name="MessageType_HiredGuards" xml:space="preserve">
+        <value>Palkasid turvamehed.</value>
+    </data>
+    <data name="MessageType_HiredMobsters" xml:space="preserve">
+        <value>Palkasid mafioosod.</value>
+    </data>
+    <data name="MessageType_MoonshineCantBeBought" xml:space="preserve">
+        <value>Puskarit ei saa osta.</value>
+    </data>
+    <data name="MessageType_WorldRestarted" xml:space="preserve">
+        <value>Alustasid maailma uuesti.</value>
     </data>
 </root>

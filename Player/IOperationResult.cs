@@ -3,7 +3,7 @@ namespace Player;
 public interface IOperationResult
 {
     public bool Success { get; }
-    public string? Message { get; }
+    public MessageType Type { get; }
     public Guid Id { get; }
 
     public void AssertOk()

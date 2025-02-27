@@ -1,0 +1,31 @@
+namespace Player;
+
+public enum MessageType
+{
+    AlreadyHave,
+    AtkLevelIncreased,
+    AttackAttempted,
+    BoughtIngredients,
+    BoughtNewBuilding,
+    ChosenLevelAboveMax,
+    DefLevelIncreased,
+    DidNotAttemptAttack,
+    EducationIncreased,
+    GotHired,
+    HiredGuards,
+    HiredMobsters,
+    LevelAlreadyMaxed,
+    LevelCantBeReduced,
+    MoonshineCantBeBought,
+    MustBeNonNegative,
+    MustBePositive,
+    NotEnoughEducation,
+    NotEnoughFame,
+    NotEnoughFood,
+    NotEnoughMobsters,
+    NotEnoughMoney,
+    NotEnoughMoves,
+    StopPlayingWithYourself,
+    Todo,
+    WorldRestarted,
+}

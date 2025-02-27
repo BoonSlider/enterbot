@@ -18,7 +18,79 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="test" xml:space="preserve">
-        <value>test english</value>
+    <data name="MessageType_AlreadyHave" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_ChosenLevelAboveMax" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_LevelAlreadyMaxed" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_LevelCantBeReduced" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_MustBeNonNegative" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_MustBePositive" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_NotEnoughEducation" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_NotEnoughFame" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_NotEnoughFood" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_NotEnoughMobsters" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_NotEnoughMoney" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_NotEnoughMoves" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_StopPlayingWithYourself" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_Todo" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_BoughtNewBuilding" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_EducationIncreased" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_GotHired" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_HiredMobsters" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_HiredGuards" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_AtkLevelIncreased" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_DefLevelIncreased" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_MoonshineCantBeBought" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_BoughtIngredients" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_AttackAttempted" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MessageType_WorldRestarted" xml:space="preserve">
+        <value />
     </data>
 </root>
