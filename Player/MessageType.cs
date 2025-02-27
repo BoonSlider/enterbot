@@ -28,4 +28,5 @@ public enum MessageType
     StopPlayingWithYourself,
     Todo,
     WorldRestarted,
+    BoughtWeapons,
 }

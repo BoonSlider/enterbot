@@ -229,4 +229,30 @@ public class Player(string id, Data data) : IPlayer
         Mut.Mobsters -= menLost;
         return new AttackResult { Success = true, AttackSucceeded = false, MenLost = menLost };
     }
+
+    public IOperationResult BuyWeapons(IDictionary<Weapon, long> weaponAmounts)
+    {
+        var cost = 0L;
+        var moves = 0L;
+        foreach (var (key, value) in weaponAmounts)
+        {
+            if (value <= 0) return OpRes.Err(MessageType.MustBePositive);
+            cost += value * Consts.WeaponPrice[key];
+            moves += value * Consts.BuyWeaponMoves;
+        }
+
+        if (Mut.Money < cost)
+            return OpRes.Err(MessageType.NotEnoughMoney);
+        if (Mut.Moves < moves)
+            return OpRes.Err(MessageType.NotEnoughMoves);
+        foreach (var (key, value) in weaponAmounts)
+        {
+            Mut.Weapons[key] += value;
+        }
+
+        Mut.Money -= cost;
+        Mut.Moves -= moves;
+
+        return OpRes.Ok(MessageType.BoughtWeapons);
+    }
 }

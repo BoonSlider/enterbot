@@ -40,10 +40,10 @@ public static class Common
             p.BuyHouse(canHouseLvl).AssertOk();
     }
 
-    public static void AllMovesEducation(IPlayer p)
+    public static void AllMovesEducation(IPlayer p, long? maxEdu = null)
     {
         var d = p.MyData;
-        var canGetEdu = Calc.HowManyMovesCanSpendOnEdu(d);
+        var canGetEdu = Calc.HowManyMovesCanSpendOnEdu(d, maxEdu);
         if (canGetEdu > 0)
             p.IncreaseEducation(canGetEdu).AssertOk();
         var maxJob = Calc.GetMaxJobLevel(d);
@@ -89,5 +89,17 @@ public static class Common
 
             p.AttackPlayer(players[target], false);
         }
+    }
+
+    public static void AllMovesWeapon(IPlayer p, Weapon w, long? max = null)
+    {
+        var d = p.MyData;
+        var canBuy = Calc.CanBuyWeapon(d, w);
+        if (max != null)
+        {
+            canBuy = Math.Min(canBuy, Math.Max(0L, max.Value - d.Weapons[w]));
+        }
+        if (canBuy > 0)
+            p.BuyWeapons(new Dictionary<Weapon, long> { [w] = canBuy }).AssertOk();
     }
 }

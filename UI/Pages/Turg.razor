@@ -46,6 +46,27 @@
         await Changes.Notify();
     }
 
+    private void AutofillWeapon(Weapon weapon)
+    {
+        _weaponAmounts[weapon] = Calc.CanBuyWeapon(D, weapon);
+        StateHasChanged();
+    }
+
+    private async Task BuyWeapons()
+    {
+        Dictionary<Weapon, long> willBuy = new Dictionary<Weapon, long>();
+        foreach (var (key, value) in _weaponAmounts)
+        {
+            if (value is > 0)
+                willBuy[key] = value.Value;
+        }
+
+        Alerts.ShowAlert(P.BuyWeapons(willBuy));
+        foreach (var key in _weaponAmounts.Keys)
+            _weaponAmounts[key] = null;
+        await Changes.Notify();
+    }
+
 }
 
 
@@ -94,9 +115,8 @@
             <p><input type="submit" name="submit" value="Ok"></p>
         </div>
     </form>
-    
-    <form>
 
+    <form @onsubmit="BuyWeapons">
         <h2>Relvad</h2>
         <div class="content">
             <table class="a">
@@ -117,19 +137,22 @@
                         <td>@L.GetEnumTranslation(weapon)</td>
                         <td>@Consts.WeaponDef[weapon]</td>
                         <td>@Consts.WeaponAtk[weapon]</td>
-                        <td class="numeric-td">0</td>
+                        <td class="numeric-td">@Utils.SepThousands(D.Weapons[weapon])</td>
                         <td class="numeric-td">@Consts.WeaponPrice[weapon] EEK</td>
                         <td>
                             <input type="number" @bind="_weaponAmounts[weapon]">
+                            <div class="autofill" @onclick="() => AutofillWeapon(weapon)"></div>
                         </td>
                     </tr>
                 }
                 </tbody>
             </table>
-            <p><button>Ok</button></p>
+            <p>
+                <button>Ok</button>
+            </p>
         </div>
     </form>
-    
+
     <h2>Müü kaupu</h2>
     <div class="content last">
         <table class="a">

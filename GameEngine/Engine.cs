@@ -36,6 +36,8 @@ public class Engine
             new AttackEveryone(2),
             new RandomMover(1),
             new RandomMover(2),
+            new ArmorHoarder(1),
+            new ArmorHoarder(2),
         ];
         foreach (var bot in botList)
         {
