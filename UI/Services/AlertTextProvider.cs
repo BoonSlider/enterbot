@@ -11,11 +11,16 @@ public class AlertTextProvider
         _textProvider = textProvider;
     }
 
+    public TextProvider TextProvider
+    {
+        get { return _textProvider; }
+    }
+
     public AlertMessage GetMessageText(IOperationResult res)
     {
         if (res is IAttackResult attackResult)
             return GetAttackResultText(attackResult);
-        return new AlertMessage(GetEnumTranslation(res.Type));
+        return new AlertMessage(_textProvider.GetEnumTranslation(res.Type));
     }
 
     private AlertMessage GetAttackResultText(IAttackResult r)
@@ -33,15 +38,27 @@ public class AlertTextProvider
                 notes.Add(string.Format(_textProvider.GetText("GuardsKilled"), r.GuardsKilled));
             }
 
+            var weaponsText = _textProvider.GetText("WeaponsStolen");
+            var first = true;
+            foreach (var (w,amount) in r.WeaponsStolen)
+            {
+                if (amount > 0)
+                {
+                    weaponsText += first ? " " : ", ";
+                    weaponsText += $"{_textProvider.GetEnumTranslation(w)} {amount}";
+                    first = false;
+                }
+            }
+
+            weaponsText += ".";
+            if (!first)
+            {
+                notes.Add(weaponsText);
+            }
+
             return new AlertMessage(string.Join(" ", notes));
         }
 
         return new AlertMessage(string.Format(_textProvider.GetText("AttackFailed"), r.MenLost)) { OverrideSuccess = false };
-    }
-
-    public string GetEnumTranslation<T>(T enumValue) where T : Enum
-    {
-        var key = $"{typeof(T).Name}_{enumValue}";
-        return _textProvider.GetText(key);
     }
 }

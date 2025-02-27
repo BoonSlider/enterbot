@@ -1,4 +1,5 @@
 {
+  "WeaponsStolen": "Röövisid relvi:",
   "MessageType_AlreadyHave": "Juba omad seda, ei saa uuesti soetada.",
   "MessageType_ChosenLevelAboveMax": "Valitud tase ületab ülempiiri.",
   "MessageType_LevelAlreadyMaxed": "Level on juba maksimaalne võimalik.",

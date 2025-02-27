@@ -134,7 +134,7 @@
                 @foreach (var weapon in Enum.GetValues<Weapon>())
                 {
                     <tr>
-                        <td>@L.GetEnumTranslation(weapon)</td>
+                        <td>@L.TextProvider.GetEnumTranslation(weapon)</td>
                         <td>@Consts.WeaponDef[weapon]</td>
                         <td>@Consts.WeaponAtk[weapon]</td>
                         <td class="numeric-td">@Utils.SepThousands(D.Weapons[weapon])</td>
