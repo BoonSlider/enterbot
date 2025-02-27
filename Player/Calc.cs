@@ -5,10 +5,10 @@ namespace Player;
 
 public static class Calc
 {
-    public static long HowManyMovesCanSpendOnEdu(IPlayerData d)
+    public static long HowManyMovesCanSpendOnEdu(IPlayerData d, long? maxEdu = null)
     {
         var ret = Math.Min(d.Money / Consts.EduCost, d.Moves);
-        var upToLimit = (Math.Max(MaxEducation - d.Education,0L) + Consts.EduRate - 1) / Consts.EduRate;
+        var upToLimit = (Math.Max((maxEdu ?? MaxEducation) - d.Education,0L) + Consts.EduRate - 1) / Consts.EduRate;
         return Math.Min(ret, upToLimit);
     }
 
