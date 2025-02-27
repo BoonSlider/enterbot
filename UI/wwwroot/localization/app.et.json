@@ -17,6 +17,7 @@
   "MessageType_AtkLevelIncreased": "Maffia level uuendatud.",
   "MessageType_AttackAttempted": "Ründasid.",
   "MessageType_BoughtIngredients": "Ostsid toiduained.",
+  "MessageType_BoughtWeapons": "Ostsid relvad.",
   "MessageType_DefLevelIncreased": "Turva level uuendatud.",
   "MessageType_EducationIncreased": "Said targemaks.",
   "MessageType_GotHired": "Võeti tööle!",

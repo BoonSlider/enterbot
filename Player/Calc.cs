@@ -29,6 +29,11 @@ public static class Calc
         {
             ret += Consts.GymStatAtk[stat] * playerData.GymStats[stat];
         }
+        
+        foreach (var stat in Enum.GetValues<Weapon>())
+        {
+            ret += Consts.WeaponAtk[stat] * playerData.Weapons[stat];
+        }
 
         return ret;
     }
@@ -39,6 +44,11 @@ public static class Calc
         foreach (var stat in Enum.GetValues<GymStat>())
         {
             ret += Consts.GymStatDef[stat] * playerData.GymStats[stat];
+        }
+        
+        foreach (var stat in Enum.GetValues<Weapon>())
+        {
+            ret += Consts.WeaponDef[stat] * playerData.Weapons[stat];
         }
 
         return ret;
@@ -161,5 +171,23 @@ public static class Calc
         }
 
         return setTo;
+    }
+
+    public static long CanBuyWeapon(IPlayerData d, Weapon w)
+    {
+        var moneyAllows = d.Money / Consts.WeaponPrice[w];
+        var movesAllow = d.Moves / Consts.BuyWeaponMoves;
+        return Math.Min(moneyAllows, movesAllow);
+    }
+
+    public static long TotalWeapons(IPlayerData playerData)
+    {
+        var total = 0L;
+        foreach (var w in playerData.Weapons.Keys.ToList())
+        {
+            total += playerData.Weapons[w];
+        }
+
+        return total;
     }
 }
