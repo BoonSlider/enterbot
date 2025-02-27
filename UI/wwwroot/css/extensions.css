@@ -177,3 +177,9 @@ body {
 .leaderboard-table td {
     padding: 0 4px;
 }
+
+.atk-event {
+    padding: 5px;
+    margin: 5px 0;
+    background: darkgray;
+}

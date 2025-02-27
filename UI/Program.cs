@@ -3,6 +3,7 @@ using GameEngine;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Localization;
+using TG.Blazor.IndexedDB;
 using UI;
 using UI.Services;
 
@@ -18,9 +19,12 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 builder.Services.AddSingleton<IStringLocalizer<App>,StringLocalizer<App>>();
 builder.Services.AddSingleton<AlertTextProvider>();
 builder.Services.AddSingleton<TextProvider>();
+builder.Services.AddSingleton<AttackResultStorageService>();
+builder.Services.AddSingleton<DbHelper>();
 builder.Services.AddSingleton(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 var host = builder.Build();
+DbHelper.Db = host.Services.GetRequiredService<AttackResultStorageService>();
 var textProvider = host.Services.GetRequiredService<TextProvider>();
 await textProvider.InitializeAsync();
 
