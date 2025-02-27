@@ -1,6 +1,6 @@
 namespace Player;
 
-public class Constants
+public class Consts
 {
     public const long EduCost = 250;
     public const long EduRate = 2;
@@ -40,4 +40,35 @@ public class Constants
         { GymStat.Strength, 53 },
         { GymStat.Agility, 58 },
     };
+   
+    public static readonly Dictionary<Weapon, long> WeaponDef = new()
+    {
+        { Weapon.Bat, 56 },
+        { Weapon.Knife, 47 },
+        { Weapon.Axe, 56 },
+        { Weapon.Armor, 85 },
+        { Weapon.Pistol, 51 },
+        { Weapon.Uzi, 41 },
+    };
+
+    public static readonly Dictionary<Weapon, long> WeaponAtk = new()
+    {
+        { Weapon.Bat, 24 },
+        { Weapon.Knife, 45 },
+        { Weapon.Axe, 46 },
+        { Weapon.Armor, 26 },
+        { Weapon.Pistol, 67 },
+        { Weapon.Uzi, 82 },
+    };
+
+    public static readonly Dictionary<Weapon, long> WeaponPrice = new()
+    {
+        { Weapon.Bat, 3600 },
+        { Weapon.Knife, 5200 },
+        { Weapon.Axe, 9500 },
+        { Weapon.Armor, 11200 },
+        { Weapon.Pistol, 12600 },
+        { Weapon.Uzi, 18600 },
+    };
+
 }

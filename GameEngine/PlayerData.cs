@@ -15,14 +15,22 @@ public class PlayerData : IPlayerData
         { MoonshineItem.Puskar, 0 },
     };
 
-    public IDictionary<GymStat, long> GymStats { get; set; } = new Dictionary<GymStat, long>
-    {
+    public IDictionary<GymStat, long> GymStats { get; set; } = new Dictionary<GymStat, long> {
         { GymStat.Skill, 10 },
         { GymStat.Strength, 10 },
         { GymStat.Agility, 10 },
     };
 
-    public IList<long> JobExp { get; set; } = Enumerable.Repeat(0L, (int)Constants.JobCount).ToList();
+    public IDictionary<Weapon, long> Weapons { get; set; } = new Dictionary<Weapon, long> {
+        { Weapon.Bat, 0 },
+        { Weapon.Knife, 0 },
+        { Weapon.Axe, 0 },
+        { Weapon.Armor, 0 },
+        { Weapon.Pistol, 0 },
+        { Weapon.Uzi, 0 },
+    };
+
+    public IList<long> JobExp { get; set; } = Enumerable.Repeat(0L, (int)Consts.JobCount).ToList();
     public int JobLevel { get; set; } = 1;
     public long Education { get; set; } = 20;
     public long Food { get; set; } = 200;
@@ -51,6 +59,7 @@ public class PlayerData : IPlayerData
         MoonshineItemsCountSaved(saved);
         Moves = saved.Moves;
         TurnsPlayed = saved.TurnsPlayed;
+        WeaponsSaved(saved);
     }
 
     private void GymStatsSaved(PlayerData saved)
@@ -58,6 +67,14 @@ public class PlayerData : IPlayerData
         foreach (var key in saved.GymStats.Keys)
         {
             GymStats[key] = saved.GymStats[key];
+        }
+    }
+     
+    private void WeaponsSaved(PlayerData saved)
+    {
+        foreach (var key in saved.Weapons.Keys)
+        {
+            Weapons[key] = saved.Weapons[key];
         }
     }
 
@@ -71,7 +88,7 @@ public class PlayerData : IPlayerData
 
     private void JobExpSaved(PlayerData saved)
     {
-        for (var i = 0; i < Constants.JobCount; i++)
+        for (var i = 0; i < Consts.JobCount; i++)
         {
             JobExp[i] = saved.JobExp[i];
         }
@@ -87,7 +104,7 @@ public class PlayerData : IPlayerData
 
     public long GetCash()
     {
-        return Math.Max(Money - Calculator.GetBankLimit(this), 0L);
+        return Math.Max(Money - Calc.GetBankLimit(this), 0L);
     }
     public FameLevel GetFameLevel()
     {

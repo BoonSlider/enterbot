@@ -31,14 +31,14 @@
 
     private string GetHouseText(long lvl)
     {
-        var cumPrice = Calculator.GetHouseCumulativePrices(D.HouseLevel + 1, lvl);
+        var cumPrice = Calc.GetHouseCumulativePrices(D.HouseLevel + 1, lvl);
         var nameText = $"{lvl}. {HouseData.GetHouseName(lvl)}";
         return $"{nameText} | {Utils.SepThousands(cumPrice)} EEK";
     }
 
     private void AutofillHouseLevel()
     {
-        _selectedHouseLevel = Calculator.MaxHouseThatCanBeBought(D);
+        _selectedHouseLevel = Calc.MaxHouseThatCanBeBought(D);
         StateHasChanged();
     }
 
@@ -66,7 +66,7 @@
     <form name="form" method="post">
         <div class="content last">
             <select name="vali" @bind="_selectedHouseLevel" class="preserve-whitespace">
-                @for (var lvl = D.HouseLevel; lvl <= Constants.MaxHouseLvl; ++lvl)
+                @for (var lvl = D.HouseLevel; lvl <= Consts.MaxHouseLvl; ++lvl)
                 {
                     <option value="@lvl" selected="@(lvl == D.HouseLevel)">
                         @GetHouseText(lvl)

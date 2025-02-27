@@ -19,76 +19,76 @@ public class Player(string id, Data data) : IPlayer
 
     public IOperationResult IncreaseEducation(long movesSpent)
     {
-        var cost = movesSpent * Constants.EduCost;
+        var cost = movesSpent * Consts.EduCost;
         if (movesSpent <= 0)
-            return OperationResult.MustBePositive;
+            return OpRes.Err(MessageType.MustBePositive);
         if (Mut.Moves < movesSpent)
-            return OperationResult.NotEnoughMoves;
+            return OpRes.Err(MessageType.NotEnoughMoves);
         if (Mut.Money < cost)
-            return OperationResult.NotEnoughMoney;
+            return OpRes.Err(MessageType.NotEnoughMoney);
         Mut.Money -= cost;
         Mut.Moves -= movesSpent;
-        Mut.Education += movesSpent * Constants.EduRate;
-        return OperationResult.Ok("Oled tark nüüd.");
+        Mut.Education += movesSpent * Consts.EduRate;
+        return OpRes.Ok(MessageType.EducationIncreased);
     }
 
     public IOperationResult AcceptJob(int jobLevel)
     {
         var job = Jobs.GetJobData(jobLevel);
         if (Mut.Education < job.RequiredEducation)
-            return OperationResult.NotEnoughEducation;
+            return OpRes.Err(MessageType.NotEnoughEducation);
         Mut.JobLevel = jobLevel;
-        return OperationResult.Ok("Võeti tööle!");
+        return OpRes.Ok(MessageType.GotHired);
     }
 
     public IOperationResult HireMobsters(long amount)
     {
         if (amount <= 0)
-            return OperationResult.MustBePositive;
-        var needMoves = amount * Constants.MobsterMoves;
-        var needMoney = amount * Constants.MobsterPrice;
-        var needFood = amount * Constants.MobsterFood;
+            return OpRes.Err(MessageType.MustBePositive);
+        var needMoves = amount * Consts.MobsterMoves;
+        var needMoney = amount * Consts.MobsterPrice;
+        var needFood = amount * Consts.MobsterFood;
         if (Mut.Moves < needMoves)
-            return OperationResult.NotEnoughMoves;
+            return OpRes.Err(MessageType.NotEnoughMoves);
         if (Mut.Money < needMoney)
-            return OperationResult.NotEnoughMoney;
+            return OpRes.Err(MessageType.NotEnoughMoney);
         if (Mut.Food < needFood)
-            return OperationResult.NotEnoughFood;
+            return OpRes.Err(MessageType.NotEnoughFood);
         Mut.Mobsters += amount;
         Mut.Moves -= needMoves;
         Mut.Money -= needMoney;
         Mut.Food -= needFood;
-        return OperationResult.Ok("Palkasid mafioosod.");
+        return OpRes.Ok(MessageType.HiredMobsters);
     }
 
     public IOperationResult HireGuards(long amount)
     {
         if (amount <= 0)
-            return OperationResult.MustBePositive;
-        var needMoves = amount * Constants.GuardMoves;
-        var needMoney = amount * Constants.GuardPrice;
-        var needFood = amount * Constants.GuardFood;
+            return OpRes.Err(MessageType.MustBePositive);
+        var needMoves = amount * Consts.GuardMoves;
+        var needMoney = amount * Consts.GuardPrice;
+        var needFood = amount * Consts.GuardFood;
         if (Mut.Moves < needMoves)
-            return OperationResult.NotEnoughMoves;
+            return OpRes.Err(MessageType.NotEnoughMoves);
         if (Mut.Money < needMoney)
-            return OperationResult.NotEnoughMoney;
+            return OpRes.Err(MessageType.NotEnoughMoney);
         if (Mut.Food < needFood)
-            return OperationResult.NotEnoughFood;
+            return OpRes.Err(MessageType.NotEnoughFood);
         Mut.Guards += amount;
         Mut.Moves -= needMoves;
         Mut.Money -= needMoney;
         Mut.Food -= needFood;
-        return OperationResult.Ok("Palkasid turvamehed.");
+        return OpRes.Ok(MessageType.HiredGuards);
     }
 
     public IOperationResult UpdateAtkLevel(int desiredLevel)
     {
         if (desiredLevel == Mut.AtkLevel)
-            return OperationResult.AlreadyHave;
+            return OpRes.Err(MessageType.AlreadyHave);
         if (desiredLevel < Mut.AtkLevel)
-            return OperationResult.LevelCantBeReduced;
-        if (desiredLevel > Constants.MaxAtkDefLvl)
-            return OperationResult.LevelAlreadyMaxed;
+            return OpRes.Err(MessageType.LevelCantBeReduced);
+        if (desiredLevel > Consts.MaxAtkDefLvl)
+            return OpRes.Err(MessageType.LevelAlreadyMaxed);
 
         var cost = 0L;
         for (var lvl = Mut.AtkLevel + 1; lvl <= desiredLevel; lvl++)
@@ -97,20 +97,20 @@ public class Player(string id, Data data) : IPlayer
         }
 
         if (Mut.Money < cost)
-            return OperationResult.NotEnoughMoney;
+            return OpRes.Err(MessageType.NotEnoughMoney);
         Mut.Money -= cost;
         Mut.AtkLevel = desiredLevel;
-        return OperationResult.Ok("Maffia level uuendatud.");
+        return OpRes.Ok(MessageType.AtkLevelIncreased);
     }
 
     public IOperationResult UpdateDefLevel(int desiredLevel)
     {
         if (desiredLevel == Mut.DefLevel)
-            return OperationResult.AlreadyHave;
+            return OpRes.Err(MessageType.AlreadyHave);
         if (desiredLevel < Mut.DefLevel)
-            return OperationResult.LevelCantBeReduced;
-        if (desiredLevel > Constants.MaxAtkDefLvl)
-            return OperationResult.LevelAlreadyMaxed;
+            return OpRes.Err(MessageType.LevelCantBeReduced);
+        if (desiredLevel > Consts.MaxAtkDefLvl)
+            return OpRes.Err(MessageType.LevelAlreadyMaxed);
 
         var cost = 0L;
         for (var lvl = Mut.DefLevel + 1; lvl <= desiredLevel; lvl++)
@@ -119,10 +119,10 @@ public class Player(string id, Data data) : IPlayer
         }
 
         if (Mut.Money < cost)
-            return OperationResult.NotEnoughMoney;
+            return OpRes.Err(MessageType.NotEnoughMoney);
         Mut.Money -= cost;
         Mut.DefLevel = desiredLevel;
-        return OperationResult.Ok("Turva level uuendatud.");
+        return OpRes.Ok(MessageType.DefLevelIncreased);
     }
 
     public IOperationResult BuyFood(long foodAmount)
@@ -132,22 +132,22 @@ public class Player(string id, Data data) : IPlayer
 
     public IOperationResult BuyFood(long foodAmount, Dictionary<MoonshineItem, long> moonshineItemCounts)
     {
-        if (foodAmount < 0) return OperationResult.MustBeNonNegative;
-        var cost = foodAmount * Constants.FoodPrice;
+        if (foodAmount <= 0) return OpRes.Err(MessageType.MustBePositive);
+        var cost = foodAmount * Consts.FoodPrice;
         foreach (var item in moonshineItemCounts.Keys.ToList())
         {
             if (item == MoonshineItem.Puskar)
-                return OperationResult.Error("Puskarit ei saa osta.");
+                return OpRes.Err(MessageType.MoonshineCantBeBought);
             if (moonshineItemCounts[item] <= 0)
             {
-                return OperationResult.MustBePositive;
+                return OpRes.Err(MessageType.MustBePositive);
             }
 
-            cost += Constants.MoonshinePrices[item] * moonshineItemCounts[item];
+            cost += Consts.MoonshinePrices[item] * moonshineItemCounts[item];
         }
 
-        if (cost <= 0) return OperationResult.MustBePositive;
-        if (Mut.Money < cost) return OperationResult.NotEnoughMoney;
+        if (cost <= 0) return OpRes.Err(MessageType.MustBePositive);
+        if (Mut.Money < cost) return OpRes.Err(MessageType.NotEnoughMoney);
         Mut.Money -= cost;
         Mut.Food += foodAmount;
         foreach (var item in moonshineItemCounts.Keys.ToList())
@@ -155,48 +155,48 @@ public class Player(string id, Data data) : IPlayer
             Mut.MoonshineItemCounts[item] += moonshineItemCounts[item];
         }
 
-        return OperationResult.Ok("Ostsid toiduaineid.");
+        return OpRes.Ok(MessageType.BoughtIngredients);
     }
 
     public IOperationResult BuyHouse(long lvl)
     {
         if (lvl == Mut.HouseLevel)
-            return OperationResult.AlreadyHave;
+            return OpRes.Err(MessageType.AlreadyHave);
         if (lvl < Mut.HouseLevel)
-            return OperationResult.LevelCantBeReduced;
-        if (lvl > Constants.MaxHouseLvl)
-            return OperationResult.ChosenLevelAboveMax;
+            return OpRes.Err(MessageType.LevelCantBeReduced);
+        if (lvl > Consts.MaxHouseLvl)
+            return OpRes.Err(MessageType.ChosenLevelAboveMax);
         if (Mut.Fame < Houses.GetHouseData(lvl).RequiredFame)
-            return OperationResult.NotEnoughFame;
-        var cumPrice = Calculator.GetHouseCumulativePrices(Mut.HouseLevel + 1, lvl);
+            return OpRes.Err(MessageType.NotEnoughFame);
+        var cumPrice = Calc.GetHouseCumulativePrices(Mut.HouseLevel + 1, lvl);
         if (Mut.Money < cumPrice)
         {
-            return OperationResult.NotEnoughMoney;
+            return OpRes.Err(MessageType.NotEnoughMoney);
         }
 
         Mut.HouseLevel = lvl;
         Mut.Money -= cumPrice;
-        return OperationResult.Ok("Ostsid uue hoone.");
+        return OpRes.Ok(MessageType.BoughtNewBuilding);
     }
 
-    public IAttackResult AttackPlayer(string victimId, bool withGang)
+    public IOperationResult AttackPlayer(string victimId, bool withGang)
     {
-        if (Mut.Mobsters < Constants.MinimumMobstersToAttack)
-            return AttackResult.DidNotAttempt(OperationResult.NotEnoughMobsters);
-        if (Mut.Moves < Constants.AtkMoves)
-            return AttackResult.DidNotAttempt(OperationResult.NotEnoughMoves);
+        if (Mut.Mobsters < Consts.MinimumMobstersToAttack)
+            return OpRes.Err(MessageType.NotEnoughMobsters);
+        if (Mut.Moves < Consts.AtkMoves)
+            return OpRes.Err(MessageType.NotEnoughMoves);
         if (Mut.Id == victimId)
-            return AttackResult.DidNotAttempt(OperationResult.StopPlayingWithYourself);
+            return OpRes.Err(MessageType.StopPlayingWithYourself);
         var victim = data[victimId];
-        var atk = withGang ? Calculator.PlayerGangTotalAtk(MyData) : Calculator.PlayerSoloTotalAtk(MyData);
-        var def = Calculator.PlayerGangTotalDef(victim);
-        Mut.Moves -= Constants.AtkMoves;
+        var atk = withGang ? Calc.PlayerGangTotalAtk(MyData) : Calc.PlayerSoloTotalAtk(MyData);
+        var def = Calc.PlayerGangTotalDef(victim);
+        Mut.Moves -= Consts.AtkMoves;
         if (atk > def)
         {
             var cash = victim.GetCash();
             var takeRatio = (double)atk / (atk + def);
             var moneyStolen = (long)Math.Floor(cash * takeRatio);
-            var unprotectedGuards = Calculator.GetUnprotectedGuards(victim);
+            var unprotectedGuards = Calc.GetUnprotectedGuards(victim);
             var guardsKilled = Math.Min(atk / def, unprotectedGuards);
             Mut.Money += moneyStolen;
             victim.Money -= moneyStolen;

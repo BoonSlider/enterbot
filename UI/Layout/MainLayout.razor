@@ -6,6 +6,7 @@
 @inject Engine Engine
 @inject ChangeNotifier Changes
 @inject AlertService Alerts
+@inject TextProvider TextProvider
 
 @code {
     private IPlayer P => Engine.HumanPlayer;
@@ -24,7 +25,6 @@
         Changes.OnChange += StateHasChanged;
         Alerts.OnAlert += (message) =>
         {
-            if (message.Message is null) return;
             lock (_alerts)
             {
                 _alerts.Insert(0, message);
@@ -77,8 +77,10 @@
     {
         foreach (var alert in _alerts)
         {
-            <div class="custom-alert @(alert.Success ? "ok" : "error")" @key="@alert.Id">
-                @alert.Message
+            var alertText = TextProvider.GetMessageText(alert);
+            var success = alertText.OverrideSuccess ?? alert.Success;
+            <div class="custom-alert @(success ? "ok" : "error")" @key="@alert.Id">
+                @alertText.Message
             </div>
         }
     }
@@ -137,7 +139,7 @@
                         <tr>
                             <td>
                                 <span
-                                    class="human-info-value">@Utils.SepThousands(Calculator.PlayerGangTotalDef(D))</span>
+                                    class="human-info-value">@Utils.SepThousands(Calc.PlayerGangTotalDef(D))</span>
                             </td>
                             <td class="human-info-label">
                                 <img src="images/icons/kaitse.gif" alt="Turva" title="Turva"/>
@@ -146,7 +148,7 @@
                         </tr>
                         <tr>
                             <td><span
-                                    class="human-info-value">@Utils.SepThousands(Calculator.PlayerGangTotalAtk(D))</span>
+                                    class="human-info-value">@Utils.SepThousands(Calc.PlayerGangTotalAtk(D))</span>
                             </td>
                             <td>
                                 <div class="human-info-label">
@@ -228,6 +230,10 @@
                             <button type="button" @onclick="() => EndTurns(16*96)" class="upd-button">16p</button>
                             <button type="button" @onclick="() => EndTurns(32*96)" class="upd-button">32p</button>
                             <button type="button" @onclick="() => EndTurns(64*96)" class="upd-button">64p</button>
+                            @* <button type="button" @onclick="() => EndTurns(128*96)" class="upd-button">128p</button> *@
+                            @* <button type="button" @onclick="() => EndTurns(256*96)" class="upd-button">256p</button> *@
+                            @* <button type="button" @onclick="() => EndTurns(512*96)" class="upd-button">512p</button> *@
+                            @* <button type="button" @onclick="() => EndTurns(1024*96)" class="upd-button">1024p</button> *@
                         </li>
                         <li class="update-until">
                             <form @onsubmit="EndTurnsUntilHasMoves">

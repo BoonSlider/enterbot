@@ -109,16 +109,23 @@
         </tbody>
     </table>
 
-    <table style="width: 100%;">
+    <table>
         <tbody>
         <tr>
         </tr>
         </tbody>
     </table>
-    <table class="a">
+    <table class="leaderboard-table">
+        <colgroup>
+            <col class="leaderboard-rank-col"/>
+            <col/>
+            <col/>
+            <col/>
+            <col class="leaderboard-col-gang"/>
+        </colgroup>
         <tbody>
         <tr>
-            <th>#</th>
+            <th><div>#</div></th>
             <th>
                 <a href="edetabel?jrk=fame&amp;asc=1">
                     <span style="font-size: 14px; color: silver; text-shadow: 1px 1px 2px gray;">★</span> </a>
@@ -140,13 +147,15 @@
         @foreach (var p in GetAllPlayers())
         {
             <tr>
-                <td>@p.LeaderboardRank</td>
+                <td>
+                    <div class="leaderboard-rank">@p.LeaderboardRank</div>
+                </td>
                 <td>
                     <span class="@GetFameClass(p.Fame)" style="font-size: 14px; text-shadow: 1px 1px 2px gray;">★</span>
                     <a href="profiil/@p.Name" class="@GetClass(p.Name)">@p.Name</a>
                 </td>
-                <td>@Utils.SepThousands(p.Score)</td>
-                <td>@Utils.SepThousands(p.Cash)</td>
+                <td class="numeric-td">@Utils.SepThousands(p.Score)</td>
+                <td class="numeric-td">@Utils.SepThousands(p.Cash)</td>
                 <td>
                     @if (p.Gang is { } gang)
                     {

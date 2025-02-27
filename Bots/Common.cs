@@ -11,7 +11,7 @@ public static class Common
         if (amount == 0) return;
         var d = p.MyData;
         var need = Math.Max(0L, amount - d.Food);
-        var buy = Math.Min(need, d.Money / Constants.FoodPrice);
+        var buy = Math.Min(need, d.Money / Consts.FoodPrice);
         if (buy == 0) return;
         p.BuyFood(buy).AssertOk();
     }
@@ -19,7 +19,7 @@ public static class Common
     public static void MaximizeAtkLvl(IPlayer p)
     {
         var d = p.MyData;
-        var canAtkLvl = Calculator.MaxAffordableAtkLvl(d);
+        var canAtkLvl = Calc.MaxAffordableAtkLvl(d);
         if (canAtkLvl != d.AtkLevel)
             p.UpdateAtkLevel(canAtkLvl).AssertOk();
     }
@@ -27,7 +27,7 @@ public static class Common
     public static void MaximizeDefLvl(IPlayer p)
     {
         var d = p.MyData;
-        var canDefLvl = Calculator.MaxAffordableDefLvl(d);
+        var canDefLvl = Calc.MaxAffordableDefLvl(d);
         if (canDefLvl != d.DefLevel)
             p.UpdateDefLevel(canDefLvl).AssertOk();
     }
@@ -35,7 +35,7 @@ public static class Common
     public static void MaximizeHouseLvl(IPlayer p)
     {
         var d = p.MyData;
-        var canHouseLvl = Calculator.MaxHouseThatCanBeBought(d);
+        var canHouseLvl = Calc.MaxHouseThatCanBeBought(d);
         if (canHouseLvl != d.HouseLevel)
             p.BuyHouse(canHouseLvl).AssertOk();
     }
@@ -43,10 +43,10 @@ public static class Common
     public static void AllMovesEducation(IPlayer p)
     {
         var d = p.MyData;
-        var canGetEdu = Calculator.HowManyMovesCanSpendOnEdu(d);
+        var canGetEdu = Calc.HowManyMovesCanSpendOnEdu(d);
         if (canGetEdu > 0)
             p.IncreaseEducation(canGetEdu).AssertOk();
-        var maxJob = Calculator.GetMaxJobLevel(d);
+        var maxJob = Calc.GetMaxJobLevel(d);
         if (d.JobLevel != maxJob)
         {
             p.AcceptJob(maxJob).AssertOk();
@@ -57,9 +57,9 @@ public static class Common
     {
         var d = p.MyData;
         var moves = Math.Max(0L, d.Moves - keepMoves);
-        var movesAllow = moves / Constants.MobsterMoves;
-        EnsureFood(p, movesAllow * Constants.MobsterFood);
-        var canHire = Calculator.CanHireMobsters(d);
+        var movesAllow = moves / Consts.MobsterMoves;
+        EnsureFood(p, movesAllow * Consts.MobsterFood);
+        var canHire = Calc.CanHireMobsters(d);
         canHire = Math.Min(canHire, movesAllow);
         if (canHire == 0) return;
         p.HireMobsters(canHire).AssertOk();
@@ -68,9 +68,9 @@ public static class Common
     public static void AllMovesGuards(IPlayer p)
     {
         var d = p.MyData;
-        var movesAllow = d.Moves / Constants.GuardMoves;
-        EnsureFood(p, movesAllow * Constants.GuardFood);
-        var canHire = Calculator.CanHireGuards(d);
+        var movesAllow = d.Moves / Consts.GuardMoves;
+        EnsureFood(p, movesAllow * Consts.GuardFood);
+        var canHire = Calc.CanHireGuards(d);
         if (canHire == 0) return;
         p.HireGuards(canHire).AssertOk();
     }
@@ -78,13 +78,13 @@ public static class Common
     public static void AttackRandomPlayer(IPlayer p)
     {
         var d = p.MyData;
-        if (Calculator.CanAttack(d))
+        if (Calc.CanAttack(d))
         {
             var players = p.GetAllPlayers();
             var target = Common.Rng.Next(players.Count);
             while (players[target] == p.Id)
             {
-                target = Common.Rng.Next(players.Count);
+                target = Rng.Next(players.Count);
             }
 
             p.AttackPlayer(players[target], false);

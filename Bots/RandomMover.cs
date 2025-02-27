@@ -8,7 +8,7 @@ public class RandomMover(int nameSuffix) : IBot(nameSuffix)
     public override void PlayTurn(IPlayer p)
     {
         var d = p.MyData;
-        if (d.Moves < Constants.AtkMoves)
+        if (d.Moves < Consts.AtkMoves)
             return;
         var moveType = Common.Rng.Next(4);
         switch (moveType)

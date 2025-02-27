@@ -17,7 +17,7 @@
     private async Task ResetWorld()
     {
         await Engine.ResetWorld();
-        Alerts.ShowAlert(OperationResult.Ok("Alustasid maailma uuesti"));
+        Alerts.ShowAlert(OpRes.Ok(MessageType.WorldRestarted));
         await Changes.Notify();
     }
 

@@ -47,7 +47,7 @@
 
     private void FindBestJob()
     {
-        _selectedJob = Calculator.GetMaxJobLevel(D);
+        _selectedJob = Calc.GetMaxJobLevel(D);
     }
 
 }
@@ -60,7 +60,7 @@
             <td style="width: 25%;">&nbsp;</td>
             <td>
                 <select @bind="_selectedJob">
-                    @for (int i = 0; i < Constants.JobCount; i++)
+                    @for (int i = 0; i < Consts.JobCount; i++)
                     {
                         var job = Jobs.GetJobData(i);
                         <option value="@i">@i. @job.JobTitle</option>

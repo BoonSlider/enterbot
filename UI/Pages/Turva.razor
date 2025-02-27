@@ -21,7 +21,7 @@
 
     private void AutofillGuards()
     {
-        _guardsAmount = Calculator.CanHireGuards(D);
+        _guardsAmount = Calc.CanHireGuards(D);
     }
 
     private async Task HireGuards()
@@ -53,7 +53,7 @@
 
     private void SetMaxAffordableLevel()
     {
-        var setTo = Calculator.MaxAffordableDefLvl(D);
+        var setTo = Calc.MaxAffordableDefLvl(D);
         _desiredLevel = setTo == D.DefLevel ? null : setTo;
         StateHasChanged();
     }
@@ -67,8 +67,8 @@
         <tr>
             <td>
                 Turva täiustamine on vajalik enda vara kaitsmiseks.
-                <br>Ühe turvamehe palkamine maksab @Constants.GuardPrice EEK, @Constants.GuardMoves käiku
-                ja @Constants.GuardFood toitu.
+                <br>Ühe turvamehe palkamine maksab @Consts.GuardPrice EEK, @Consts.GuardMoves käiku
+                ja @Consts.GuardFood toitu.
                 <br>Turvalevelist oleneb kambast saadav kaitse. Kui turvalevel on @D.DefLevel, siis saad @D.DefLevel%
                 kamba kaitsest.
             </td>
@@ -89,12 +89,12 @@
             </td>
         </tr>
         <tr>
-            @if (D.DefLevel < Constants.MaxAtkDefLvl)
+            @if (D.DefLevel < Consts.MaxAtkDefLvl)
             {
                 <td>
                     <select name="level" @bind="_desiredLevel">
                         <option></option>
-                        @for (var lvl = D.DefLevel + 1; lvl <= Constants.MaxAtkDefLvl; ++lvl)
+                        @for (var lvl = D.DefLevel + 1; lvl <= Consts.MaxAtkDefLvl; ++lvl)
                         {
                             <option value="@lvl">
                                 Level @lvl | @Utils.SepThousands(GetCumulativePrice(lvl)) EEK
@@ -119,12 +119,12 @@
         <tbody>
         <tr>
             <td>Turvamehi: <span class="turvamees">@Utils.SepThousands(D.Guards)</span>
-                (kaitse all kuni <span class="maxGuards">@Utils.SepThousands(Calculator.MaxProtectedGuards(D))</span>
+                (kaitse all kuni <span class="maxGuards">@Utils.SepThousands(Calc.MaxProtectedGuards(D))</span>
                 meest)
             </td>
         </tr>
         <tr>
-            <td>Turvameeste maks: @(Utils.SepThousands(D.Guards * Constants.GuardTax))</td>
+            <td>Turvameeste maks: @(Utils.SepThousands(D.Guards * Consts.GuardTax))</td>
         </tr>
         <tr>
             <td>Turvalevel: <span class="turva">@D.DefLevel</span></td>
@@ -133,10 +133,10 @@
             <td>Turva meestest: @(Utils.SepThousands(D.Guards * D.DefLevel))</td>
         </tr>
         <tr>
-            <td>Enda turva kokku: @Utils.SepThousands(Calculator.PlayerSoloTotalDef(D))</td>
+            <td>Enda turva kokku: @Utils.SepThousands(Calc.PlayerSoloTotalDef(D))</td>
         </tr>
         <tr>
-            <td>Enda ja kamba turva kokku: @Utils.SepThousands(Calculator.PlayerGangTotalDef(D))</td>
+            <td>Enda ja kamba turva kokku: @Utils.SepThousands(Calc.PlayerGangTotalDef(D))</td>
         </tr>
         </tbody>
     </table>
