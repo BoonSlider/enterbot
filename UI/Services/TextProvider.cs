@@ -18,7 +18,7 @@ public class TextProvider
 
     public async Task InitializeAsync()
     {
-        var response = await _httpClient.GetStringAsync("localization/app.et.json");
+        var response = await _httpClient.GetStringAsync($"localization/app.et.json?v={Guid.NewGuid()}");
         _translations = JsonSerializer.Deserialize<Dictionary<string, string>>(response)!;
     }
 
