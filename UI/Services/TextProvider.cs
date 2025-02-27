@@ -1,42 +1,34 @@
-using GameEngine;
-using Microsoft.Extensions.Localization;
-using Player;
+using Microsoft.JSInterop;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 
-namespace UI.Services;
-
-public class TextProvider(IStringLocalizer<App> localizer)
+public class TextProvider
 {
-    public AlertMessage GetMessageText(IOperationResult res)
+    private readonly HttpClient _httpClient;
+    private readonly IJSRuntime _jsRuntime;
+    private Dictionary<string, string> _translations;
+
+    public TextProvider(HttpClient httpClient, IJSRuntime jsRuntime)
     {
-        if (res is IAttackResult attackResult)
-            return GetAttackResultText(attackResult);
-        return new AlertMessage(GetEnumTranslation(res.Type));
+        _httpClient = httpClient;
+        _jsRuntime = jsRuntime;
     }
 
-    private AlertMessage GetAttackResultText(IAttackResult r)
+    public async Task InitializeAsync()
     {
-        if (r.AttackSucceeded)
+        var response = await _httpClient.GetStringAsync("localization/app.et.json");
+        _translations = JsonSerializer.Deserialize<Dictionary<string, string>>(response)!;
+    }
+
+    public string GetText(string key)
+    {
+        if (_translations != null && _translations.ContainsKey(key))
         {
-            var notes = new List<string> { localizer["AttackSucceeded"] };
-            if (r.MoneyStolen > 0)
-            {
-                notes.Add(string.Format(localizer["MoneyStolen"], Utils.SepThousands(r.MoneyStolen)));
-            }
-
-            if (r.GuardsKilled > 0)
-            {
-                notes.Add(string.Format(localizer["GuardsKilled"], r.GuardsKilled));
-            }
-
-            return new AlertMessage(string.Join(" ", notes));
+            return _translations[key];
         }
 
-        return new AlertMessage(string.Format(localizer["AttackFailed"], r.MenLost)) { OverrideSuccess = false };
-    }
-
-    public string GetEnumTranslation<T>(T enumValue) where T : Enum
-    {
-        var key = $"{typeof(T).Name}_{enumValue}";
-        return localizer[key].Value;
+        return key; // Return the key itself if not found in the dictionary
     }
 }
