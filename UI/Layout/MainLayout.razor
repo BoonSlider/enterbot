@@ -6,6 +6,7 @@
 @inject Engine Engine
 @inject ChangeNotifier Changes
 @inject AlertService Alerts
+@inject MessageProvider MessageProvider
 
 @code {
     private IPlayer P => Engine.HumanPlayer;
@@ -24,7 +25,6 @@
         Changes.OnChange += StateHasChanged;
         Alerts.OnAlert += (message) =>
         {
-            if (message.Message is null) return;
             lock (_alerts)
             {
                 _alerts.Insert(0, message);
@@ -77,8 +77,10 @@
     {
         foreach (var alert in _alerts)
         {
-            <div class="custom-alert @(alert.Success ? "ok" : "error")" @key="@alert.Id">
-                @alert.Message
+            var alertText = MessageProvider.GetMessageText(alert);
+            var success = alertText.OverrideSuccess ?? alert.Success;
+            <div class="custom-alert @(success ? "ok" : "error")" @key="@alert.Id">
+                @alertText.Message
             </div>
         }
     }

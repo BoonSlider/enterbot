@@ -60,6 +60,33 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rünne ebaõnnestus. Kaotasid {0} mafioosot..
+        /// </summary>
+        internal static string AttackFailed {
+            get {
+                return ResourceManager.GetString("AttackFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rünne õnnestus..
+        /// </summary>
+        internal static string AttackSucceeded {
+            get {
+                return ResourceManager.GetString("AttackSucceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tapsid {0} turvameest..
+        /// </summary>
+        internal static string GuardsKilled {
+            get {
+                return ResourceManager.GetString("GuardsKilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Juba omad seda, ei saa uuesti soetada..
         /// </summary>
         internal static string MessageType_AlreadyHave {
@@ -281,6 +308,15 @@ namespace UI.Resources {
         internal static string MessageType_WorldRestarted {
             get {
                 return ResourceManager.GetString("MessageType_WorldRestarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Röövisid {0} EEK..
+        /// </summary>
+        internal static string MoneyStolen {
+            get {
+                return ResourceManager.GetString("MoneyStolen", resourceCulture);
             }
         }
     }

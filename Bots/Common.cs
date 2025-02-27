@@ -84,7 +84,7 @@ public static class Common
             var target = Common.Rng.Next(players.Count);
             while (players[target] == p.Id)
             {
-                target = Common.Rng.Next(players.Count);
+                target = Rng.Next(players.Count);
             }
 
             p.AttackPlayer(players[target], false);

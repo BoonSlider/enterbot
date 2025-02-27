@@ -15,7 +15,8 @@ builder.Services.AddSingleton<ChangeNotifier>();
 builder.Services.AddSingleton<AlertService>();
 builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-builder.Services.AddScoped<IStringLocalizer<App>,StringLocalizer<App>>();
+builder.Services.AddSingleton<IStringLocalizer<App>,StringLocalizer<App>>();
+builder.Services.AddSingleton<MessageProvider>();
 
 var host = builder.Build();
 

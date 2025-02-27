@@ -138,7 +138,7 @@ public static class Calc
 
     public static bool CanAttack(IPlayerData d)
     {
-        return d.Mobsters >= Constants.MinimumMobstersToAttack && d.Moves >= Constants.AtkMoves;
+        return d is { Mobsters: >= Constants.MinimumMobstersToAttack, Moves: >= Constants.AtkMoves };
     }
 
     public static long MaxEducation => Jobs.GetJobData(Constants.MaxJob).RequiredEducation;

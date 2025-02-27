@@ -93,4 +93,16 @@
     <data name="MessageType_WorldRestarted" xml:space="preserve">
         <value />
     </data>
+    <data name="AttackSucceeded" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MoneyStolen" xml:space="preserve">
+        <value />
+    </data>
+    <data name="GuardsKilled" xml:space="preserve">
+        <value />
+    </data>
+    <data name="AttackFailed" xml:space="preserve">
+        <value />
+    </data>
 </root>

@@ -62,6 +62,33 @@ namespace UI.Resources {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        internal static string AttackFailed {
+            get {
+                return ResourceManager.GetString("AttackFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string AttackSucceeded {
+            get {
+                return ResourceManager.GetString("AttackSucceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string GuardsKilled {
+            get {
+                return ResourceManager.GetString("GuardsKilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         internal static string MessageType_AlreadyHave {
             get {
                 return ResourceManager.GetString("MessageType_AlreadyHave", resourceCulture);
@@ -281,6 +308,15 @@ namespace UI.Resources {
         internal static string MessageType_WorldRestarted {
             get {
                 return ResourceManager.GetString("MessageType_WorldRestarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MoneyStolen {
+            get {
+                return ResourceManager.GetString("MoneyStolen", resourceCulture);
             }
         }
     }

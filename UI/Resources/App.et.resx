@@ -93,4 +93,16 @@
     <data name="MessageType_WorldRestarted" xml:space="preserve">
         <value>Alustasid maailma uuesti.</value>
     </data>
+    <data name="AttackFailed" xml:space="preserve">
+        <value>Rünne ebaõnnestus. Kaotasid {0} mafioosot.</value>
+    </data>
+    <data name="AttackSucceeded" xml:space="preserve">
+        <value>Rünne õnnestus.</value>
+    </data>
+    <data name="GuardsKilled" xml:space="preserve">
+        <value>Tapsid {0} turvameest.</value>
+    </data>
+    <data name="MoneyStolen" xml:space="preserve">
+        <value>Röövisid {0} EEK.</value>
+    </data>
 </root>
