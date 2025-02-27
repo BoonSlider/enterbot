@@ -2,10 +2,10 @@ namespace Player;
 
 public enum Weapon
 {
-    Kurikas,
-    Nuga,
-    Kirves,
-    Kuulivest,
-    Püstol,
-    Automaat,
+    Bat = 1,
+    Knife = 2,
+    Axe = 3,
+    Armor = 4,
+    Pistol = 5,
+    Uzi = 6,
 }

@@ -15,11 +15,19 @@ public class PlayerData : IPlayerData
         { MoonshineItem.Puskar, 0 },
     };
 
-    public IDictionary<GymStat, long> GymStats { get; set; } = new Dictionary<GymStat, long>
-    {
+    public IDictionary<GymStat, long> GymStats { get; set; } = new Dictionary<GymStat, long> {
         { GymStat.Skill, 10 },
         { GymStat.Strength, 10 },
         { GymStat.Agility, 10 },
+    };
+
+    public IDictionary<Weapon, long> Weapons { get; set; } = new Dictionary<Weapon, long> {
+        { Weapon.Bat, 0 },
+        { Weapon.Knife, 0 },
+        { Weapon.Axe, 0 },
+        { Weapon.Armor, 0 },
+        { Weapon.Pistol, 0 },
+        { Weapon.Uzi, 0 },
     };
 
     public IList<long> JobExp { get; set; } = Enumerable.Repeat(0L, (int)Constants.JobCount).ToList();
@@ -51,6 +59,7 @@ public class PlayerData : IPlayerData
         MoonshineItemsCountSaved(saved);
         Moves = saved.Moves;
         TurnsPlayed = saved.TurnsPlayed;
+        WeaponsSaved(saved);
     }
 
     private void GymStatsSaved(PlayerData saved)
@@ -58,6 +67,14 @@ public class PlayerData : IPlayerData
         foreach (var key in saved.GymStats.Keys)
         {
             GymStats[key] = saved.GymStats[key];
+        }
+    }
+     
+    private void WeaponsSaved(PlayerData saved)
+    {
+        foreach (var key in saved.Weapons.Keys)
+        {
+            Weapons[key] = saved.Weapons[key];
         }
     }
 

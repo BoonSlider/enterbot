@@ -14,4 +14,5 @@ public interface IPlayerPrivateData
     public long Fame { get; }
     public IDictionary<MoonshineItem, long> MoonshineItemCounts { get; }
     public IDictionary<GymStat, long> GymStats { get; }
+    public IDictionary<Weapon, long> Weapons { get; }
 }
