@@ -19,7 +19,7 @@ public class Player(string id, Data data) : IPlayer
 
     public IOperationResult IncreaseEducation(long movesSpent)
     {
-        var cost = movesSpent * Constants.EduCost;
+        var cost = movesSpent * Consts.EduCost;
         if (movesSpent <= 0)
             return OpRes.Err(MessageType.MustBePositive);
         if (Mut.Moves < movesSpent)
@@ -28,7 +28,7 @@ public class Player(string id, Data data) : IPlayer
             return OpRes.Err(MessageType.NotEnoughMoney);
         Mut.Money -= cost;
         Mut.Moves -= movesSpent;
-        Mut.Education += movesSpent * Constants.EduRate;
+        Mut.Education += movesSpent * Consts.EduRate;
         return OpRes.Ok(MessageType.EducationIncreased);
     }
 
@@ -45,9 +45,9 @@ public class Player(string id, Data data) : IPlayer
     {
         if (amount <= 0)
             return OpRes.Err(MessageType.MustBePositive);
-        var needMoves = amount * Constants.MobsterMoves;
-        var needMoney = amount * Constants.MobsterPrice;
-        var needFood = amount * Constants.MobsterFood;
+        var needMoves = amount * Consts.MobsterMoves;
+        var needMoney = amount * Consts.MobsterPrice;
+        var needFood = amount * Consts.MobsterFood;
         if (Mut.Moves < needMoves)
             return OpRes.Err(MessageType.NotEnoughMoves);
         if (Mut.Money < needMoney)
@@ -65,9 +65,9 @@ public class Player(string id, Data data) : IPlayer
     {
         if (amount <= 0)
             return OpRes.Err(MessageType.MustBePositive);
-        var needMoves = amount * Constants.GuardMoves;
-        var needMoney = amount * Constants.GuardPrice;
-        var needFood = amount * Constants.GuardFood;
+        var needMoves = amount * Consts.GuardMoves;
+        var needMoney = amount * Consts.GuardPrice;
+        var needFood = amount * Consts.GuardFood;
         if (Mut.Moves < needMoves)
             return OpRes.Err(MessageType.NotEnoughMoves);
         if (Mut.Money < needMoney)
@@ -87,7 +87,7 @@ public class Player(string id, Data data) : IPlayer
             return OpRes.Err(MessageType.AlreadyHave);
         if (desiredLevel < Mut.AtkLevel)
             return OpRes.Err(MessageType.LevelCantBeReduced);
-        if (desiredLevel > Constants.MaxAtkDefLvl)
+        if (desiredLevel > Consts.MaxAtkDefLvl)
             return OpRes.Err(MessageType.LevelAlreadyMaxed);
 
         var cost = 0L;
@@ -109,7 +109,7 @@ public class Player(string id, Data data) : IPlayer
             return OpRes.Err(MessageType.AlreadyHave);
         if (desiredLevel < Mut.DefLevel)
             return OpRes.Err(MessageType.LevelCantBeReduced);
-        if (desiredLevel > Constants.MaxAtkDefLvl)
+        if (desiredLevel > Consts.MaxAtkDefLvl)
             return OpRes.Err(MessageType.LevelAlreadyMaxed);
 
         var cost = 0L;
@@ -133,7 +133,7 @@ public class Player(string id, Data data) : IPlayer
     public IOperationResult BuyFood(long foodAmount, Dictionary<MoonshineItem, long> moonshineItemCounts)
     {
         if (foodAmount <= 0) return OpRes.Err(MessageType.MustBePositive);
-        var cost = foodAmount * Constants.FoodPrice;
+        var cost = foodAmount * Consts.FoodPrice;
         foreach (var item in moonshineItemCounts.Keys.ToList())
         {
             if (item == MoonshineItem.Puskar)
@@ -143,7 +143,7 @@ public class Player(string id, Data data) : IPlayer
                 return OpRes.Err(MessageType.MustBePositive);
             }
 
-            cost += Constants.MoonshinePrices[item] * moonshineItemCounts[item];
+            cost += Consts.MoonshinePrices[item] * moonshineItemCounts[item];
         }
 
         if (cost <= 0) return OpRes.Err(MessageType.MustBePositive);
@@ -164,7 +164,7 @@ public class Player(string id, Data data) : IPlayer
             return OpRes.Err(MessageType.AlreadyHave);
         if (lvl < Mut.HouseLevel)
             return OpRes.Err(MessageType.LevelCantBeReduced);
-        if (lvl > Constants.MaxHouseLvl)
+        if (lvl > Consts.MaxHouseLvl)
             return OpRes.Err(MessageType.ChosenLevelAboveMax);
         if (Mut.Fame < Houses.GetHouseData(lvl).RequiredFame)
             return OpRes.Err(MessageType.NotEnoughFame);
@@ -181,16 +181,16 @@ public class Player(string id, Data data) : IPlayer
 
     public IOperationResult AttackPlayer(string victimId, bool withGang)
     {
-        if (Mut.Mobsters < Constants.MinimumMobstersToAttack)
+        if (Mut.Mobsters < Consts.MinimumMobstersToAttack)
             return OpRes.Err(MessageType.NotEnoughMobsters);
-        if (Mut.Moves < Constants.AtkMoves)
+        if (Mut.Moves < Consts.AtkMoves)
             return OpRes.Err(MessageType.NotEnoughMoves);
         if (Mut.Id == victimId)
             return OpRes.Err(MessageType.StopPlayingWithYourself);
         var victim = data[victimId];
         var atk = withGang ? Calc.PlayerGangTotalAtk(MyData) : Calc.PlayerSoloTotalAtk(MyData);
         var def = Calc.PlayerGangTotalDef(victim);
-        Mut.Moves -= Constants.AtkMoves;
+        Mut.Moves -= Consts.AtkMoves;
         if (atk > def)
         {
             var cash = victim.GetCash();

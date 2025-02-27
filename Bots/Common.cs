@@ -11,7 +11,7 @@ public static class Common
         if (amount == 0) return;
         var d = p.MyData;
         var need = Math.Max(0L, amount - d.Food);
-        var buy = Math.Min(need, d.Money / Constants.FoodPrice);
+        var buy = Math.Min(need, d.Money / Consts.FoodPrice);
         if (buy == 0) return;
         p.BuyFood(buy).AssertOk();
     }
@@ -57,8 +57,8 @@ public static class Common
     {
         var d = p.MyData;
         var moves = Math.Max(0L, d.Moves - keepMoves);
-        var movesAllow = moves / Constants.MobsterMoves;
-        EnsureFood(p, movesAllow * Constants.MobsterFood);
+        var movesAllow = moves / Consts.MobsterMoves;
+        EnsureFood(p, movesAllow * Consts.MobsterFood);
         var canHire = Calc.CanHireMobsters(d);
         canHire = Math.Min(canHire, movesAllow);
         if (canHire == 0) return;
@@ -68,8 +68,8 @@ public static class Common
     public static void AllMovesGuards(IPlayer p)
     {
         var d = p.MyData;
-        var movesAllow = d.Moves / Constants.GuardMoves;
-        EnsureFood(p, movesAllow * Constants.GuardFood);
+        var movesAllow = d.Moves / Consts.GuardMoves;
+        EnsureFood(p, movesAllow * Consts.GuardFood);
         var canHire = Calc.CanHireGuards(d);
         if (canHire == 0) return;
         p.HireGuards(canHire).AssertOk();

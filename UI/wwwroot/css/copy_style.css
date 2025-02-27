@@ -426,7 +426,7 @@ input[type=submit] {
     cursor:pointer;
 }
 
-input[type=button] {
+input[type=button], button {
     border: 1px solid #FFFFFF;
     background-color: #F0F0F0;
     background: url(../images/nupp.png);

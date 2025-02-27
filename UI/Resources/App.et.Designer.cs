@@ -319,5 +319,59 @@ namespace UI.Resources {
                 return ResourceManager.GetString("MoneyStolen", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kuulivest.
+        /// </summary>
+        internal static string Weapon_Armor {
+            get {
+                return ResourceManager.GetString("Weapon_Armor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kirves.
+        /// </summary>
+        internal static string Weapon_Axe {
+            get {
+                return ResourceManager.GetString("Weapon_Axe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kurikas.
+        /// </summary>
+        internal static string Weapon_Bat {
+            get {
+                return ResourceManager.GetString("Weapon_Bat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuga.
+        /// </summary>
+        internal static string Weapon_Knife {
+            get {
+                return ResourceManager.GetString("Weapon_Knife", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Püstol.
+        /// </summary>
+        internal static string Weapon_Pistol {
+            get {
+                return ResourceManager.GetString("Weapon_Pistol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automaat.
+        /// </summary>
+        internal static string Weapon_Uzi {
+            get {
+                return ResourceManager.GetString("Weapon_Uzi", resourceCulture);
+            }
+        }
     }
 }

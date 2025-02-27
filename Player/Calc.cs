@@ -7,8 +7,8 @@ public static class Calc
 {
     public static long HowManyMovesCanSpendOnEdu(IPlayerData d)
     {
-        var ret = Math.Min(d.Money / Constants.EduCost, d.Moves);
-        var upToLimit = (Math.Max(MaxEducation - d.Education,0L) + Constants.EduRate - 1) / Constants.EduRate;
+        var ret = Math.Min(d.Money / Consts.EduCost, d.Moves);
+        var upToLimit = (Math.Max(MaxEducation - d.Education,0L) + Consts.EduRate - 1) / Consts.EduRate;
         return Math.Min(ret, upToLimit);
     }
 
@@ -27,7 +27,7 @@ public static class Calc
         var ret = playerData.AtkLevel * playerData.Mobsters;
         foreach (var stat in Enum.GetValues<GymStat>())
         {
-            ret += Constants.GymStatAtk[stat] * playerData.GymStats[stat];
+            ret += Consts.GymStatAtk[stat] * playerData.GymStats[stat];
         }
 
         return ret;
@@ -38,7 +38,7 @@ public static class Calc
         var ret = playerData.DefLevel * playerData.Guards;
         foreach (var stat in Enum.GetValues<GymStat>())
         {
-            ret += Constants.GymStatDef[stat] * playerData.GymStats[stat];
+            ret += Consts.GymStatDef[stat] * playerData.GymStats[stat];
         }
 
         return ret;
@@ -46,24 +46,24 @@ public static class Calc
 
     public static long CanHireMobsters(IPlayerData playerData)
     {
-        var foodMax = playerData.Food / Constants.MobsterFood;
-        var movesMax = playerData.Moves / Constants.MobsterMoves;
-        var moneyMax = playerData.Money / Constants.MobsterPrice;
+        var foodMax = playerData.Food / Consts.MobsterFood;
+        var movesMax = playerData.Moves / Consts.MobsterMoves;
+        var moneyMax = playerData.Money / Consts.MobsterPrice;
         return Math.Min(foodMax, Math.Min(movesMax, moneyMax));
     }
 
     public static long CanHireGuards(IPlayerData playerData)
     {
-        var foodMax = playerData.Food / Constants.GuardFood;
-        var movesMax = playerData.Moves / Constants.GuardMoves;
-        var moneyMax = playerData.Money / Constants.GuardPrice;
+        var foodMax = playerData.Food / Consts.GuardFood;
+        var movesMax = playerData.Moves / Consts.GuardMoves;
+        var moneyMax = playerData.Money / Consts.GuardPrice;
         return Math.Min(foodMax, Math.Min(movesMax, moneyMax));
     }
 
     public static int GetMaxJobLevel(IPlayerData d)
     {
         var index = 1;
-        while (index + 1 < Constants.JobCount && Jobs.GetJobData(index + 1).RequiredEducation <= d.Education)
+        while (index + 1 < Consts.JobCount && Jobs.GetJobData(index + 1).RequiredEducation <= d.Education)
         {
             ++index;
         }
@@ -90,7 +90,7 @@ public static class Calc
         var moneyLeft = p.Money;
         while (true)
         {
-            if (nxt > Constants.MaxHouseLvl)
+            if (nxt > Consts.MaxHouseLvl)
                 break;
             var houseData = Houses.GetHouseData(nxt);
             if (houseData.RequiredFame > p.Fame)
@@ -119,7 +119,7 @@ public static class Calc
     {
         var money = d.Money;
         var setTo = d.AtkLevel;
-        for (var lvl = d.AtkLevel + 1; lvl <= Constants.MaxAtkDefLvl; ++lvl)
+        for (var lvl = d.AtkLevel + 1; lvl <= Consts.MaxAtkDefLvl; ++lvl)
         {
             var price = Levels.LevelPrices[lvl];
             if (money >= price)
@@ -138,15 +138,15 @@ public static class Calc
 
     public static bool CanAttack(IPlayerData d)
     {
-        return d is { Mobsters: >= Constants.MinimumMobstersToAttack, Moves: >= Constants.AtkMoves };
+        return d is { Mobsters: >= Consts.MinimumMobstersToAttack, Moves: >= Consts.AtkMoves };
     }
 
-    public static long MaxEducation => Jobs.GetJobData(Constants.MaxJob).RequiredEducation;
+    public static long MaxEducation => Jobs.GetJobData(Consts.MaxJob).RequiredEducation;
     public static int MaxAffordableDefLvl(IPlayerData d)
     {
         var money = d.Money;
         var setTo = d.DefLevel;
-        for (var lvl = d.DefLevel + 1; lvl <= Constants.MaxAtkDefLvl; ++lvl)
+        for (var lvl = d.DefLevel + 1; lvl <= Consts.MaxAtkDefLvl; ++lvl)
         {
             var price = Levels.LevelPrices[lvl];
             if (money >= price)

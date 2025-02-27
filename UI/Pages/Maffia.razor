@@ -68,8 +68,8 @@
             <td>
                 Maffia täiustamine on vajalik teiste mängijate vara röövimiseks. Ründamine on üks mängu tulusamaid
                 tegevusi.
-                <br>Ühe mafiooso palkamine maksab @Constants.MobsterPrice EEK, @Constants.MobsterMoves käiku
-                ja @Constants.MobsterFood toitu.
+                <br>Ühe mafiooso palkamine maksab @Consts.MobsterPrice EEK, @Consts.MobsterMoves käiku
+                ja @Consts.MobsterFood toitu.
                 <br>Maffialevelist oleneb kambast saadav rünne. Kui maffialevel on @D.AtkLevel, siis saad @D.AtkLevel%
                 kamba ründest.
             </td>
@@ -90,12 +90,12 @@
             </td>
         </tr>
         <tr>
-            @if (D.AtkLevel < Constants.MaxAtkDefLvl)
+            @if (D.AtkLevel < Consts.MaxAtkDefLvl)
             {
                 <td>
                     <select name="level" @bind="_desiredLevel">
                         <option></option>
-                        @for (var lvl = D.AtkLevel + 1; lvl <= Constants.MaxAtkDefLvl; ++lvl)
+                        @for (var lvl = D.AtkLevel + 1; lvl <= Consts.MaxAtkDefLvl; ++lvl)
                         {
                             <option value="@lvl">
                                 Level @lvl | @Utils.SepThousands(GetCumulativePrice(lvl)) EEK

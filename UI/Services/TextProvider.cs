@@ -4,7 +4,7 @@ using Player;
 
 namespace UI.Services;
 
-public class MessageProvider(IStringLocalizer<App> localizer)
+public class TextProvider(IStringLocalizer<App> localizer)
 {
     public AlertMessage GetMessageText(IOperationResult res)
     {
@@ -34,7 +34,7 @@ public class MessageProvider(IStringLocalizer<App> localizer)
         return new AlertMessage(string.Format(localizer["AttackFailed"], r.MenLost)) { OverrideSuccess = false };
     }
 
-    private string GetEnumTranslation<T>(T enumValue) where T : Enum
+    public string GetEnumTranslation<T>(T enumValue) where T : Enum
     {
         var key = $"{typeof(T).Name}_{enumValue}";
         return localizer[key].Value;

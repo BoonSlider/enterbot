@@ -105,4 +105,22 @@
     <data name="MoneyStolen" xml:space="preserve">
         <value>Röövisid {0} EEK.</value>
     </data>
+    <data name="Weapon_Bat" xml:space="preserve">
+        <value>Kurikas</value>
+    </data>
+    <data name="Weapon_Knife" xml:space="preserve">
+        <value>Nuga</value>
+    </data>
+    <data name="Weapon_Axe" xml:space="preserve">
+        <value>Kirves</value>
+    </data>
+    <data name="Weapon_Armor" xml:space="preserve">
+        <value>Kuulivest</value>
+    </data>
+    <data name="Weapon_Pistol" xml:space="preserve">
+        <value>Püstol</value>
+    </data>
+    <data name="Weapon_Uzi" xml:space="preserve">
+        <value>Automaat</value>
+    </data>
 </root>

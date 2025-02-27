@@ -30,7 +30,7 @@ public class PlayerData : IPlayerData
         { Weapon.Uzi, 0 },
     };
 
-    public IList<long> JobExp { get; set; } = Enumerable.Repeat(0L, (int)Constants.JobCount).ToList();
+    public IList<long> JobExp { get; set; } = Enumerable.Repeat(0L, (int)Consts.JobCount).ToList();
     public int JobLevel { get; set; } = 1;
     public long Education { get; set; } = 20;
     public long Food { get; set; } = 200;
@@ -88,7 +88,7 @@ public class PlayerData : IPlayerData
 
     private void JobExpSaved(PlayerData saved)
     {
-        for (var i = 0; i < Constants.JobCount; i++)
+        for (var i = 0; i < Consts.JobCount; i++)
         {
             JobExp[i] = saved.JobExp[i];
         }

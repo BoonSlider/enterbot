@@ -67,8 +67,8 @@
         <tr>
             <td>
                 Turva täiustamine on vajalik enda vara kaitsmiseks.
-                <br>Ühe turvamehe palkamine maksab @Constants.GuardPrice EEK, @Constants.GuardMoves käiku
-                ja @Constants.GuardFood toitu.
+                <br>Ühe turvamehe palkamine maksab @Consts.GuardPrice EEK, @Consts.GuardMoves käiku
+                ja @Consts.GuardFood toitu.
                 <br>Turvalevelist oleneb kambast saadav kaitse. Kui turvalevel on @D.DefLevel, siis saad @D.DefLevel%
                 kamba kaitsest.
             </td>
@@ -89,12 +89,12 @@
             </td>
         </tr>
         <tr>
-            @if (D.DefLevel < Constants.MaxAtkDefLvl)
+            @if (D.DefLevel < Consts.MaxAtkDefLvl)
             {
                 <td>
                     <select name="level" @bind="_desiredLevel">
                         <option></option>
-                        @for (var lvl = D.DefLevel + 1; lvl <= Constants.MaxAtkDefLvl; ++lvl)
+                        @for (var lvl = D.DefLevel + 1; lvl <= Consts.MaxAtkDefLvl; ++lvl)
                         {
                             <option value="@lvl">
                                 Level @lvl | @Utils.SepThousands(GetCumulativePrice(lvl)) EEK
@@ -124,7 +124,7 @@
             </td>
         </tr>
         <tr>
-            <td>Turvameeste maks: @(Utils.SepThousands(D.Guards * Constants.GuardTax))</td>
+            <td>Turvameeste maks: @(Utils.SepThousands(D.Guards * Consts.GuardTax))</td>
         </tr>
         <tr>
             <td>Turvalevel: <span class="turva">@D.DefLevel</span></td>
