@@ -8,8 +8,9 @@ public static class Calc
     public static long HowManyMovesCanSpendOnEdu(IPlayerData d, long? maxEdu = null)
     {
         var ret = Math.Min(d.Money / Consts.EduCost, d.Moves);
-        var upToLimit = (Math.Max((maxEdu ?? MaxEducation) - d.Education,0L) + Consts.EduRate - 1) / Consts.EduRate;
-        return Math.Min(ret, upToLimit);
+        var eduLeft = Math.Max((maxEdu ?? MaxEducation) - d.Education, 0L);
+        var eduLeftMoves = (eduLeft + Consts.EduRate - 1) / Consts.EduRate;
+        return Math.Min(ret, eduLeftMoves);
     }
 
     public static long PlayerGangTotalAtk(IPlayerData playerData)
@@ -189,5 +190,13 @@ public static class Calc
         }
 
         return total;
+    }
+
+    public static long GetFreeWeapons(IPlayerData d, Weapon w)
+    {
+        var guarded = Consts.WeaponGuardedRate * (d.Guards + d.Mobsters);
+        var got = d.Weapons[w];
+        var free = Math.Max(got-guarded, 0L);
+        return free;
     }
 }

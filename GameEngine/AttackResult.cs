@@ -10,6 +10,7 @@ public record AttackResult : IAttackResult
     public long MoneyStolen { get; set; }
     public long GuardsKilled { get; set; }
     public bool Success { get; set; }
+    public IDictionary<Weapon, long> WeaponsStolen { get; set; } = new Dictionary<Weapon, long>();
 
     public MessageType Type => MessageType.AttackAttempted;
 }

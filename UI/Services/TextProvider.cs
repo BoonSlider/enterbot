@@ -31,4 +31,10 @@ public class TextProvider
 
         return key; // Return the key itself if not found in the dictionary
     }
+
+    public string GetEnumTranslation<T>(T enumValue) where T : Enum
+    {
+        var key = $"{typeof(T).Name}_{enumValue}";
+        return this.GetText(key);
+    }
 }

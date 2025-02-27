@@ -198,6 +198,17 @@ public class Player(string id, Data data) : IPlayer
             var moneyStolen = (long)Math.Floor(cash * takeRatio);
             var unprotectedGuards = Calc.GetUnprotectedGuards(victim);
             var guardsKilled = Math.Min(atk / def, unprotectedGuards);
+            var res = new AttackResult
+                { Success = true, AttackSucceeded = true, MoneyStolen = moneyStolen, GuardsKilled = guardsKilled };
+            foreach (var weapon in victim.Weapons.Keys)
+            {
+                var free = Calc.GetFreeWeapons(victim, weapon);
+                var take = free * atk / def / 100;
+                take = Math.Min(take, free);
+                victim.Weapons[weapon] -= take;
+                Mut.Weapons[weapon] += take;
+                res.WeaponsStolen[weapon] = take;
+            }
             Mut.Money += moneyStolen;
             victim.Money -= moneyStolen;
             victim.Guards -= guardsKilled;
@@ -210,8 +221,7 @@ public class Player(string id, Data data) : IPlayer
                 Mut.Fame += 1;
             }
 
-            return new AttackResult
-                { Success = true, AttackSucceeded = true, MoneyStolen = moneyStolen, GuardsKilled = guardsKilled };
+                return res;
         }
 
         if (victim.Fame > Mut.Fame)

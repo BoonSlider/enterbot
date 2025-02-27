@@ -12,6 +12,7 @@ public class Consts
     public const int MobsterFood = 9;
     public const int MobsterPrice = 180;
     public const int GuardMoves = 3;
+    public const int WeaponGuardedRate = 2;
     public const int GuardFood = 7;
     public const int GuardPrice = 150;
     public const int GuardTax = 2;
