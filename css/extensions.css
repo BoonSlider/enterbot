@@ -157,3 +157,23 @@ body {
     align-items: center;
     gap: 3px;
 }
+
+.leaderboard-table {
+    table-layout: fixed;
+}
+
+.numeric-td {
+    text-align: right;
+}
+
+.leaderboard-rank-col {
+    width: 4%;
+}
+
+.leaderboard-col-gang {
+    width: 8%;
+}
+
+.leaderboard-table td {
+    padding: 0 4px;
+}
