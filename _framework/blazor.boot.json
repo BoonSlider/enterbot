@@ -1,10 +1,10 @@
 {
   "mainAssemblyName": "ui",
   "resources": {
-    "hash": "sha256-oynWn0eSUoaBxnSHWaP0XXlRXvUBjqmXrjR9HHPcc94=",
+    "hash": "sha256-OcSHsd+Gm+oZxG3byC6JBuhwueGQoeL5J+LINgcjcgY=",
     "fingerprinting": {
-      "Bots.tclhbqcc8r.wasm": "Bots.wasm",
-      "GameEngine.22s30ig2wy.wasm": "GameEngine.wasm",
+      "Bots.v8wx9wmtp5.wasm": "Bots.wasm",
+      "GameEngine.ox8zashkt5.wasm": "GameEngine.wasm",
       "Microsoft.AspNetCore.Components.5u2cg9vbdg.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Web.ov86umxrs4.wasm": "Microsoft.AspNetCore.Components.Web.wasm",
       "Microsoft.AspNetCore.Components.WebAssembly.10boxhkyks.wasm": "Microsoft.AspNetCore.Components.WebAssembly.wasm",
@@ -22,7 +22,7 @@
       "Microsoft.JSInterop.bdr89uoxtd.wasm": "Microsoft.JSInterop.wasm",
       "Microsoft.JSInterop.WebAssembly.p386u0jty9.wasm": "Microsoft.JSInterop.WebAssembly.wasm",
       "netstandard.8j6znw0i7i.wasm": "netstandard.wasm",
-      "Player.cx6r0ykdxk.wasm": "Player.wasm",
+      "Player.dt8fhdp3bk.wasm": "Player.wasm",
       "System.Collections.Concurrent.uw1toezr0e.wasm": "System.Collections.Concurrent.wasm",
       "System.Collections.Immutable.5l6ravcssk.wasm": "System.Collections.Immutable.wasm",
       "System.Collections.nlah73f6ra.wasm": "System.Collections.wasm",
@@ -42,8 +42,8 @@
       "System.Text.Json.qacniyxpvh.wasm": "System.Text.Json.wasm",
       "System.Text.RegularExpressions.0e9rlv7vxy.wasm": "System.Text.RegularExpressions.wasm",
       "System.Threading.9awl0tu40j.wasm": "System.Threading.wasm",
-      "ui.1z3l13yra7.wasm": "ui.wasm",
-      "ui.resources.n0sf0fqz1k.wasm": "ui.resources.wasm",
+      "ui.gyipq7889o.wasm": "ui.wasm",
+      "ui.resources.rtry3tr9d8.wasm": "ui.resources.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.8bti36lthm.js": "dotnet.native.js",
       "dotnet.native.tr0cyonrwt.wasm": "dotnet.native.wasm",
@@ -67,8 +67,8 @@
       "System.Runtime.InteropServices.JavaScript.2qzse51b5r.wasm": "sha256-2nWN1zwezK82JRmcnLLcKzdroP7qZRNl6DW0r2jhKe4="
     },
     "assembly": {
-      "Bots.tclhbqcc8r.wasm": "sha256-oyYBpCrNm9n3Y0XRQ9GtMVJff0UDpFMOfBIh02ukjXE=",
-      "GameEngine.22s30ig2wy.wasm": "sha256-yrh34UOA1OomSVhB0tWx2d1rm5iY+DIBpvjOHfrKaPk=",
+      "Bots.v8wx9wmtp5.wasm": "sha256-gRVXVbSp31HDK+8QxU0ETHF/TDU66PG4fOkRbeH3gp4=",
+      "GameEngine.ox8zashkt5.wasm": "sha256-/GGxlZL+5olqbRWxPtv+T3Qm+ZbC1oJjoXYNfTEsn7I=",
       "Microsoft.AspNetCore.Components.5u2cg9vbdg.wasm": "sha256-o+JQkJAymAfmQkBnmJ2xrr/RUHU6zMTfXl7UQFan0FY=",
       "Microsoft.AspNetCore.Components.Web.ov86umxrs4.wasm": "sha256-dDh9P0ey9k4zNRiukTTdwOQigqmn9J7aRAjJ5G5qOV0=",
       "Microsoft.AspNetCore.Components.WebAssembly.10boxhkyks.wasm": "sha256-T02GOrfjAEalJSlsGmWhMGPPQJt2PwW6xu5pJ0qUZaY=",
@@ -86,7 +86,7 @@
       "Microsoft.JSInterop.bdr89uoxtd.wasm": "sha256-j93883TLWrUsylBnXBVb1aCW34uImOVFvkmgV7v8tx0=",
       "Microsoft.JSInterop.WebAssembly.p386u0jty9.wasm": "sha256-hbzWuXrlepIqY/y+nQ2ZAFer2/njy1dc+Y4LUaAaL5E=",
       "netstandard.8j6znw0i7i.wasm": "sha256-LH11yTi+J8OsbgLh365/RDbtnj26WxampQeAHMNBlxY=",
-      "Player.cx6r0ykdxk.wasm": "sha256-0KMkivs9qWE4XXbYAVgWICs4/YPFcG37B2+6gngmiIA=",
+      "Player.dt8fhdp3bk.wasm": "sha256-n9DIisfi9QLkWKRY7lDZb70X+NRVhhfa3aPcZBlIQrY=",
       "System.Collections.Concurrent.uw1toezr0e.wasm": "sha256-7q44zaSRNTBvLR1KpjI8HsLA6oQKETjv0H219zuao7o=",
       "System.Collections.Immutable.5l6ravcssk.wasm": "sha256-57+yu9jzl33x/gRbD1QC2VgBoIkd/Em6Hk2rHyXCRSg=",
       "System.Collections.nlah73f6ra.wasm": "sha256-6xJK0AqHrFd345/T94mXv1f1+ZzQlZvJAiKuiB+5xx8=",
@@ -104,11 +104,11 @@
       "System.Text.Json.qacniyxpvh.wasm": "sha256-/vd/i4fLGy3liN5NTv6aQpPD2tjhqqMYyW1IvZ1hoUU=",
       "System.Text.RegularExpressions.0e9rlv7vxy.wasm": "sha256-SKkTQL9D0Loskr+NX705/WITcRNb/8VQlQorMrz5S6M=",
       "System.Threading.9awl0tu40j.wasm": "sha256-sQqdAQ9ilL89LZ1mSKDpn6zX4LqrL8s6DUCBQwLVvj8=",
-      "ui.1z3l13yra7.wasm": "sha256-o4vgQww4OVCoiACeL+Cw6YLYQqfqMjPzBGgk7g/GWvo="
+      "ui.gyipq7889o.wasm": "sha256-OIL6UtDp53tH6byzEFmqJKubMkZQrAmpZJ+JR8SbCHY="
     },
     "satelliteResources": {
       "et": {
-        "ui.resources.n0sf0fqz1k.wasm": "sha256-lzdG+3C0hHB2qsA9K6ShuQjU+j25a75RaQxcuoPEJB8="
+        "ui.resources.rtry3tr9d8.wasm": "sha256-XyjetLIpbS4Quv+iTCJHf64Wxc/B5a/eQmBi4jGCzi8="
       }
     }
   },
