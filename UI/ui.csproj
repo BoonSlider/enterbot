@@ -25,10 +25,12 @@
       <EmbeddedResource Update="Resources\App.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>App.Designer.cs</LastGenOutput>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
       <EmbeddedResource Update="Resources\App.et.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>App.et.Designer.cs</LastGenOutput>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
 
