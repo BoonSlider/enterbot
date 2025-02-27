@@ -16,9 +16,13 @@ builder.Services.AddSingleton<AlertService>();
 builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddSingleton<IStringLocalizer<App>,StringLocalizer<App>>();
+builder.Services.AddSingleton<AlertTextProvider>();
 builder.Services.AddSingleton<TextProvider>();
+builder.Services.AddSingleton(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 var host = builder.Build();
+var textProvider = host.Services.GetRequiredService<TextProvider>();
+await textProvider.InitializeAsync();
 
 var culture = new CultureInfo("et-EE");
 CultureInfo.DefaultThreadCurrentCulture = culture;
