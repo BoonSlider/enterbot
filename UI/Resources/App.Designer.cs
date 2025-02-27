@@ -319,5 +319,59 @@ namespace UI.Resources {
                 return ResourceManager.GetString("MoneyStolen", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Armor.
+        /// </summary>
+        internal static string Weapon_Armor {
+            get {
+                return ResourceManager.GetString("Weapon_Armor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Axe.
+        /// </summary>
+        internal static string Weapon_Axe {
+            get {
+                return ResourceManager.GetString("Weapon_Axe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bat.
+        /// </summary>
+        internal static string Weapon_Bat {
+            get {
+                return ResourceManager.GetString("Weapon_Bat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Knife.
+        /// </summary>
+        internal static string Weapon_Knife {
+            get {
+                return ResourceManager.GetString("Weapon_Knife", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pistol.
+        /// </summary>
+        internal static string Weapon_Pistol {
+            get {
+                return ResourceManager.GetString("Weapon_Pistol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uzi.
+        /// </summary>
+        internal static string Weapon_Uzi {
+            get {
+                return ResourceManager.GetString("Weapon_Uzi", resourceCulture);
+            }
+        }
     }
 }

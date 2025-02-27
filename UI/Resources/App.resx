@@ -105,4 +105,22 @@
     <data name="AttackFailed" xml:space="preserve">
         <value />
     </data>
+    <data name="Weapon_Armor" xml:space="preserve">
+        <value>Armor</value>
+    </data>
+    <data name="Weapon_Axe" xml:space="preserve">
+        <value>Axe</value>
+    </data>
+    <data name="Weapon_Bat" xml:space="preserve">
+        <value>Bat</value>
+    </data>
+    <data name="Weapon_Knife" xml:space="preserve">
+        <value>Knife</value>
+    </data>
+    <data name="Weapon_Pistol" xml:space="preserve">
+        <value>Pistol</value>
+    </data>
+    <data name="Weapon_Uzi" xml:space="preserve">
+        <value>Uzi</value>
+    </data>
 </root>
