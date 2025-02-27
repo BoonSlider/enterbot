@@ -199,7 +199,11 @@ public class Player(string id, Data data) : IPlayer
             var unprotectedGuards = Calc.GetUnprotectedGuards(victim);
             var guardsKilled = Math.Min(atk / def, unprotectedGuards);
             var res = new AttackResult
-                { Success = true, AttackSucceeded = true, MoneyStolen = moneyStolen, GuardsKilled = guardsKilled };
+            {
+                Success = true, AttackSucceeded = true, MoneyStolen = moneyStolen, GuardsKilled = guardsKilled,
+                Attacker = Mut.Id, Defender = victim.Id,
+            };
+            DbHelper.Db.Save(res);
             foreach (var weapon in victim.Weapons.Keys)
             {
                 var free = Calc.GetFreeWeapons(victim, weapon);
@@ -209,6 +213,7 @@ public class Player(string id, Data data) : IPlayer
                 Mut.Weapons[weapon] += take;
                 res.WeaponsStolen[weapon] = take;
             }
+
             Mut.Money += moneyStolen;
             victim.Money -= moneyStolen;
             victim.Guards -= guardsKilled;
@@ -221,7 +226,7 @@ public class Player(string id, Data data) : IPlayer
                 Mut.Fame += 1;
             }
 
-                return res;
+            return res;
         }
 
         if (victim.Fame > Mut.Fame)
@@ -237,7 +242,13 @@ public class Player(string id, Data data) : IPlayer
 
         var menLost = Math.Min(def / atk, Mut.Mobsters);
         Mut.Mobsters -= menLost;
-        return new AttackResult { Success = true, AttackSucceeded = false, MenLost = menLost };
+        var resFail = new AttackResult
+        {
+            Success = true, AttackSucceeded = false, MenLost = menLost,
+                Attacker = Mut.Id, Defender = victim.Id,
+        };
+        DbHelper.Db.Save(resFail);
+        return resFail;
     }
 
     public IOperationResult BuyWeapons(IDictionary<Weapon, long> weaponAmounts)

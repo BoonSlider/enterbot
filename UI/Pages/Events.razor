@@ -1,0 +1,62 @@
+@page "/sündmused"
+@page "/events"
+@using GameEngine
+@inject AttackResultStorageService Log
+@inject AlertTextProvider AlertText
+@inject ChangeNotifier Changes
+
+@code {
+    private IList<AttackResult> events = new List<AttackResult>();
+    private long currentPage = 0;
+    private const long PageSize = 30;
+    private long totalPages = 1;
+    private long MaxId => Log.CurrentMaxId;
+
+    protected async override Task OnInitializedAsync()
+    {
+        totalPages = (MaxId / PageSize) + (MaxId % PageSize > 0L ? 1L : 0L);
+        currentPage = totalPages - 1; // Default to the last page
+        await LoadPage();
+        Changes.OnChange += StateHasChanged;
+    }
+
+    private async Task LoadPage()
+    {
+        var startId = currentPage * PageSize;
+        events = (await Log.GetRangeAsync(startId, PageSize)).ToList();
+        StateHasChanged();
+    }
+
+    private async Task NextPage()
+    {
+        if (currentPage < totalPages - 1)
+        {
+            currentPage++;
+            await LoadPage();
+        }
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 0)
+        {
+            currentPage--;
+            await LoadPage();
+        }
+    }
+
+}
+
+<div class="pagination">
+    <button @onclick="PreviousPage" disabled="@(@currentPage == 0)">Previous</button>
+    <span>Page @(currentPage + 1) of @totalPages</span>
+    <button @onclick="NextPage" disabled="@(@currentPage == totalPages - 1)">Next</button>
+</div>
+
+@foreach (var atk in events)
+{
+    <div class="atk-event">
+        @atk.Attacker -> @atk.Defender
+        <p>@AlertText.GetMessageText(atk).Message</p>
+    </div>
+}
