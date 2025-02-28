@@ -207,3 +207,10 @@ body {
 .automation-clean-button {
     grid-column: 2;
 }
+
+.atk-succ {
+    background: greenyellow;
+}
+.atk-fail {
+    background: orange;
+}
