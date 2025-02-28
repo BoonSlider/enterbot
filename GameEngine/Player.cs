@@ -205,7 +205,7 @@ public class Player(string id, Data data) : IPlayer
                 Success = true, AttackSucceeded = true, MoneyStolen = moneyStolen, GuardsKilled = guardsKilled,
                 Attacker = Mut.Id, Defender = victim.Id,
             };
-            // DbHelper.Db.Save(res);
+            DbHelper.Db.Save(res);
             foreach (var weapon in victim.Weapons.Keys)
             {
                 var free = Calc.GetFreeWeapons(victim, weapon);
@@ -255,7 +255,7 @@ public class Player(string id, Data data) : IPlayer
             Success = true, AttackSucceeded = false, MenLost = menLost,
                 Attacker = Mut.Id, Defender = victim.Id,
         };
-        // DbHelper.Db.Save(resFail);
+        DbHelper.Db.Save(resFail);
         return resFail;
     }
 

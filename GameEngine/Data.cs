@@ -18,12 +18,14 @@ public class Data
         set => _allPlayerData[playerId] = value;
     }
 
-    public void ResetWorld()
+    public async Task ResetWorld(AttackResultStorageService attackResultStorageService)
     {
         var defaultData = new PlayerData { Id = "default" };
         foreach (var key in _allPlayerData.Keys.ToList())
         {
             _allPlayerData[key].Update(defaultData);
         }
+
+        attackResultStorageService.Clear();
     }
 }

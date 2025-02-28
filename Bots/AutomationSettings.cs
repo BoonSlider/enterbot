@@ -11,6 +11,7 @@ public class AutomationSettings
     public int? HouseLevel { get; set; }
     public int? AttackLevel { get; set; }
     public int? DefenseLevel { get; set; }
+    public int MoveReserve { get; set; }
 
     public Dictionary<Weapon, long?> WeaponLimits { get; set; } =
         Enum.GetValues<Weapon>().ToDictionary(s => s, s => (long?)null);

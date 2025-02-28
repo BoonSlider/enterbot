@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using GameEngine;
 using Microsoft.JSInterop;
 using Player;
+
+namespace GameEngine;
 
 public class AttackResultStorageService : IDisposable
 {
@@ -276,63 +272,18 @@ public class AttackResultStorageService : IDisposable
         return attackResults;
     }
 
-public async Task<AttackResult> GetByIdAsync(long id)
-{
-    if (_isDisposed)
-        throw new ObjectDisposedException(nameof(AttackResultStorageService));
-
-    try
+    public async Task<AttackResult> GetByIdAsync(long id)
     {
-        var result = await _jsRuntime.InvokeAsync<object>("indexedDBInterop.getItemById", _dbName, _storeName, id);
+        if (_isDisposed)
+            throw new ObjectDisposedException(nameof(AttackResultStorageService));
 
-        if (result == null)
-            return null;
-
-        var jsonElement = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(
-            System.Text.Json.JsonSerializer.Serialize(result));
-
-        var attackResult = new AttackResult
+        try
         {
-            Id = jsonElement.GetProperty("id").GetInt64(),
-            AttackSucceeded = jsonElement.GetProperty("attackSucceeded").GetBoolean(),
-            MenLost = jsonElement.GetProperty("menLost").GetInt64(),
-            MoneyStolen = jsonElement.GetProperty("moneyStolen").GetInt64(),
-            GuardsKilled = jsonElement.GetProperty("guardsKilled").GetInt64(),
-            Success = jsonElement.GetProperty("success").GetBoolean(),
-            Type = (MessageType)jsonElement.GetProperty("type").GetInt32(),
-            Attacker  = jsonElement.GetProperty("attacker").GetString(),
-            Defender = jsonElement.GetProperty("defender").GetString(),
-        };
+            var result = await _jsRuntime.InvokeAsync<object>("indexedDBInterop.getItemById", _dbName, _storeName, id);
 
-        var weaponsElement = jsonElement.GetProperty("weaponsStolen");
-        foreach (var weaponItem in weaponsElement.EnumerateArray())
-        {
-            var weaponType = Enum.Parse<Weapon>(weaponItem.GetProperty("weaponType").GetString());
-            var count = weaponItem.GetProperty("count").GetInt64();
-            attackResult.WeaponsStolen[weaponType] = count;
-        }
+            if (result == null)
+                return null;
 
-        return attackResult;
-    }
-    catch (Exception ex)
-    {
-        Console.Error.WriteLine($"Failed to get attack result: {ex.Message}");
-        throw;
-    }
-}
-
-public async Task<List<AttackResult>> GetRangeAsync(long startId, long count)
-{
-    if (_isDisposed)
-        throw new ObjectDisposedException(nameof(AttackResultStorageService));
-
-    try
-    {
-        var results = await _jsRuntime.InvokeAsync<List<object>>("indexedDBInterop.getRange", _dbName, _storeName, startId, count);
-        var attackResults = new List<AttackResult>();
-
-        foreach (var result in results)
-        {
             var jsonElement = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(
                 System.Text.Json.JsonSerializer.Serialize(result));
 
@@ -353,21 +304,66 @@ public async Task<List<AttackResult>> GetRangeAsync(long startId, long count)
             foreach (var weaponItem in weaponsElement.EnumerateArray())
             {
                 var weaponType = Enum.Parse<Weapon>(weaponItem.GetProperty("weaponType").GetString());
-                var wCount = weaponItem.GetProperty("count").GetInt64();
-                attackResult.WeaponsStolen[weaponType] = wCount;
+                var count = weaponItem.GetProperty("count").GetInt64();
+                attackResult.WeaponsStolen[weaponType] = count;
             }
 
-            attackResults.Add(attackResult);
+            return attackResult;
         }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Failed to get attack result: {ex.Message}");
+            throw;
+        }
+    }
 
-        return attackResults;
-    }
-    catch (Exception ex)
+    public async Task<List<AttackResult>> GetRangeAsync(long startId, long count)
     {
-        Console.Error.WriteLine($"Failed to get attack results range: {ex.Message}");
-        throw;
+        if (_isDisposed)
+            throw new ObjectDisposedException(nameof(AttackResultStorageService));
+
+        try
+        {
+            var results = await _jsRuntime.InvokeAsync<List<object>>("indexedDBInterop.getRange", _dbName, _storeName, startId, count);
+            var attackResults = new List<AttackResult>();
+
+            foreach (var result in results)
+            {
+                var jsonElement = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(
+                    System.Text.Json.JsonSerializer.Serialize(result));
+
+                var attackResult = new AttackResult
+                {
+                    Id = jsonElement.GetProperty("id").GetInt64(),
+                    AttackSucceeded = jsonElement.GetProperty("attackSucceeded").GetBoolean(),
+                    MenLost = jsonElement.GetProperty("menLost").GetInt64(),
+                    MoneyStolen = jsonElement.GetProperty("moneyStolen").GetInt64(),
+                    GuardsKilled = jsonElement.GetProperty("guardsKilled").GetInt64(),
+                    Success = jsonElement.GetProperty("success").GetBoolean(),
+                    Type = (MessageType)jsonElement.GetProperty("type").GetInt32(),
+                    Attacker  = jsonElement.GetProperty("attacker").GetString(),
+                    Defender = jsonElement.GetProperty("defender").GetString(),
+                };
+
+                var weaponsElement = jsonElement.GetProperty("weaponsStolen");
+                foreach (var weaponItem in weaponsElement.EnumerateArray())
+                {
+                    var weaponType = Enum.Parse<Weapon>(weaponItem.GetProperty("weaponType").GetString());
+                    var wCount = weaponItem.GetProperty("count").GetInt64();
+                    attackResult.WeaponsStolen[weaponType] = wCount;
+                }
+
+                attackResults.Add(attackResult);
+            }
+
+            return attackResults;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Failed to get attack results range: {ex.Message}");
+            throw;
+        }
     }
-}
 
     private void EnqueueOperation(Func<Task> operation)
     {

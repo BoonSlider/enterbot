@@ -8,16 +8,18 @@ public class Engine
 {
     private readonly LocalStorageService _storage;
     private readonly ChangeNotifier _changes;
+    private readonly AttackResultStorageService _attackResultStorageService;
     private const string HumanPlayerId = "mina";
     public IPlayer HumanPlayer => _humanPlayer;
     private readonly Player _humanPlayer;
     private readonly Data _data = new();
     private readonly List<BotWithData> _bots = [];
 
-    public Engine(LocalStorageService storage, ChangeNotifier changes)
+    public Engine(LocalStorageService storage, ChangeNotifier changes, AttackResultStorageService attackResultStorageService)
     {
         _storage = storage;
         _changes = changes;
+        _attackResultStorageService = attackResultStorageService;
         _data.AddPlayer(HumanPlayerId);
         _humanPlayer = new Player(HumanPlayerId, _data);
     }
@@ -119,7 +121,7 @@ public class Engine
 
     public async Task ResetWorld()
     {
-        _data.ResetWorld();
+        await _data.ResetWorld(_attackResultStorageService);
         await SaveAll();
     }
 }

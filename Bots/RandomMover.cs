@@ -17,13 +17,13 @@ public class RandomMover(int nameSuffix) : IBot(nameSuffix)
                 Common.AllMovesEducation(p);
                 break;
             case 1:
-                Common.AllMovesMobsters(p);
+                Common.AllMovesMobsters(p, null, 0);
                 break;
             case 2:
                 Common.AttackRandomPlayer(p);
                 break;
             case 3:
-                Common.AllMovesGuards(p);
+                Common.AllMovesGuards(p, null, 0);
                 break;
         }
         Common.MaximizeAtkLvl(p);

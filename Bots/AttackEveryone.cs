@@ -13,7 +13,7 @@ public class AttackEveryone(int nameSuffix) : IBot(nameSuffix)
             return;
         }
 
-        Common.AllMovesMobsters(p,20);
+        Common.AllMovesMobsters(p,null, 20);
         Common.AttackRandomPlayer(p);
         Common.MaximizeAtkLvl(p);
         Common.MaximizeDefLvl(p);

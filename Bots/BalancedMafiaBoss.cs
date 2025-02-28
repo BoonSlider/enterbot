@@ -5,7 +5,7 @@ namespace Bots;
 
 public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
 {
-    public override string NamePrefix => "boss";
+    public override string NamePrefix => "claude2";
     private readonly Random _random = new();
     private int _phase = 0;
     private int _turnCounter = 0;
@@ -139,13 +139,13 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         // Build up mobsters
         if (d.Mobsters < 100 && d.Moves > 20)
         {
-            Common.AllMovesMobsters(p, 15); // Keep some moves for other actions
+            Common.AllMovesMobsters(p, null, 20); // Keep some moves for other actions
         }
         
         // Get some guards too
         if (d.Guards < 50 && d.Money > 100000 && d.Moves > 10)
         {
-            Common.AllMovesGuards(p);
+            Common.AllMovesGuards(p, null, 0);
         }
         
         // Upgrade attack and defense
@@ -200,7 +200,7 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         // Focus on mobsters for attacking
         if (d.Moves > 0 && d.Money > 500000)
         {
-            Common.AllMovesMobsters(p, 15); // Keep some moves for attacks
+            Common.AllMovesMobsters(p, null, 20); // Keep some moves for attacks
         }
         
         // Buy high-end weapons
@@ -217,11 +217,11 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         // In early game, focus on affordable weapons
         if (d.Money > 20000 && d.Weapons[Weapon.Armor] < WEAPON_THRESHOLD)
         {
-            Common.AllMovesWeapon(p, Weapon.Armor, WEAPON_THRESHOLD);
+            Common.AllMovesWeapon(p, Weapon.Armor, WEAPON_THRESHOLD, 0);
         }
         else if (d.Money > 10000 && d.Weapons[Weapon.Bat] < WEAPON_THRESHOLD)
         {
-            Common.AllMovesWeapon(p, Weapon.Bat, WEAPON_THRESHOLD);
+            Common.AllMovesWeapon(p, Weapon.Bat, WEAPON_THRESHOLD, 0);
         }
     }
 
@@ -235,17 +235,17 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
             // Prioritize armor for defense
             if (d.Weapons[Weapon.Armor] < 1000)
             {
-                Common.AllMovesWeapon(p, Weapon.Armor, 1000);
+                Common.AllMovesWeapon(p, Weapon.Armor, 1000, 0);
             }
             // Then get some pistols
             else if (d.Weapons[Weapon.Pistol] < 500)
             {
-                Common.AllMovesWeapon(p, Weapon.Pistol, 500);
+                Common.AllMovesWeapon(p, Weapon.Pistol, 500, 0);
             }
             // And knives for cost efficiency
             else if (d.Weapons[Weapon.Knife] < 1000)
             {
-                Common.AllMovesWeapon(p, Weapon.Knife, 1000);
+                Common.AllMovesWeapon(p, Weapon.Knife, 1000, 0);
             }
         }
     }
@@ -260,12 +260,12 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
             // Get Uzis for maximum attack power
             if (d.Weapons[Weapon.Uzi] < 2000)
             {
-                Common.AllMovesWeapon(p, Weapon.Uzi, 2000);
+                Common.AllMovesWeapon(p, Weapon.Uzi, 2000, 0);
             }
             // Maintain armor stock
             else if (d.Weapons[Weapon.Armor] < 5000)
             {
-                Common.AllMovesWeapon(p, Weapon.Armor, 5000);
+                Common.AllMovesWeapon(p, Weapon.Armor, 5000, 0);
             }
         }
     }

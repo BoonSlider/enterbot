@@ -124,7 +124,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         }
         
         // Use remaining moves for guards
-        Common.AllMovesGuards(p);
+        Common.AllMovesGuards(p, null, 0);
         
         // Attack if we have enough moves and mobsters
         if (Calc.CanAttack(p.MyData) && d.AtkLevel >= 20)
@@ -146,7 +146,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         
         // Prioritize mobsters over guards
         var moveReserve = Math.Min(Consts.AtkMoves * 2, d.Moves / 3); // Reserve moves for attack
-        Common.AllMovesMobsters(p, moveReserve);
+        Common.AllMovesMobsters(p, null, moveReserve);
         
         // Use leftover moves for education
         Common.AllMovesEducation(p);
@@ -178,7 +178,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         AcquireDefensiveWeapons(p);
         
         // Prioritize guards over mobsters
-        Common.AllMovesGuards(p);
+        Common.AllMovesGuards(p, null, 0);
         
         // Use leftover moves for education and minimal offense
         var remainingMoves =  d.Moves;
@@ -220,28 +220,28 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         // First get basic weapons for both offense and defense
         if (d.Weapons[Weapon.Bat] < _weaponTargets[Weapon.Bat])
         {
-            Common.AllMovesWeapon(p, Weapon.Bat, _weaponTargets[Weapon.Bat]);
+            Common.AllMovesWeapon(p, Weapon.Bat, _weaponTargets[Weapon.Bat], 0);
         }
         else if (d.Weapons[Weapon.Knife] < _weaponTargets[Weapon.Knife])
         {
-            Common.AllMovesWeapon(p, Weapon.Knife, _weaponTargets[Weapon.Knife]);
+            Common.AllMovesWeapon(p, Weapon.Knife, _weaponTargets[Weapon.Knife], 0);
         }
         else if (d.Weapons[Weapon.Armor] < _weaponTargets[Weapon.Armor])
         {
             // Armor is a major priority for balanced strategy
-            Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor]);
+            Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor], 0);
         }
         else if (d.Weapons[Weapon.Uzi] < _weaponTargets[Weapon.Uzi])
         {
-            Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi]);
+            Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi], 0);
         }
         else if (d.Weapons[Weapon.Pistol] < _weaponTargets[Weapon.Pistol])
         {
-            Common.AllMovesWeapon(p, Weapon.Pistol, _weaponTargets[Weapon.Pistol]);
+            Common.AllMovesWeapon(p, Weapon.Pistol, _weaponTargets[Weapon.Pistol], 0);
         }
         else if (d.Weapons[Weapon.Axe] < _weaponTargets[Weapon.Axe])
         {
-            Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe]);
+            Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe], 0);
         }
     }
     
@@ -252,23 +252,23 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         // Prioritize weapons with high attack value
         if (d.Weapons[Weapon.Uzi] < _weaponTargets[Weapon.Uzi])
         {
-            Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi]);
+            Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi], 0);
         }
         else if (d.Weapons[Weapon.Pistol] < _weaponTargets[Weapon.Pistol])
         {
-            Common.AllMovesWeapon(p, Weapon.Pistol, _weaponTargets[Weapon.Pistol]);
+            Common.AllMovesWeapon(p, Weapon.Pistol, _weaponTargets[Weapon.Pistol], 0);
         }
         else if (d.Weapons[Weapon.Knife] < _weaponTargets[Weapon.Knife] * 2) // Double knife target for offensive
         {
-            Common.AllMovesWeapon(p, Weapon.Knife, _weaponTargets[Weapon.Knife] * 2);
+            Common.AllMovesWeapon(p, Weapon.Knife, _weaponTargets[Weapon.Knife] * 2, 0);
         }
         else if (d.Weapons[Weapon.Axe] < _weaponTargets[Weapon.Axe] * 2) // Double axe target for offensive
         {
-            Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe] * 2);
+            Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe] * 2, 0);
         }
         else if (d.Weapons[Weapon.Armor] < _weaponTargets[Weapon.Armor] / 2) // Half armor target for offensive
         {
-            Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor] / 2);
+            Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor] / 2, 0);
         }
     }
     
@@ -279,19 +279,19 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         // Prioritize weapons with high defense value
         if (d.Weapons[Weapon.Armor] < _weaponTargets[Weapon.Armor] * 2) // Double armor target for defensive
         {
-            Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor] * 2);
+            Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor] * 2, 0);
         }
         else if (d.Weapons[Weapon.Axe] < _weaponTargets[Weapon.Axe] * 1.5) // More axes for defensive
         {
-            Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe] * 3 / 2);
+            Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe] * 3 / 2, 0);
         }
         else if (d.Weapons[Weapon.Bat] < _weaponTargets[Weapon.Bat] * 2) // Double bat target for defensive
         {
-            Common.AllMovesWeapon(p, Weapon.Bat, _weaponTargets[Weapon.Bat] * 2);
+            Common.AllMovesWeapon(p, Weapon.Bat, _weaponTargets[Weapon.Bat] * 2, 0);
         }
         else if (d.Weapons[Weapon.Uzi] < _weaponTargets[Weapon.Uzi] / 2) // Half Uzi target for defensive
         {
-            Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi] / 2);
+            Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi] / 2, 0);
         }
     }
     
