@@ -16,6 +16,19 @@
         Changes.OnChange += StateHasChanged;
     }
 
+    public enum LeaderboardType
+    {
+        Score,
+        MoneyStolen,
+        MoneyLost,
+        GuardsKilled,
+        GuardsLost,
+        MobstersKilled,
+        MobstersLost,
+        WeaponsStolen,
+        WeaponsLost,
+    }
+
     public class PlayerLeaderboardData
     {
         public int LeaderboardRank { get; set; }
@@ -24,6 +37,14 @@
         public long Cash { get; set; }
         public string? Gang { get; set; }
         public FameLevel Fame { get; set; }
+        public required long MoneyStolen { get; init; }
+        public required long MoneyLost { get; init; }
+        public required long GuardsKilled { get; init; }
+        public required long GuardsLost { get; init; }
+        public required long MobstersKilled { get; init; }
+        public required long MobstersLost { get; init; }
+        public required long WeaponsStolen { get; init; }
+        public required long WeaponsLost { get; init; }
     }
 
     public List<PlayerLeaderboardData> GetAllPlayers()
@@ -33,7 +54,23 @@
         var index = 1;
         foreach (var player in players)
         {
-            data.Add(new PlayerLeaderboardData { LeaderboardRank = index, Name = player.Id, Score = player.GetScore(), Cash = player.GetCash(), Gang = null, Fame = player.GetFameLevel() });
+            data.Add(new PlayerLeaderboardData
+            {
+                LeaderboardRank = index,
+                Name = player.Id,
+                Score = player.GetScore(),
+                Cash = player.GetCash(),
+                Gang = null,
+                Fame = player.GetFameLevel(),
+                MoneyStolen = player.MoneyStolen,
+                MoneyLost = player.MoneyLost,
+                GuardsKilled = player.GuardsKilled,
+                GuardsLost = player.GuardsLost,
+                MobstersKilled = player.MobstersKilled,
+                MobstersLost = player.MobstersLost,
+                WeaponsStolen = player.WeaponsStolen,
+                WeaponsLost = player.WeaponsLost,
+            });
             index++;
         }
 
@@ -125,7 +162,9 @@
         </colgroup>
         <tbody>
         <tr>
-            <th><div>#</div></th>
+            <th>
+                <div>#</div>
+            </th>
             <th>
                 <a href="edetabel?jrk=fame&amp;asc=1">
                     <span style="font-size: 14px; color: silver; text-shadow: 1px 1px 2px gray;">★</span> </a>

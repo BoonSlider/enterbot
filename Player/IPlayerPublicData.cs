@@ -9,4 +9,12 @@ public interface IPlayerPublicData
     public FameLevel GetFameLevel();
     public long GetScore();
     public long GetCash();
+    public long MoneyStolen { get; }
+    public long MoneyLost { get; }
+    public long GuardsKilled { get; }
+    public long GuardsLost { get; }
+    public long MobstersKilled { get; }
+    public long MobstersLost { get; }
+    public long WeaponsStolen { get; }
+    public long WeaponsLost { get; }
 }
