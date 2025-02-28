@@ -183,3 +183,27 @@ body {
     margin: 5px 0;
     background: darkgray;
 }
+
+.automation-label {
+    display: flex;
+    gap: 3px;
+    grid-column: 1;
+    align-items: center;
+}
+
+.automation-input {
+    grid-column: 2;
+    width: 100%;
+}
+
+.automation {
+    display: grid;
+    gap: 3px;
+}
+
+.automation-save-button {
+    grid-column: 1;
+}
+.automation-clean-button {
+    grid-column: 2;
+}
