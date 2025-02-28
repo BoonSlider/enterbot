@@ -6,7 +6,7 @@ public class OnlyEducation(int nameSuffix) : IBot(nameSuffix)
 {
     public override string NamePrefix => "tarkpea";
 
-    public override void PlayTurn(IPlayer p)
+    public override Task PlayTurn(IPlayer p)
     {
         var d = p.MyData;
         Common.AllMovesEducation(p);
@@ -17,5 +17,7 @@ public class OnlyEducation(int nameSuffix) : IBot(nameSuffix)
         {
             Common.MaximizeAtkLvl(p);
         }
+
+        return Task.CompletedTask;
     }
 }

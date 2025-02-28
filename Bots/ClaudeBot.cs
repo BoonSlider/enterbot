@@ -20,7 +20,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
     // Track when we last changed strategy to avoid oscillating
     private int _turnsSinceStrategyChange = 0;
     
-    public override void PlayTurn(IPlayer p)
+    public override async Task PlayTurn(IPlayer p)
     {
         var d = p.MyData;
         _turnsSinceStrategyChange++;
@@ -47,13 +47,13 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         switch (_strategy)
         {
             case 0: // Build up
-                ExecuteBuildUpStrategy(p);
+                await ExecuteBuildUpStrategy(p);
                 break;
             case 1: // Offensive
-                ExecuteOffensiveStrategy(p);
+                await ExecuteOffensiveStrategy(p);
                 break;
             case 2: // Defensive
-                ExecuteDefensiveStrategy(p);
+                await ExecuteDefensiveStrategy(p);
                 break;
         }
         
@@ -97,7 +97,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         }
     }
     
-    private void ExecuteBuildUpStrategy(IPlayer p)
+    private async Task ExecuteBuildUpStrategy(IPlayer p)
     {
         var d = p.MyData;
         
@@ -132,12 +132,12 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
             // Only attack if we feel confident
             if (d.Mobsters >= 50 && Calc.PlayerSoloTotalAtk(d) > 10000)
             {
-                Common.AttackRandomPlayer(p);
+                await Common.AttackRandomPlayer(p);
             }
         }
     }
     
-    private void ExecuteOffensiveStrategy(IPlayer p)
+    private async Task ExecuteOffensiveStrategy(IPlayer p)
     {
         var d = p.MyData;
         
@@ -163,14 +163,14 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
                 {
                     if (Calc.CanAttack(p.MyData))
                     {
-                        Common.AttackRandomPlayer(p);
+                        await Common.AttackRandomPlayer(p);
                     }
                 }
             }
         }
     }
     
-    private void ExecuteDefensiveStrategy(IPlayer p)
+    private async Task ExecuteDefensiveStrategy(IPlayer p)
     {
         var d = p.MyData;
         
@@ -203,7 +203,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         // Only attack if we have a strong position
         if (Calc.CanAttack(p.MyData) && d.AtkLevel >= 30 && d.Mobsters >= 100)
         {
-            Common.AttackRandomPlayer(p);
+            await Common.AttackRandomPlayer(p);
         }
     }
     

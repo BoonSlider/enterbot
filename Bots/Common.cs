@@ -82,7 +82,7 @@ public static class Common
     }
 
 
-    public static void AttackRandomPlayer(IPlayer p)
+    public static async Task AttackRandomPlayer(IPlayer p)
     {
         var d = p.MyData;
         if (Calc.CanAttack(d))
@@ -94,7 +94,7 @@ public static class Common
                 target = Rng.Next(players.Count);
             }
 
-            p.AttackPlayer(players[target], false);
+            await p.AttackPlayer(players[target], false);
         }
     }
 
@@ -110,12 +110,12 @@ public static class Common
             p.BuyWeapons(new Dictionary<Weapon, long> { [w] = canBuy }).AssertOk();
     }
 
-    public static IOperationResult? SafeAttackPlayer(IPlayer p, string vic, bool withGang)
+    public static async Task<IOperationResult?> SafeAttackPlayer(IPlayer p, string vic, bool withGang)
     {
         var d = p.MyData;
         if (Calc.CanAttack(d))
         {
-            var res = p.AttackPlayer(vic, withGang);
+            var res = await p.AttackPlayer(vic, withGang);
             return res;
         }
 

@@ -38,10 +38,10 @@ public class PlayerData : IPlayerData
     public long Education { get; set; } = 20;
     public long Food { get; set; } = 200;
     public long HouseLevel { get; set; } = 1;
-    public long Fame { get; set; } = 0;
+    public long Fame { get; set; }
     public long Guards { get; set; }
     public long Mobsters { get; set; }
-    public long TurnsPlayed { get; set; } = 0;
+    public long TurnsPlayed { get; set; }
     public long Money { get; set; } = 30_000;
     public long Moves { get; set; } = 700;
 

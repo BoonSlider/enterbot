@@ -5,7 +5,7 @@ namespace Bots;
 public class RandomMover(int nameSuffix) : IBot(nameSuffix)
 {
     public override string NamePrefix => "rando";
-    public override void PlayTurn(IPlayer p)
+    public override async Task PlayTurn(IPlayer p)
     {
         var d = p.MyData;
         if (d.Moves < Consts.AtkMoves)
@@ -20,7 +20,7 @@ public class RandomMover(int nameSuffix) : IBot(nameSuffix)
                 Common.AllMovesMobsters(p, null, 0);
                 break;
             case 2:
-                Common.AttackRandomPlayer(p);
+                await Common.AttackRandomPlayer(p);
                 break;
             case 3:
                 Common.AllMovesGuards(p, null, 0);

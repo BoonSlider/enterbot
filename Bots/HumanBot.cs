@@ -6,7 +6,7 @@ public class HumanBot(AutomationSettings a) : IBot(-1)
 {
     public override string NamePrefix => "human";
 
-    public override void PlayTurn(IPlayer p)
+    public override async Task PlayTurn(IPlayer p)
     {
         if (!a.IsActive) return;
         if (a.EducationLimit is { } edu)
@@ -36,7 +36,7 @@ public class HumanBot(AutomationSettings a) : IBot(-1)
                 var wantCash = (a.PlayerAttackReq[vic] ?? a.AttackMoneyDefault);
                 while (p.GetPlayerData(vic).GetCash() >= wantCash)
                 {
-                    var res = Common.SafeAttackPlayer(p, vic, false);
+                    var res = await Common.SafeAttackPlayer(p, vic, false);
                     if (res is null)
                     {
                         break;

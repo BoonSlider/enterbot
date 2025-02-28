@@ -26,6 +26,6 @@ public class Data
             _allPlayerData[key].Update(defaultData);
         }
 
-        indexedDbService.Clear();
+        await indexedDbService.ClearAsync();
     }
 }

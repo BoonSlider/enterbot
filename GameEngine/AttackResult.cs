@@ -11,7 +11,8 @@ public record AttackResult : IAttackResult
     public long GuardsKilled { get; set; }
     public bool Success { get; set; }
     public IDictionary<Weapon, long> WeaponsStolen { get; set; } = new Dictionary<Weapon, long>();
+    public long TurnNumber { get; set; }
     public MessageType Type { get; set; } = MessageType.AttackAttempted;
-    public required string Attacker { get; set; }
-    public required string Defender { get; set; }
+    public required string? Attacker { get; init; }
+    public required string? Defender { get; init; }
 }

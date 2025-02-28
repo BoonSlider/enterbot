@@ -69,11 +69,11 @@ public class Engine
     public async Task HumanEndTurn(bool notifyChanges, AutomationSettings a)
     {
         var humanBot = new HumanBot(a);
-        humanBot.PlayTurn(_humanPlayer);
+        await humanBot.PlayTurn(_humanPlayer);
         
         foreach (var bot in _bots.OrderBy(_ => Random.Shared.Next()))
         {
-            bot.Strategy.PlayTurn(bot.Player);
+            await bot.Strategy.PlayTurn(bot.Player);
         }
 
         foreach (var bot in _bots)
@@ -96,7 +96,7 @@ public class Engine
         await SaveHumanPlayerAsync();
     }
 
-    public async Task SaveHumanPlayerAsync()
+    private async Task SaveHumanPlayerAsync()
     {
         await _storage.SetItemAsync(GetStorageKey(_humanPlayer.Mut), _humanPlayer.Mut);
     }
