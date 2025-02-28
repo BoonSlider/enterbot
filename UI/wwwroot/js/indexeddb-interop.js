@@ -306,3 +306,27 @@ window.indexedDBInterop = {
         });
     }
 };
+function simulateBlazorClick(selector) {
+    const element = document.querySelector(selector);
+    if (element) {
+        // Get the Blazor event info
+        const blazorId = element.getAttribute('_bl_');
+
+        if (blazorId) {
+            // If this is a Blazor-managed element, dispatch the event through Blazor
+            const event = new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true
+            });
+
+            element.dispatchEvent(event);
+        } else {
+            // Fallback to regular click if not a Blazor element
+            console.warn('Element does not appear to be Blazor-managed:', selector);
+            element.click();
+        }
+    } else {
+        console.error('Element not found:', selector);
+    }
+}

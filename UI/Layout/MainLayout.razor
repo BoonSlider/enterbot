@@ -33,6 +33,11 @@
         StateHasChanged();
     }
 
+    public async Task SaveAuto()
+    {
+        await Auto.SaveAsync();
+    }
+
     public void Dispose()
     {
         Changes.OnChange -= StateHasChanged;
@@ -70,7 +75,7 @@
     {
         for (var i = 0; i < turns; ++i)
         {
-            await Engine.HumanEndTurn(i + 1 == turns);
+            await Engine.HumanEndTurn(i + 1 == turns, A);
         }
     }
 
@@ -79,7 +84,7 @@
         while (D.Moves < _movesNeed)
         {
             var shouldUpdate = D.Moves + 15 >= _movesNeed;
-            await Engine.HumanEndTurn(shouldUpdate);
+            await Engine.HumanEndTurn(shouldUpdate, A);
         }
 
         _movesNeed = null;
@@ -341,17 +346,20 @@
                     <p></p>
                 </div>
 
-                <form @onsubmit="async () => await Auto.SaveAsync()">
+                <form @onsubmit="async () => await Auto.SaveAsync()" class="automation-form">
                     <div class="left1h">Automatsioon</div>
                     <div class="left1 automation">
                         <label class="automation-label" for="automation-active">Aktiivne</label>
                         <input class="automation-input" type="checkbox" id="automation-active" @bind="A.IsActive"/>
                         <label class="automation-label" for="automation-edu">Haridust</label>
-                        <input class="automation-input" type="number" id="automation-edu" placeholder="koolita kuni" @bind="A.EducationLimit"/>
+                        <input class="automation-input" type="number" id="automation-edu" placeholder="koolita kuni"
+                               @bind="A.EducationLimit"/>
                         <label class="automation-label" for="automation-mafia">Mafioososid</label>
-                        <input class="automation-input" type="number" id="automation-mafia" placeholder="palka kuni" @bind="A.MafiaLimit"/>
+                        <input class="automation-input" type="number" id="automation-mafia" placeholder="palka kuni"
+                               @bind="A.MafiaLimit"/>
                         <label class="automation-label" for="automation-guards">Turvasid</label>
-                        <input class="automation-input" type="number" id="automation-guards" placeholder="palka kuni" @bind="A.GuardsLimit"/>
+                        <input class="automation-input" type="number" id="automation-guards" placeholder="palka kuni"
+                               @bind="A.GuardsLimit"/>
                         <label class="automation-label" for="automation-house-lvl">Hoone lvl</label>
                         <input class="automation-input" type="number" id="automation-house-lvl"
                                placeholder="uuenda kuni" @bind="A.HouseLevel"/>
@@ -364,7 +372,8 @@
                         @foreach (var w in Enum.GetValues<Weapon>())
                         {
                             <label class="automation-label" for="automation-@w">@L.GetEnumTranslation(w)</label>
-                            <input class="automation-input" type="number" id="automation-@w" placeholder="osta kuni" @bind="A.WeaponLimits[w]"/>
+                            <input class="automation-input" type="number" id="automation-@w" placeholder="osta kuni"
+                                   @bind="A.WeaponLimits[w]"/>
                         }
                         <label class="automation-label" for="automation-attack-default">Ründa kui käes</label>
                         <input class="automation-input" type="number" id="automation-attack-default" placeholder="raha"
@@ -373,12 +382,12 @@
                         {
                             if (id != P.Id)
                             {
-                                <label class="automation-label">
-                                    <input type="checkbox"/>
-                                    @id
-                                </label>
                                 @if (A.PlayerAttackReq.ContainsKey(id))
                                 {
+                                    <label class="automation-label">
+                                        <input type="checkbox" @bind="A.ShouldAttackPlayer[id]"/>
+                                        @id
+                                    </label>
                                     <input class="automation-input" type="number" placeholder="@A.AttackMoneyDefault"
                                            @bind="A.PlayerAttackReq[id]"/>
                                 }

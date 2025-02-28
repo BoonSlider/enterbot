@@ -48,6 +48,7 @@ public class AutomationService
         foreach (var key in Settings.PlayerAttackReq.Keys.ToList())
         {
             Settings.PlayerAttackReq[key] = null;
+            Settings.ShouldAttackPlayer[key] = false;
         }
 
         await SaveAsync();
@@ -58,6 +59,7 @@ public class AutomationService
         foreach (var player in getAllPlayers)
         {
             Settings.PlayerAttackReq.TryAdd(player, null);
+            Settings.ShouldAttackPlayer.TryAdd(player, false);
         }
     }
 }

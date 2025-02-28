@@ -64,9 +64,10 @@ public class Engine
         playerData.Update(saved);
     }
 
-    public async Task HumanEndTurn(bool notifyChanges)
+    public async Task HumanEndTurn(bool notifyChanges, AutomationSettings a)
     {
-        
+        var humanBot = new HumanBot(a);
+        humanBot.PlayTurn(_humanPlayer);
         
         foreach (var bot in _bots.OrderBy(_ => Random.Shared.Next()))
         {

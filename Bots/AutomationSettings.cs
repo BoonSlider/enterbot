@@ -17,4 +17,5 @@ public class AutomationSettings
 
     public long AttackMoneyDefault { get; set; }
     public Dictionary<string, long?> PlayerAttackReq { get; set; } = new();
+    public Dictionary<string, bool> ShouldAttackPlayer { get; set; } = new();
 }
