@@ -39,6 +39,7 @@ public class AutomationService
         Settings.HouseLevel = null;
         Settings.AttackLevel = null;
         Settings.DefenseLevel = null;
+        Settings.MoveReserve = 0;
         foreach (var key in Settings.WeaponLimits.Keys.ToList())
         {
             Settings.WeaponLimits[key] = null;

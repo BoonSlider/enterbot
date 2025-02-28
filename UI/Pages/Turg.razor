@@ -48,7 +48,7 @@
 
     private void AutofillWeapon(Weapon weapon)
     {
-        _weaponAmounts[weapon] = Calc.CanBuyWeapon(D, weapon);
+        _weaponAmounts[weapon] = Calc.CanBuyWeapon(D, weapon, 0);
         StateHasChanged();
     }
 

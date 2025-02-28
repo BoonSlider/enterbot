@@ -4,7 +4,7 @@ using Player;
 
 namespace GameEngine;
 
-public class AttackResultStorageService : IDisposable
+public class IndexedDbService : IDisposable
 {
     private readonly IJSRuntime _jsRuntime;
     private readonly string _dbName = "attackResultsDb";
@@ -18,7 +18,7 @@ public class AttackResultStorageService : IDisposable
     private bool _isDisposed = false;
     public long CurrentMaxId = 0;
 
-    public AttackResultStorageService(IJSRuntime jsRuntime)
+    public IndexedDbService(IJSRuntime jsRuntime)
     {
         _jsRuntime = jsRuntime;
         _processingTask = ProcessOperationQueueAsync(_cts.Token);
@@ -118,7 +118,7 @@ public class AttackResultStorageService : IDisposable
     public bool Save(AttackResult attackResult)
     {
         if (_isDisposed)
-            throw new ObjectDisposedException(nameof(AttackResultStorageService));
+            throw new ObjectDisposedException(nameof(IndexedDbService));
 
         if (!_isInitialized)
             Initialize();
@@ -175,7 +175,7 @@ public class AttackResultStorageService : IDisposable
     public bool Delete(long id)
     {
         if (_isDisposed)
-            throw new ObjectDisposedException(nameof(AttackResultStorageService));
+            throw new ObjectDisposedException(nameof(IndexedDbService));
 
         if (!_isInitialized)
             Initialize();
@@ -199,7 +199,7 @@ public class AttackResultStorageService : IDisposable
     public bool Clear()
     {
         if (_isDisposed)
-            throw new ObjectDisposedException(nameof(AttackResultStorageService));
+            throw new ObjectDisposedException(nameof(IndexedDbService));
 
         if (!_isInitialized)
             Initialize();
@@ -227,7 +227,7 @@ public class AttackResultStorageService : IDisposable
     public async Task<IEnumerable<AttackResult>> GetAll()
     {
         if (_isDisposed)
-            throw new ObjectDisposedException(nameof(AttackResultStorageService));
+            throw new ObjectDisposedException(nameof(IndexedDbService));
 
         if (!_isInitialized)
             Initialize();
@@ -275,7 +275,7 @@ public class AttackResultStorageService : IDisposable
     public async Task<AttackResult> GetByIdAsync(long id)
     {
         if (_isDisposed)
-            throw new ObjectDisposedException(nameof(AttackResultStorageService));
+            throw new ObjectDisposedException(nameof(IndexedDbService));
 
         try
         {
@@ -320,7 +320,7 @@ public class AttackResultStorageService : IDisposable
     public async Task<List<AttackResult>> GetRangeAsync(long startId, long count)
     {
         if (_isDisposed)
-            throw new ObjectDisposedException(nameof(AttackResultStorageService));
+            throw new ObjectDisposedException(nameof(IndexedDbService));
 
         try
         {

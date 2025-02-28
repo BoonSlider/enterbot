@@ -3,9 +3,9 @@ namespace GameEngine;
 
 public class DbHelper
 {
-    public static AttackResultStorageService Db { get; set; }
+    public static IndexedDbService Db { get; set; }
 
-    public DbHelper(AttackResultStorageService dbService)
+    public DbHelper(IndexedDbService dbService)
     {
         Db = dbService;
     }

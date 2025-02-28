@@ -18,7 +18,7 @@ public class Data
         set => _allPlayerData[playerId] = value;
     }
 
-    public async Task ResetWorld(AttackResultStorageService attackResultStorageService)
+    public async Task ResetWorld(IndexedDbService indexedDbService)
     {
         var defaultData = new PlayerData { Id = "default" };
         foreach (var key in _allPlayerData.Keys.ToList())
@@ -26,6 +26,6 @@ public class Data
             _allPlayerData[key].Update(defaultData);
         }
 
-        attackResultStorageService.Clear();
+        indexedDbService.Clear();
     }
 }

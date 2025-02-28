@@ -351,6 +351,8 @@
                     <div class="left1 automation">
                         <label class="automation-label" for="automation-active">Aktiivne</label>
                         <input class="automation-input" type="checkbox" id="automation-active" @bind="A.IsActive"/>
+                        <label class="automation-label" for="automation-reserve">Jäta ründamiseks</label>
+                        <input class="automation-input" type="number" id="automation-reserve" @bind="A.MoveReserve"/>
                         <label class="automation-label" for="automation-edu">Haridust</label>
                         <input class="automation-input" type="number" id="automation-edu" placeholder="koolita kuni"
                                @bind="A.EducationLimit"/>
@@ -365,7 +367,7 @@
                                placeholder="uuenda kuni" @bind="A.HouseLevel"/>
                         <label class="automation-label" for="automation-atk-lvl">Maffia lvl</label>
                         <input class="automation-input" type="number" id="automation-atk-lvl"
-                               placeholder="uuenda kuni" @bind="A.MafiaLimit"/>
+                               placeholder="uuenda kuni" @bind="A.AttackLevel"/>
                         <label class="automation-label" for="automation-def-lvl">Turva lvl</label>
                         <input class="automation-input" type="number" id="automation-def-lvl"
                                placeholder="uuenda kuni" @bind="A.DefenseLevel"/>

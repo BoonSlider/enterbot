@@ -19,7 +19,7 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 builder.Services.AddSingleton<IStringLocalizer<App>,StringLocalizer<App>>();
 builder.Services.AddSingleton<AlertTextProvider>();
 builder.Services.AddSingleton<TextProvider>();
-builder.Services.AddSingleton<AttackResultStorageService>();
+builder.Services.AddSingleton<IndexedDbService>();
 builder.Services.AddSingleton<DbHelper>();
 builder.Services.AddSingleton<AutomationService>();
 builder.Services.AddSingleton(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
@@ -27,7 +27,7 @@ builder.Services.AddSingleton(new HttpClient { BaseAddress = new Uri(builder.Hos
 var host = builder.Build();
 var auto = host.Services.GetRequiredService<AutomationService>();
 var engine = host.Services.GetRequiredService<Engine>();
-DbHelper.Db = host.Services.GetRequiredService<AttackResultStorageService>();
+DbHelper.Db = host.Services.GetRequiredService<IndexedDbService>();
 var textProvider = host.Services.GetRequiredService<TextProvider>();
 await textProvider.InitializeAsync();
 
