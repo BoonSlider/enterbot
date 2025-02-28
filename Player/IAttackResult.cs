@@ -7,5 +7,6 @@ public interface IAttackResult : IOperationResult
     public long MoneyStolen { get; }
     public long GuardsKilled { get; }
     public IDictionary<Weapon, long> WeaponsStolen { get; }
+    public long TurnNumber { get; }
 
 }

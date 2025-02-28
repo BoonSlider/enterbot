@@ -10,7 +10,7 @@
 @code {
     private IPlayer P => Engine.HumanPlayer;
     private IPlayerData D => P.MyData;
-    private LeaderboardType currentLeaderboardType = LeaderboardType.Score;
+    private LeaderboardType _currentLeaderboardType = LeaderboardType.Score;
 
     protected override void OnInitialized()
     {
@@ -33,7 +33,7 @@
     public class PlayerLeaderboardData
     {
         public int LeaderboardRank { get; set; }
-        public required string Name { get; set; }
+        public required string? Name { get; set; }
         public long Score { get; set; }
         public long Cash { get; set; }
         public string? Gang { get; set; }
@@ -90,7 +90,7 @@
 
     private List<PlayerLeaderboardData> SortLeaderboardData(List<PlayerLeaderboardData> data)
     {
-        return currentLeaderboardType switch
+        return _currentLeaderboardType switch
         {
             LeaderboardType.Score => data.OrderByDescending(p => p.Score).ToList(),
             LeaderboardType.MoneyStolen => data.OrderByDescending(p => p.MoneyStolen).ToList(),
@@ -109,7 +109,7 @@
     {
         if (Enum.TryParse<LeaderboardType>(e.Value?.ToString(), out var newType))
         {
-            currentLeaderboardType = newType;
+            _currentLeaderboardType = newType;
         }
     }
 
@@ -132,7 +132,7 @@
 
     private long GetLeaderboardValue(PlayerLeaderboardData player)
     {
-        return currentLeaderboardType switch
+        return _currentLeaderboardType switch
         {
             LeaderboardType.Score => player.Score,
             LeaderboardType.MoneyStolen => player.MoneyStolen,
@@ -147,7 +147,7 @@
         };
     }
 
-    private string GetClass(string id)
+    private string GetClass(string? id)
     {
         if (id == P.Id)
         {
@@ -220,7 +220,7 @@
         <select id="leaderboardType" @onchange="ChangeLeaderboardType">
             @foreach (LeaderboardType type in Enum.GetValues(typeof(LeaderboardType)))
             {
-                <option value="@type" selected="@(type == currentLeaderboardType)">@GetLeaderboardDisplayName(type)</option>
+                <option value="@type" selected="@(type == _currentLeaderboardType)">@GetLeaderboardDisplayName(type)</option>
             }
         </select>
     </div>
@@ -245,7 +245,7 @@
                     Nimi </a>
             </th>
             <th>
-                @GetLeaderboardDisplayName(currentLeaderboardType)
+                @GetLeaderboardDisplayName(_currentLeaderboardType)
             </th>
             <th>
                 Sularaha

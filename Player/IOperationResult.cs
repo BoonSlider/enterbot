@@ -10,7 +10,7 @@ public interface IOperationResult
     {
         if (!Success)
         {
-            throw new Exception("Result was not successful.");
+            throw new Exception($"Result was not successful: {Type}");
         }
     }
 }

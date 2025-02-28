@@ -1,11 +1,18 @@
 @page "/sündmused"
 @page "/events"
 @using GameEngine
-@inject AttackResultStorageService Log
+@using UI.Services
+
+@using Player
+@inject IndexedDbService Log
 @inject AlertTextProvider AlertText
 @inject ChangeNotifier Changes
+@inject Engine Engine
+@inject AlertService Alerts
 
 @code {
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
     private IList<AttackResult> events = new List<AttackResult>();
     private long currentPage = 0;
     private const long PageSize = 30;
@@ -23,7 +30,7 @@
     private async Task LoadPage()
     {
         var startId = currentPage * PageSize;
-        events = (await Log.GetRangeAsync(startId, PageSize)).ToList();
+        events = (await Log.GetRangeAsync(startId, PageSize)).Where(ev => ev.Attacker == P.Id || ev.Defender == P.Id).ToList();
         StateHasChanged();
     }
 
@@ -45,6 +52,12 @@
         }
     }
 
+    private string GetClass(AttackResult atk)
+    {
+        bool isSucc = atk.Attacker == P.Id && atk.AttackSucceeded || atk.Defender == P.Id && !atk.AttackSucceeded;
+        return $"atk-event {(isSucc ? "atk-succ" : "atk-fail")}";
+    }
+
 }
 
 <div class="pagination">
@@ -55,8 +68,8 @@
 
 @foreach (var atk in events)
 {
-    <div class="atk-event">
-        @atk.Attacker -> @atk.Defender
+    <div class="@GetClass(atk)">
+        @atk.Attacker -> @atk.Defender (käigul @atk.TurnNumber)
         <p>@AlertText.GetMessageText(atk).Message</p>
     </div>
 }

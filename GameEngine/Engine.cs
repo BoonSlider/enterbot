@@ -8,16 +8,18 @@ public class Engine
 {
     private readonly LocalStorageService _storage;
     private readonly ChangeNotifier _changes;
+    private readonly IndexedDbService _indexedDbService;
     private const string HumanPlayerId = "mina";
     public IPlayer HumanPlayer => _humanPlayer;
     private readonly Player _humanPlayer;
     private readonly Data _data = new();
     private readonly List<BotWithData> _bots = [];
 
-    public Engine(LocalStorageService storage, ChangeNotifier changes)
+    public Engine(LocalStorageService storage, ChangeNotifier changes, IndexedDbService indexedDbService)
     {
         _storage = storage;
         _changes = changes;
+        _indexedDbService = indexedDbService;
         _data.AddPlayer(HumanPlayerId);
         _humanPlayer = new Player(HumanPlayerId, _data);
     }
@@ -67,11 +69,11 @@ public class Engine
     public async Task HumanEndTurn(bool notifyChanges, AutomationSettings a)
     {
         var humanBot = new HumanBot(a);
-        humanBot.PlayTurn(_humanPlayer);
+        await humanBot.PlayTurn(_humanPlayer);
         
         foreach (var bot in _bots.OrderBy(_ => Random.Shared.Next()))
         {
-            bot.Strategy.PlayTurn(bot.Player);
+            await bot.Strategy.PlayTurn(bot.Player);
         }
 
         foreach (var bot in _bots)
@@ -94,7 +96,7 @@ public class Engine
         await SaveHumanPlayerAsync();
     }
 
-    public async Task SaveHumanPlayerAsync()
+    private async Task SaveHumanPlayerAsync()
     {
         await _storage.SetItemAsync(GetStorageKey(_humanPlayer.Mut), _humanPlayer.Mut);
     }
@@ -119,7 +121,7 @@ public class Engine
 
     public async Task ResetWorld()
     {
-        _data.ResetWorld();
+        await _data.ResetWorld(_indexedDbService);
         await SaveAll();
     }
 }

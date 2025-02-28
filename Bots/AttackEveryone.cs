@@ -5,7 +5,7 @@ namespace Bots;
 public class AttackEveryone(int nameSuffix) : IBot(nameSuffix)
 {
     public override string NamePrefix => "sarimõrvar";
-    public override void PlayTurn(IPlayer p)
+    public override async Task PlayTurn(IPlayer p)
     {
         var d = p.MyData;
         if (d.Moves < 100)
@@ -13,8 +13,8 @@ public class AttackEveryone(int nameSuffix) : IBot(nameSuffix)
             return;
         }
 
-        Common.AllMovesMobsters(p,20);
-        Common.AttackRandomPlayer(p);
+        Common.AllMovesMobsters(p,null, 20);
+        await Common.AttackRandomPlayer(p);
         Common.MaximizeAtkLvl(p);
         Common.MaximizeDefLvl(p);
         Common.MaximizeHouseLvl(p);

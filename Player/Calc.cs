@@ -95,13 +95,13 @@ public static class Calc
         return cost;
     }
 
-    public static long MaxHouseThatCanBeBought(IPlayerData p)
+    public static long MaxHouseThatCanBeBought(IPlayerData p, int maxLvl = Consts.MaxHouseLvl)
     {
         var nxt = p.HouseLevel + 1;
         var moneyLeft = p.Money;
         while (true)
         {
-            if (nxt > Consts.MaxHouseLvl)
+            if (nxt > maxLvl)
                 break;
             var houseData = Houses.GetHouseData(nxt);
             if (houseData.RequiredFame > p.Fame)
@@ -126,11 +126,11 @@ public static class Calc
         return Math.Max(0L, victim.Guards - underProtection);
     }
 
-    public static int MaxAffordableAtkLvl(IPlayerData d)
+    public static int MaxAffordableAtkLvl(IPlayerData d, int maxLevel = Consts.MaxAtkDefLvl)
     {
         var money = d.Money;
         var setTo = d.AtkLevel;
-        for (var lvl = d.AtkLevel + 1; lvl <= Consts.MaxAtkDefLvl; ++lvl)
+        for (var lvl = d.AtkLevel + 1; lvl <= maxLevel; ++lvl)
         {
             var price = Levels.LevelPrices[lvl];
             if (money >= price)
@@ -153,11 +153,11 @@ public static class Calc
     }
 
     public static long MaxEducation => Jobs.GetJobData(Consts.MaxJob).RequiredEducation;
-    public static int MaxAffordableDefLvl(IPlayerData d)
+    public static int MaxAffordableDefLvl(IPlayerData d, int maxLvl = Consts.MaxAtkDefLvl)
     {
         var money = d.Money;
         var setTo = d.DefLevel;
-        for (var lvl = d.DefLevel + 1; lvl <= Consts.MaxAtkDefLvl; ++lvl)
+        for (var lvl = d.DefLevel + 1; lvl <= maxLvl; ++lvl)
         {
             var price = Levels.LevelPrices[lvl];
             if (money >= price)
@@ -174,10 +174,10 @@ public static class Calc
         return setTo;
     }
 
-    public static long CanBuyWeapon(IPlayerData d, Weapon w)
+    public static long CanBuyWeapon(IPlayerData d, Weapon w, long keepMoves)
     {
         var moneyAllows = d.Money / Consts.WeaponPrice[w];
-        var movesAllow = d.Moves / Consts.BuyWeaponMoves;
+        var movesAllow = Math.Max(d.Moves-keepMoves, 0L) / Consts.BuyWeaponMoves;
         return Math.Min(moneyAllows, movesAllow);
     }
 

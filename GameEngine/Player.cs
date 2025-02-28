@@ -134,26 +134,26 @@ public class Player(string id, Data data) : IPlayer
     {
         if (foodAmount <= 0) return OpRes.Err(MessageType.MustBePositive);
         var cost = foodAmount * Consts.FoodPrice;
-        foreach (var item in moonshineItemCounts.Keys.ToList())
-        {
-            if (item == MoonshineItem.Puskar)
-                return OpRes.Err(MessageType.MoonshineCantBeBought);
-            if (moonshineItemCounts[item] <= 0)
-            {
-                return OpRes.Err(MessageType.MustBePositive);
-            }
-
-            cost += Consts.MoonshinePrices[item] * moonshineItemCounts[item];
-        }
+        // foreach (var item in moonshineItemCounts.Keys.ToList())
+        // {
+        //     if (item == MoonshineItem.Puskar)
+        //         return OpRes.Err(MessageType.MoonshineCantBeBought);
+        //     if (moonshineItemCounts[item] <= 0)
+        //     {
+        //         return OpRes.Err(MessageType.MustBePositive);
+        //     }
+        //
+        //     cost += Consts.MoonshinePrices[item] * moonshineItemCounts[item];
+        // }
 
         if (cost <= 0) return OpRes.Err(MessageType.MustBePositive);
         if (Mut.Money < cost) return OpRes.Err(MessageType.NotEnoughMoney);
         Mut.Money -= cost;
         Mut.Food += foodAmount;
-        foreach (var item in moonshineItemCounts.Keys.ToList())
-        {
-            Mut.MoonshineItemCounts[item] += moonshineItemCounts[item];
-        }
+        // foreach (var item in moonshineItemCounts.Keys.ToList())
+        // {
+        //     Mut.MoonshineItemCounts[item] += moonshineItemCounts[item];
+        // }
 
         return OpRes.Ok(MessageType.BoughtIngredients);
     }
@@ -179,7 +179,7 @@ public class Player(string id, Data data) : IPlayer
         return OpRes.Ok(MessageType.BoughtNewBuilding);
     }
 
-    public IOperationResult AttackPlayer(string victimId, bool withGang)
+    public async Task<IOperationResult> AttackPlayer(string victimId, bool withGang)
     {
         if (Mut.Mobsters < Consts.MinimumMobstersToAttack)
             return OpRes.Err(MessageType.NotEnoughMobsters);
@@ -204,8 +204,9 @@ public class Player(string id, Data data) : IPlayer
             {
                 Success = true, AttackSucceeded = true, MoneyStolen = moneyStolen, GuardsKilled = guardsKilled,
                 Attacker = Mut.Id, Defender = victim.Id,
+                TurnNumber = Mut.TurnsPlayed,
             };
-            // DbHelper.Db.Save(res);
+            // await DbHelper.Db!.SaveAsync(res);
             foreach (var weapon in victim.Weapons.Keys)
             {
                 var free = Calc.GetFreeWeapons(victim, weapon);
@@ -253,9 +254,9 @@ public class Player(string id, Data data) : IPlayer
         var resFail = new AttackResult
         {
             Success = true, AttackSucceeded = false, MenLost = menLost,
-                Attacker = Mut.Id, Defender = victim.Id,
+                Attacker = Mut.Id, Defender = victim.Id, TurnNumber = Mut.TurnsPlayed,
         };
-        // DbHelper.Db.Save(resFail);
+        // await DbHelper.Db!.SaveAsync(resFail);
         return resFail;
     }
 

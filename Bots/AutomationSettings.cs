@@ -11,11 +11,12 @@ public class AutomationSettings
     public int? HouseLevel { get; set; }
     public int? AttackLevel { get; set; }
     public int? DefenseLevel { get; set; }
+    public int MoveReserve { get; set; }
 
-    public Dictionary<Weapon, long?> WeaponLimits { get; set; } =
-        Enum.GetValues<Weapon>().ToDictionary(s => s, s => (long?)null);
+    public Dictionary<Weapon, long?> WeaponLimits { get; init; } =
+        Enum.GetValues<Weapon>().ToDictionary(s => s, _ => (long?)null);
 
     public long AttackMoneyDefault { get; set; }
-    public Dictionary<string, long?> PlayerAttackReq { get; set; } = new();
-    public Dictionary<string, bool> ShouldAttackPlayer { get; set; } = new();
+    public Dictionary<string, long?> PlayerAttackReq { get; init; } = new();
+    public Dictionary<string, bool> ShouldAttackPlayer { get; init; } = new();
 }

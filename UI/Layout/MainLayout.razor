@@ -1,5 +1,4 @@
 ﻿@namespace UI.Layout
-@using System.Runtime.Loader
 @using Bots
 @using GameEngine
 @using Player
@@ -17,15 +16,15 @@
     private IPlayerData D => P.MyData;
     private long? _movesNeed;
     private AutomationSettings A => Auto.Settings;
-    private EditContext _editContext;
+    private readonly EditContext _editContext;
 
-    public MainLayout(AutomationService _auto)
+    public MainLayout(AutomationService auto)
     {
-        _editContext = new EditContext(_auto.Settings);
-        _editContext.OnFieldChanged += async (sender, e) => await HandleFieldChanged(sender, e);
+        _editContext = new EditContext(auto.Settings);
+        _editContext.OnFieldChanged += async (_, _) => await HandleFieldChanged();
     }
 
-    private async Task HandleFieldChanged(object? sender, FieldChangedEventArgs e)
+    private async Task HandleFieldChanged()
     {
         A.AttackMoneyDefault = 666;
         Alerts.ShowAlert(OpRes.Ok(MessageType.Todo));
@@ -351,6 +350,8 @@
                     <div class="left1 automation">
                         <label class="automation-label" for="automation-active">Aktiivne</label>
                         <input class="automation-input" type="checkbox" id="automation-active" @bind="A.IsActive"/>
+                        <label class="automation-label" for="automation-reserve">Jäta ründamiseks</label>
+                        <input class="automation-input" type="number" id="automation-reserve" @bind="A.MoveReserve"/>
                         <label class="automation-label" for="automation-edu">Haridust</label>
                         <input class="automation-input" type="number" id="automation-edu" placeholder="koolita kuni"
                                @bind="A.EducationLimit"/>
@@ -365,7 +366,7 @@
                                placeholder="uuenda kuni" @bind="A.HouseLevel"/>
                         <label class="automation-label" for="automation-atk-lvl">Maffia lvl</label>
                         <input class="automation-input" type="number" id="automation-atk-lvl"
-                               placeholder="uuenda kuni" @bind="A.MafiaLimit"/>
+                               placeholder="uuenda kuni" @bind="A.AttackLevel"/>
                         <label class="automation-label" for="automation-def-lvl">Turva lvl</label>
                         <input class="automation-input" type="number" id="automation-def-lvl"
                                placeholder="uuenda kuni" @bind="A.DefenseLevel"/>

@@ -8,6 +8,7 @@ public static class Common
 
     public static void EnsureFood(IPlayer p, long amount)
     {
+        if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
         if (amount == 0) return;
         var d = p.MyData;
         var need = Math.Max(0L, amount - d.Food);
@@ -16,26 +17,26 @@ public static class Common
         p.BuyFood(buy).AssertOk();
     }
 
-    public static void MaximizeAtkLvl(IPlayer p)
+    public static void MaximizeAtkLvl(IPlayer p, int maxLvl = Consts.MaxAtkDefLvl)
     {
         var d = p.MyData;
-        var canAtkLvl = Calc.MaxAffordableAtkLvl(d);
+        var canAtkLvl = Calc.MaxAffordableAtkLvl(d, maxLvl);
         if (canAtkLvl != d.AtkLevel)
             p.UpdateAtkLevel(canAtkLvl).AssertOk();
     }
 
-    public static void MaximizeDefLvl(IPlayer p)
+    public static void MaximizeDefLvl(IPlayer p, int maxLvl = Consts.MaxAtkDefLvl)
     {
         var d = p.MyData;
-        var canDefLvl = Calc.MaxAffordableDefLvl(d);
+        var canDefLvl = Calc.MaxAffordableDefLvl(d, maxLvl);
         if (canDefLvl != d.DefLevel)
             p.UpdateDefLevel(canDefLvl).AssertOk();
     }
 
-    public static void MaximizeHouseLvl(IPlayer p)
+    public static void MaximizeHouseLvl(IPlayer p, int maxLvl = Consts.MaxHouseLvl)
     {
         var d = p.MyData;
-        var canHouseLvl = Calc.MaxHouseThatCanBeBought(d);
+        var canHouseLvl = Calc.MaxHouseThatCanBeBought(d, maxLvl);
         if (canHouseLvl != d.HouseLevel)
             p.BuyHouse(canHouseLvl).AssertOk();
     }
@@ -53,29 +54,36 @@ public static class Common
         }
     }
 
-    public static void AllMovesMobsters(IPlayer p, long keepMoves = 0)
+    public static void AllMovesMobsters(IPlayer p, long? maxCount, long keepMoves)
     {
         var d = p.MyData;
         var moves = Math.Max(0L, d.Moves - keepMoves);
         var movesAllow = moves / Consts.MobsterMoves;
+        var limAllows = maxCount == null ? movesAllow : Math.Max(maxCount.Value - d.Mobsters, 0L);
+        movesAllow = Math.Min(movesAllow, limAllows);
         EnsureFood(p, movesAllow * Consts.MobsterFood);
         var canHire = Calc.CanHireMobsters(d);
         canHire = Math.Min(canHire, movesAllow);
         if (canHire == 0) return;
         p.HireMobsters(canHire).AssertOk();
     }
-
-    public static void AllMovesGuards(IPlayer p)
+    
+    public static void AllMovesGuards(IPlayer p, long? maxCount, long keepMoves)
     {
         var d = p.MyData;
-        var movesAllow = d.Moves / Consts.GuardMoves;
+        var moves = Math.Max(0L, d.Moves - keepMoves);
+        var movesAllow = moves / Consts.GuardMoves;
+        var limAllows = maxCount == null ? movesAllow : Math.Max(maxCount.Value - d.Guards, 0L);
+        movesAllow = Math.Min(movesAllow, limAllows);
         EnsureFood(p, movesAllow * Consts.GuardFood);
         var canHire = Calc.CanHireGuards(d);
+        canHire = Math.Min(canHire, movesAllow);
         if (canHire == 0) return;
         p.HireGuards(canHire).AssertOk();
     }
 
-    public static void AttackRandomPlayer(IPlayer p)
+
+    public static async Task AttackRandomPlayer(IPlayer p)
     {
         var d = p.MyData;
         if (Calc.CanAttack(d))
@@ -87,19 +95,31 @@ public static class Common
                 target = Rng.Next(players.Count);
             }
 
-            p.AttackPlayer(players[target], false);
+            await p.AttackPlayer(players[target], false);
         }
     }
 
-    public static void AllMovesWeapon(IPlayer p, Weapon w, long? max = null)
+    public static void AllMovesWeapon(IPlayer p, Weapon w, long? max, long keepMoves)
     {
         var d = p.MyData;
-        var canBuy = Calc.CanBuyWeapon(d, w);
+        var canBuy = Calc.CanBuyWeapon(d, w, keepMoves);
         if (max != null)
         {
             canBuy = Math.Min(canBuy, Math.Max(0L, max.Value - d.Weapons[w]));
         }
         if (canBuy > 0)
             p.BuyWeapons(new Dictionary<Weapon, long> { [w] = canBuy }).AssertOk();
+    }
+
+    public static async Task<IOperationResult?> SafeAttackPlayer(IPlayer p, string vic, bool withGang)
+    {
+        var d = p.MyData;
+        if (Calc.CanAttack(d))
+        {
+            var res = await p.AttackPlayer(vic, withGang);
+            return res;
+        }
+
+        return null;
     }
 }

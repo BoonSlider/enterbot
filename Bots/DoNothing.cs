@@ -6,8 +6,9 @@ public class DoNothing(int nameSuffix) : IBot(nameSuffix)
 {
     public override string NamePrefix => "ei_mängi";
 
-    public override void PlayTurn(IPlayer p)
+    public override Task PlayTurn(IPlayer p)
     {
+        return Task.CompletedTask;
         // no actions
     }
 }
