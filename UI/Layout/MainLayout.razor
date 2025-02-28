@@ -1,4 +1,6 @@
 ﻿@namespace UI.Layout
+@using System.Runtime.Loader
+@using Bots
 @using GameEngine
 @using Player
 @using UI.Services
@@ -7,11 +9,29 @@
 @inject ChangeNotifier Changes
 @inject AlertService Alerts
 @inject AlertTextProvider AlertTextProvider
+@inject AutomationService Auto
+@inject TextProvider L
 
 @code {
     private IPlayer P => Engine.HumanPlayer;
     private IPlayerData D => P.MyData;
     private long? _movesNeed;
+    private AutomationSettings A => Auto.Settings;
+    private EditContext _editContext;
+
+    public MainLayout(AutomationService _auto)
+    {
+        _editContext = new EditContext(_auto.Settings);
+        _editContext.OnFieldChanged += async (sender, e) => await HandleFieldChanged(sender, e);
+    }
+
+    private async Task HandleFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        A.AttackMoneyDefault = 666;
+        Alerts.ShowAlert(OpRes.Ok(MessageType.Todo));
+        await Auto.SaveAsync();
+        StateHasChanged();
+    }
 
     public void Dispose()
     {
@@ -20,8 +40,10 @@
 
     private readonly List<IOperationResult> _alerts = [];
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await Auto.LoadAsync();
+        Auto.InitializeWith(P.GetAllPlayers());
         Changes.OnChange += StateHasChanged;
         Alerts.OnAlert += (message) =>
         {
@@ -64,12 +86,6 @@
         StateHasChanged();
     }
 
-    private long GetBankPercentage()
-    {
-        var cash = D.GetCash();
-        var bank = D.Money - cash;
-        return 100 * bank / (cash + bank);
-    }
 }
 
 <div class="alert-container">
@@ -213,9 +229,7 @@
         <div id="leftcolumn">
             <!-- Start Box -->
             <div id="left">
-                <div class="left1h">
-                    Uuenda
-                </div>
+                <div class="left1h">Uuenda</div>
                 <div class="left1">
                     <ul>
                         <li class="update-buttons">
@@ -245,6 +259,7 @@
                         </li>
                     </ul>
                 </div>
+
                 <div class="left1h">Menüü</div>
                 <div class="left1">
                     <p class="boxTxt1"></p>
@@ -325,6 +340,57 @@
                     <br>
                     <p></p>
                 </div>
+
+                <form @onsubmit="async () => await Auto.SaveAsync()">
+                    <div class="left1h">Automatsioon</div>
+                    <div class="left1 automation">
+                        <label class="automation-label" for="automation-active">Aktiivne</label>
+                        <input class="automation-input" type="checkbox" id="automation-active" @bind="A.IsActive"/>
+                        <label class="automation-label" for="automation-edu">Haridust</label>
+                        <input class="automation-input" type="number" id="automation-edu" placeholder="koolita kuni" @bind="A.EducationLimit"/>
+                        <label class="automation-label" for="automation-mafia">Mafioososid</label>
+                        <input class="automation-input" type="number" id="automation-mafia" placeholder="palka kuni" @bind="A.MafiaLimit"/>
+                        <label class="automation-label" for="automation-guards">Turvasid</label>
+                        <input class="automation-input" type="number" id="automation-guards" placeholder="palka kuni" @bind="A.GuardsLimit"/>
+                        <label class="automation-label" for="automation-house-lvl">Hoone lvl</label>
+                        <input class="automation-input" type="number" id="automation-house-lvl"
+                               placeholder="uuenda kuni" @bind="A.HouseLevel"/>
+                        <label class="automation-label" for="automation-atk-lvl">Maffia lvl</label>
+                        <input class="automation-input" type="number" id="automation-atk-lvl"
+                               placeholder="uuenda kuni" @bind="A.MafiaLimit"/>
+                        <label class="automation-label" for="automation-def-lvl">Turva lvl</label>
+                        <input class="automation-input" type="number" id="automation-def-lvl"
+                               placeholder="uuenda kuni" @bind="A.DefenseLevel"/>
+                        @foreach (var w in Enum.GetValues<Weapon>())
+                        {
+                            <label class="automation-label" for="automation-@w">@L.GetEnumTranslation(w)</label>
+                            <input class="automation-input" type="number" id="automation-@w" placeholder="osta kuni" @bind="A.WeaponLimits[w]"/>
+                        }
+                        <label class="automation-label" for="automation-attack-default">Ründa kui käes</label>
+                        <input class="automation-input" type="number" id="automation-attack-default" placeholder="raha"
+                               @bind="A.AttackMoneyDefault"/>
+                        @foreach (var id in P.GetAllPlayers())
+                        {
+                            if (id != P.Id)
+                            {
+                                <label class="automation-label">
+                                    <input type="checkbox"/>
+                                    @id
+                                </label>
+                                @if (A.PlayerAttackReq.ContainsKey(id))
+                                {
+                                    <input class="automation-input" type="number" placeholder="@A.AttackMoneyDefault"
+                                           @bind="A.PlayerAttackReq[id]"/>
+                                }
+                            }
+                        }
+
+                        <button class="automation-save-button">Salvesta</button>
+                        <button type="button" class="automation-clean-button"
+                                @onclick="async() => await Auto.ClearAsync()">Puhasta
+                        </button>
+                    </div>
+                </form>
             </div>
             <!-- End Box -->
         </div>

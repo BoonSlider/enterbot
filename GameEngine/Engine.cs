@@ -66,6 +66,8 @@ public class Engine
 
     public async Task HumanEndTurn(bool notifyChanges)
     {
+        
+        
         foreach (var bot in _bots.OrderBy(_ => Random.Shared.Next()))
         {
             bot.Strategy.PlayTurn(bot.Player);

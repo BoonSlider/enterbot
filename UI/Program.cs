@@ -21,9 +21,12 @@ builder.Services.AddSingleton<AlertTextProvider>();
 builder.Services.AddSingleton<TextProvider>();
 builder.Services.AddSingleton<AttackResultStorageService>();
 builder.Services.AddSingleton<DbHelper>();
+builder.Services.AddSingleton<AutomationService>();
 builder.Services.AddSingleton(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 var host = builder.Build();
+var auto = host.Services.GetRequiredService<AutomationService>();
+var engine = host.Services.GetRequiredService<Engine>();
 DbHelper.Db = host.Services.GetRequiredService<AttackResultStorageService>();
 var textProvider = host.Services.GetRequiredService<TextProvider>();
 await textProvider.InitializeAsync();
@@ -32,8 +35,9 @@ var culture = new CultureInfo("et-EE");
 CultureInfo.DefaultThreadCurrentCulture = culture;
 CultureInfo.DefaultThreadCurrentUICulture = culture;
 
-var engine = host.Services.GetRequiredService<Engine>();
 engine.AddBots();
 await engine.InitializeAsync();
 
 await host.RunAsync();
+auto.InitializeWith(engine.HumanPlayer.GetAllPlayers());
+await auto.LoadAsync();
