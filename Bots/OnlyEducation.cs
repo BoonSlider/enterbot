@@ -10,7 +10,7 @@ public class OnlyEducation(int nameSuffix) : IBot(nameSuffix)
     {
         var d = p.MyData;
         Common.AllMovesEducation(p);
-        Common.AllMovesGuards(p, null, 0);
+        Common.AllMovesMobsters(p, null, 0);
         Common.MaximizeDefLvl(p);
         Common.MaximizeHouseLvl(p);
         if (d is { HouseLevel: >= 26, DefLevel: Consts.MaxAtkDefLvl })

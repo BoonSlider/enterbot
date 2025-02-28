@@ -8,6 +8,7 @@ public static class Common
 
     public static void EnsureFood(IPlayer p, long amount)
     {
+        if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
         if (amount == 0) return;
         var d = p.MyData;
         var need = Math.Max(0L, amount - d.Food);

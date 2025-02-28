@@ -1,19 +1,15 @@
-using Microsoft.JSInterop;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Text.Json;
-using System.Threading.Tasks;
+
+namespace UI.Services;
 
 public class TextProvider
 {
     private readonly HttpClient _httpClient;
-    private readonly IJSRuntime _jsRuntime;
-    private Dictionary<string, string> _translations;
+    private Dictionary<string, string> _translations=null!;
 
-    public TextProvider(HttpClient httpClient, IJSRuntime jsRuntime)
+    public TextProvider(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _jsRuntime = jsRuntime;
     }
 
     public async Task InitializeAsync()
@@ -24,12 +20,7 @@ public class TextProvider
 
     public string GetText(string key)
     {
-        if (_translations != null && _translations.ContainsKey(key))
-        {
-            return _translations[key];
-        }
-
-        return key; // Return the key itself if not found in the dictionary
+        return _translations.GetValueOrDefault(key, key); // Return the key itself if not found in the dictionary
     }
 
     public string GetEnumTranslation<T>(T enumValue) where T : Enum

@@ -69,7 +69,7 @@
 @foreach (var atk in events)
 {
     <div class="@GetClass(atk)">
-        @atk.Attacker -> @atk.Defender
+        @atk.Attacker -> @atk.Defender (käigul @atk.TurnNumber)
         <p>@AlertText.GetMessageText(atk).Message</p>
     </div>
 }

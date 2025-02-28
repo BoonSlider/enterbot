@@ -1,6 +1,7 @@
 using GameEngine;
 using Player;
 using UI;
+using UI.Services;
 
 public class AlertTextProvider
 {
