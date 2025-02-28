@@ -28,14 +28,14 @@ public class Engine
     {
         List<IBot> botList =
         [
-            new DoNothing(1),
-            new OnlyEducation(1),
-            new GreedyDefense(1),
+            // new DoNothing(1),
+            // new OnlyEducation(1),
+            // new GreedyDefense(1),
             new AttackEveryone(1),
-            new RandomMover(1),
-            new ArmorHoarder(1),
-            new ClaudeBot(1),
-            new BalancedMafiaBoss(1),
+            // new RandomMover(1),
+            // new ArmorHoarder(1),
+            // new ClaudeBot(1),
+            // new BalancedMafiaBoss(1),
         ];
         foreach (var bot in botList)
         {

@@ -206,7 +206,7 @@ public class Player(string id, Data data) : IPlayer
                 Attacker = Mut.Id, Defender = victim.Id,
                 TurnNumber = Mut.TurnsPlayed,
             };
-            // await DbHelper.Db!.SaveAsync(res);
+            await DbHelper.Db!.SaveAsync(res);
             foreach (var weapon in victim.Weapons.Keys)
             {
                 var free = Calc.GetFreeWeapons(victim, weapon);
@@ -256,7 +256,7 @@ public class Player(string id, Data data) : IPlayer
             Success = true, AttackSucceeded = false, MenLost = menLost,
                 Attacker = Mut.Id, Defender = victim.Id, TurnNumber = Mut.TurnsPlayed,
         };
-        // await DbHelper.Db!.SaveAsync(resFail);
+        await DbHelper.Db!.SaveAsync(resFail);
         return resFail;
     }
 
