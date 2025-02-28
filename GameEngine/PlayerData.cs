@@ -7,6 +7,7 @@ public class PlayerData : IPlayerData
     public required string Id { get; init; }
     public int AtkLevel { get; set; } = 1;
     public int DefLevel { get; set; } = 1;
+
     public IDictionary<MoonshineItem, long> MoonshineItemCounts { get; set; } = new Dictionary<MoonshineItem, long>
     {
         { MoonshineItem.Teravili, 0 },
@@ -15,13 +16,15 @@ public class PlayerData : IPlayerData
         { MoonshineItem.Puskar, 0 },
     };
 
-    public IDictionary<GymStat, long> GymStats { get; set; } = new Dictionary<GymStat, long> {
+    public IDictionary<GymStat, long> GymStats { get; set; } = new Dictionary<GymStat, long>
+    {
         { GymStat.Skill, 10 },
         { GymStat.Strength, 10 },
         { GymStat.Agility, 10 },
     };
 
-    public IDictionary<Weapon, long> Weapons { get; set; } = new Dictionary<Weapon, long> {
+    public IDictionary<Weapon, long> Weapons { get; set; } = new Dictionary<Weapon, long>
+    {
         { Weapon.Bat, 0 },
         { Weapon.Knife, 0 },
         { Weapon.Axe, 0 },
@@ -60,6 +63,14 @@ public class PlayerData : IPlayerData
         Moves = saved.Moves;
         TurnsPlayed = saved.TurnsPlayed;
         WeaponsSaved(saved);
+        MoneyStolen = saved.MoneyStolen;
+        MoneyLost = saved.MoneyLost;
+        GuardsLost = saved.GuardsLost;
+        GuardsKilled = saved.GuardsKilled;
+        MobstersLost = saved.GuardsLost;
+        MobstersKilled = saved.MobstersLost;
+        WeaponsStolen = saved.WeaponsStolen;
+        WeaponsLost = saved.WeaponsLost;
     }
 
     private void GymStatsSaved(PlayerData saved)
@@ -69,7 +80,7 @@ public class PlayerData : IPlayerData
             GymStats[key] = saved.GymStats[key];
         }
     }
-     
+
     private void WeaponsSaved(PlayerData saved)
     {
         foreach (var key in saved.Weapons.Keys)
@@ -106,6 +117,16 @@ public class PlayerData : IPlayerData
     {
         return Math.Max(Money - Calc.GetBankLimit(this), 0L);
     }
+
+    public long MoneyStolen { get; set; }
+    public long MoneyLost { get; set; }
+    public long GuardsKilled { get; set; }
+    public long GuardsLost { get; set; }
+    public long MobstersKilled { get; set; }
+    public long MobstersLost { get; set; }
+    public long WeaponsStolen { get; set; }
+    public long WeaponsLost { get; set; }
+
     public FameLevel GetFameLevel()
     {
         return Enum.GetValues(typeof(FameLevel))

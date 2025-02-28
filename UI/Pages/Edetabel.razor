@@ -10,10 +10,24 @@
 @code {
     private IPlayer P => Engine.HumanPlayer;
     private IPlayerData D => P.MyData;
+    private LeaderboardType currentLeaderboardType = LeaderboardType.Score;
 
     protected override void OnInitialized()
     {
         Changes.OnChange += StateHasChanged;
+    }
+
+    public enum LeaderboardType
+    {
+        Score,
+        MoneyStolen,
+        MoneyLost,
+        GuardsKilled,
+        GuardsLost,
+        MobstersKilled,
+        MobstersLost,
+        WeaponsStolen,
+        WeaponsLost,
     }
 
     public class PlayerLeaderboardData
@@ -24,20 +38,113 @@
         public long Cash { get; set; }
         public string? Gang { get; set; }
         public FameLevel Fame { get; set; }
+        public required long MoneyStolen { get; init; }
+        public required long MoneyLost { get; init; }
+        public required long GuardsKilled { get; init; }
+        public required long GuardsLost { get; init; }
+        public required long MobstersKilled { get; init; }
+        public required long MobstersLost { get; init; }
+        public required long WeaponsStolen { get; init; }
+        public required long WeaponsLost { get; init; }
     }
 
     public List<PlayerLeaderboardData> GetAllPlayers()
     {
-        var players = P.GetAllPlayers().Select(id => P.GetPlayerData(id)).OrderByDescending(p => p.GetScore());
+        var players = P.GetAllPlayers();
         var data = new List<PlayerLeaderboardData>();
-        var index = 1;
-        foreach (var player in players)
+        
+        // Convert to our leaderboard data model
+        foreach (var playerId in players)
         {
-            data.Add(new PlayerLeaderboardData { LeaderboardRank = index, Name = player.Id, Score = player.GetScore(), Cash = player.GetCash(), Gang = null, Fame = player.GetFameLevel() });
-            index++;
+            var player = P.GetPlayerData(playerId);
+            data.Add(new PlayerLeaderboardData
+            {
+                LeaderboardRank = 0, // Will be set after sorting
+                Name = player.Id,
+                Score = player.GetScore(),
+                Cash = player.GetCash(),
+                Gang = null,
+                Fame = player.GetFameLevel(),
+                MoneyStolen = player.MoneyStolen,
+                MoneyLost = player.MoneyLost,
+                GuardsKilled = player.GuardsKilled,
+                GuardsLost = player.GuardsLost,
+                MobstersKilled = player.MobstersKilled,
+                MobstersLost = player.MobstersLost,
+                WeaponsStolen = player.WeaponsStolen,
+                WeaponsLost = player.WeaponsLost,
+            });
+        }
+
+        // Sort based on selected leaderboard type
+        data = SortLeaderboardData(data);
+
+        // Assign ranks after sorting
+        for (int i = 0; i < data.Count; i++)
+        {
+            data[i].LeaderboardRank = i + 1;
         }
 
         return data;
+    }
+
+    private List<PlayerLeaderboardData> SortLeaderboardData(List<PlayerLeaderboardData> data)
+    {
+        return currentLeaderboardType switch
+        {
+            LeaderboardType.Score => data.OrderByDescending(p => p.Score).ToList(),
+            LeaderboardType.MoneyStolen => data.OrderByDescending(p => p.MoneyStolen).ToList(),
+            LeaderboardType.MoneyLost => data.OrderByDescending(p => p.MoneyLost).ToList(),
+            LeaderboardType.GuardsKilled => data.OrderByDescending(p => p.GuardsKilled).ToList(),
+            LeaderboardType.GuardsLost => data.OrderByDescending(p => p.GuardsLost).ToList(),
+            LeaderboardType.MobstersKilled => data.OrderByDescending(p => p.MobstersKilled).ToList(),
+            LeaderboardType.MobstersLost => data.OrderByDescending(p => p.MobstersLost).ToList(),
+            LeaderboardType.WeaponsStolen => data.OrderByDescending(p => p.WeaponsStolen).ToList(),
+            LeaderboardType.WeaponsLost => data.OrderByDescending(p => p.WeaponsLost).ToList(),
+            _ => data.OrderByDescending(p => p.Score).ToList(),
+        };
+    }
+
+    private void ChangeLeaderboardType(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<LeaderboardType>(e.Value?.ToString(), out var newType))
+        {
+            currentLeaderboardType = newType;
+        }
+    }
+
+    private string GetLeaderboardDisplayName(LeaderboardType type)
+    {
+        return type switch
+        {
+            LeaderboardType.Score => "Skoor",
+            LeaderboardType.MoneyStolen => "Raha varastanud",
+            LeaderboardType.MoneyLost => "Raha kaotanud",
+            LeaderboardType.GuardsKilled => "Turvamehi tapnud",
+            LeaderboardType.GuardsLost => "Turvamehi kaotanud",
+            LeaderboardType.MobstersKilled => "Mafioososid tapnud",
+            LeaderboardType.MobstersLost => "Mafioososid kaotanud",
+            LeaderboardType.WeaponsStolen => "Relvi varastanud",
+            LeaderboardType.WeaponsLost => "Relvi kaotanud",
+            _ => "Skoor"
+        };
+    }
+
+    private long GetLeaderboardValue(PlayerLeaderboardData player)
+    {
+        return currentLeaderboardType switch
+        {
+            LeaderboardType.Score => player.Score,
+            LeaderboardType.MoneyStolen => player.MoneyStolen,
+            LeaderboardType.MoneyLost => player.MoneyLost,
+            LeaderboardType.GuardsKilled => player.GuardsKilled,
+            LeaderboardType.GuardsLost => player.GuardsLost,
+            LeaderboardType.MobstersKilled => player.MobstersKilled,
+            LeaderboardType.MobstersLost => player.MobstersLost,
+            LeaderboardType.WeaponsStolen => player.WeaponsStolen,
+            LeaderboardType.WeaponsLost => player.WeaponsLost,
+            _ => player.Score
+        };
     }
 
     private string GetClass(string id)
@@ -64,7 +171,6 @@
         };
         return $"fame-{color}";
     }
-
 }
 
 <h1>Mängijad</h1>
@@ -109,12 +215,16 @@
         </tbody>
     </table>
 
-    <table>
-        <tbody>
-        <tr>
-        </tr>
-        </tbody>
-    </table>
+    <div class="leaderboard-selector">
+        <label for="leaderboardType">Edetabeli tüüp:</label>
+        <select id="leaderboardType" @onchange="ChangeLeaderboardType">
+            @foreach (LeaderboardType type in Enum.GetValues(typeof(LeaderboardType)))
+            {
+                <option value="@type" selected="@(type == currentLeaderboardType)">@GetLeaderboardDisplayName(type)</option>
+            }
+        </select>
+    </div>
+
     <table class="leaderboard-table">
         <colgroup>
             <col class="leaderboard-rank-col"/>
@@ -125,7 +235,9 @@
         </colgroup>
         <tbody>
         <tr>
-            <th><div>#</div></th>
+            <th>
+                <div>#</div>
+            </th>
             <th>
                 <a href="edetabel?jrk=fame&amp;asc=1">
                     <span style="font-size: 14px; color: silver; text-shadow: 1px 1px 2px gray;">★</span> </a>
@@ -133,8 +245,7 @@
                     Nimi </a>
             </th>
             <th>
-                <a href="edetabel?jrk=score&amp;asc=1">
-                    Skoor </a>
+                @GetLeaderboardDisplayName(currentLeaderboardType)
             </th>
             <th>
                 Sularaha
@@ -154,7 +265,7 @@
                     <span class="@GetFameClass(p.Fame)" style="font-size: 14px; text-shadow: 1px 1px 2px gray;">★</span>
                     <a href="profiil/@p.Name" class="@GetClass(p.Name)">@p.Name</a>
                 </td>
-                <td class="numeric-td">@Utils.SepThousands(p.Score)</td>
+                <td class="numeric-td">@Utils.SepThousands(GetLeaderboardValue(p))</td>
                 <td class="numeric-td">@Utils.SepThousands(p.Cash)</td>
                 <td>
                     @if (p.Gang is { } gang)
