@@ -36,6 +36,7 @@ public class Engine
             new ArmorHoarder(1),
             new ClaudeBot(1),
             new BalancedMafiaBoss(1),
+            new SmartAtk(1),
         ];
         foreach (var bot in botList)
         {
