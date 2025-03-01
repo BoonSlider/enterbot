@@ -22,7 +22,7 @@
 
     private async Task AttackPlayer(IPlayerPublicData victim, bool withGang)
     {
-        Alerts.ShowAlert(await P.AttackPlayer(victim.Id, withGang));
+        Alerts.ShowAlert(P.AttackPlayer(victim.Id, withGang));
         await Changes.Notify();
     }
 
