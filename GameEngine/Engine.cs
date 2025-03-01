@@ -69,11 +69,15 @@ public class Engine
     public async Task HumanEndTurn(bool notifyChanges, AutomationSettings a)
     {
         var humanBot = new HumanBot(a);
-        humanBot.PlayTurn(_humanPlayer);
-        
+        {
+            var events = humanBot.PlayTurn(_humanPlayer);
+            await SaveEvents(events);
+        }
+
         foreach (var bot in _bots.OrderBy(_ => Random.Shared.Next()))
         {
-            bot.Strategy.PlayTurn(bot.Player);
+            var events = bot.Strategy.PlayTurn(bot.Player);
+            await SaveEvents(events);
         }
 
         foreach (var bot in _bots)
@@ -84,6 +88,18 @@ public class Engine
         BeginNextTurn(_humanPlayer.Mut);
         if (notifyChanges)
             await _changes.Notify();
+    }
+
+    private async Task SaveEvents(IList<IOperationResult> events)
+    {
+        foreach (var ev in events)
+        {
+            if (ev is AttackResult attackResult)
+            {
+                if (attackResult.Attacker == HumanPlayerId || attackResult.Defender == HumanPlayerId)
+                    await DbHelper.Db!.SaveAsync(attackResult);
+            }
+        }
     }
 
     private async Task SaveAll()
@@ -109,6 +125,7 @@ public class Engine
         {
             RunEndOfDayEvents(p);
         }
+
         p.Money += Jobs.GetExperiencedIncome(p.JobLevel, p.JobExp[p.JobLevel]);
         p.JobExp[p.JobLevel] += 1;
     }
