@@ -14,7 +14,7 @@
     color: white;
     border-radius: 4px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    animation: fadeOut 3s linear forwards;
+    animation: fadeOut 5s linear forwards;
 }
 
 .custom-alert.ok {
@@ -26,5 +26,5 @@
 
 @keyframes fadeOut {
     0% { opacity: 0.9; }
-    100% { opacity: 0.3; }
+    100% { opacity: 0.0; }
 }
