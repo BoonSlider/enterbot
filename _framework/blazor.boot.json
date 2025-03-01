@@ -1,10 +1,10 @@
 {
   "mainAssemblyName": "ui",
   "resources": {
-    "hash": "sha256-y01e0sxwj301MlMNjl12zHGRJfozz+ibl25H/kwIq7c=",
+    "hash": "sha256-JtbpoYmDpmUbmJyPfQptg06J7VbpwJ/W6dceYYWC318=",
     "fingerprinting": {
-      "Bots.72jrunqwoi.wasm": "Bots.wasm",
-      "GameEngine.n4noykgt74.wasm": "GameEngine.wasm",
+      "Bots.tvs07a14ml.wasm": "Bots.wasm",
+      "GameEngine.03p41hfkda.wasm": "GameEngine.wasm",
       "IndexedDB.Blazor.wi4xqmzb2y.wasm": "IndexedDB.Blazor.wasm",
       "Microsoft.AspNetCore.Components.Forms.g23xjr9jh4.wasm": "Microsoft.AspNetCore.Components.Forms.wasm",
       "Microsoft.AspNetCore.Components.7guv4bq0ns.wasm": "Microsoft.AspNetCore.Components.wasm",
@@ -24,7 +24,7 @@
       "Microsoft.JSInterop.bdr89uoxtd.wasm": "Microsoft.JSInterop.wasm",
       "Microsoft.JSInterop.WebAssembly.p386u0jty9.wasm": "Microsoft.JSInterop.WebAssembly.wasm",
       "netstandard.ea9p0fovac.wasm": "netstandard.wasm",
-      "Player.swvnnipb6u.wasm": "Player.wasm",
+      "Player.u4icjmq7mn.wasm": "Player.wasm",
       "System.Collections.Concurrent.6utwi9ii62.wasm": "System.Collections.Concurrent.wasm",
       "System.Collections.Immutable.cqdu2hflg9.wasm": "System.Collections.Immutable.wasm",
       "System.Collections.lp82a51dlo.wasm": "System.Collections.wasm",
@@ -49,7 +49,7 @@
       "System.Threading.Tasks.Extensions.8lgfcm41ed.wasm": "System.Threading.Tasks.Extensions.wasm",
       "System.Threading.9awl0tu40j.wasm": "System.Threading.wasm",
       "TG.Blazor.IndexedDB.y0k6n7pzc8.wasm": "TG.Blazor.IndexedDB.wasm",
-      "ui.jceyfxlwao.wasm": "ui.wasm",
+      "ui.17x5dobwnk.wasm": "ui.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.8bti36lthm.js": "dotnet.native.js",
       "dotnet.native.tr0cyonrwt.wasm": "dotnet.native.wasm",
@@ -73,8 +73,8 @@
       "System.Runtime.InteropServices.JavaScript.f4ln4hfftw.wasm": "sha256-r+LQmgoVdHgFKWJvUNAR7HQZAtSw+xvBIQ6siSPsBNM="
     },
     "assembly": {
-      "Bots.72jrunqwoi.wasm": "sha256-wSz3q89AjVa/t5zBNOSEGdkJDXkaz7sjf7gHvdkZgNY=",
-      "GameEngine.n4noykgt74.wasm": "sha256-6QJtxvpkoQbsq+0W7V16hAzyQVt+qTZ0CLhb3Y/Rt4A=",
+      "Bots.tvs07a14ml.wasm": "sha256-OXEgO/nEB3oEiXHc3VLW8vVZBBN2xJUE+WqDiiA9VtI=",
+      "GameEngine.03p41hfkda.wasm": "sha256-/MzFHc1BiKcg2vN44r2xTqjKhcnFf2u6QIB+/muVyYo=",
       "IndexedDB.Blazor.wi4xqmzb2y.wasm": "sha256-KPfBDdTsdA1UJa39MMwHDmeTAj43EMBfmy0J8wNBcuo=",
       "Microsoft.AspNetCore.Components.Forms.g23xjr9jh4.wasm": "sha256-yBzFtVpcxoVM+XCK5Nkz/WM7Ok7SH/AOnfh8tCrVnv4=",
       "Microsoft.AspNetCore.Components.7guv4bq0ns.wasm": "sha256-GST/ybwT3oDYLxNrWe80WCYHc7HSQ2dRND1cAPXxV7c=",
@@ -94,7 +94,7 @@
       "Microsoft.JSInterop.bdr89uoxtd.wasm": "sha256-j93883TLWrUsylBnXBVb1aCW34uImOVFvkmgV7v8tx0=",
       "Microsoft.JSInterop.WebAssembly.p386u0jty9.wasm": "sha256-hbzWuXrlepIqY/y+nQ2ZAFer2/njy1dc+Y4LUaAaL5E=",
       "netstandard.ea9p0fovac.wasm": "sha256-RtfO3jFnxlYazC9bU4xPo7YDw3+w3wNSSFH5otrByO4=",
-      "Player.swvnnipb6u.wasm": "sha256-tK9eSJyn1qzwqqr2LtCd2PLE5emuqoxWOdLoJMY+z6U=",
+      "Player.u4icjmq7mn.wasm": "sha256-zlEn2zHFnzlk3Pn/O0rzhWofTf0//KNj9SDHKAJQPII=",
       "System.Collections.Concurrent.6utwi9ii62.wasm": "sha256-8updEv9HCf6aAmqE9G5fjNO1fBICZO0aKm81JLZHkGE=",
       "System.Collections.Immutable.cqdu2hflg9.wasm": "sha256-/AghFjdaZVjbHXvwSdDB7WD/w9kAS73kqQzhfEofRkg=",
       "System.Collections.lp82a51dlo.wasm": "sha256-Z5nbd4uDIIWOVOuYyVEViT/DE4nmiNW9gctbdIatVNI=",
@@ -117,7 +117,7 @@
       "System.Threading.Tasks.Extensions.8lgfcm41ed.wasm": "sha256-vCWVBUrIto8psBFQS6HMm/OVI93g5YjH9rx9pyJGMi8=",
       "System.Threading.9awl0tu40j.wasm": "sha256-sQqdAQ9ilL89LZ1mSKDpn6zX4LqrL8s6DUCBQwLVvj8=",
       "TG.Blazor.IndexedDB.y0k6n7pzc8.wasm": "sha256-4u3DzThxux9K9sTeHhZyBhid/AlxJKAaouBiayJ/n5Y=",
-      "ui.jceyfxlwao.wasm": "sha256-I2AGzhKf0wYaYx5H1GhI1/HQlJM2ZZMPAcV0mR1RVZc="
+      "ui.17x5dobwnk.wasm": "sha256-TXRFVU21L44L/VY1lsXUuNyrpUkAwQvwc30urqOudaM="
     }
   },
   "cacheBootResources": true,
