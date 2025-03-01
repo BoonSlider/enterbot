@@ -72,13 +72,13 @@ public class Engine
         var humanBot = new HumanBot(a);
         {
             var events = humanBot.PlayTurn(_humanPlayer);
-            await SaveEvents(events);
+            // await SaveEvents(events);
         }
 
         foreach (var bot in _bots.OrderBy(_ => Random.Shared.Next()))
         {
             var events = bot.Strategy.PlayTurn(bot.Player);
-            await SaveEvents(events);
+            // await SaveEvents(events);
         }
 
         foreach (var bot in _bots)
