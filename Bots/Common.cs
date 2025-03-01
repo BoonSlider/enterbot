@@ -105,7 +105,7 @@ public static class Common
                 target = Rng.Next(players.Count);
             }
 
-            return p.AttackPlayer(players[target], false);
+            return [p.AttackPlayer(players[target], false)];
         }
 
         return [];
@@ -124,13 +124,12 @@ public static class Common
         return [];
     }
 
-    public static async Task<IOperationResult?> SafeAttackPlayer(IPlayer p, string vic, bool withGang)
+    public static IOperationResult? SafeAttackPlayer(IPlayer p, string vic, bool withGang)
     {
         var d = p.MyData;
         if (Calc.CanAttack(d))
         {
-            var res = await p.AttackPlayer(vic, withGang);
-            return res;
+            return p.AttackPlayer(vic, withGang);
         }
 
         return null;

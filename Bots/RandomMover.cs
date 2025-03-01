@@ -30,5 +30,6 @@ public class RandomMover(int nameSuffix) : IBot(nameSuffix)
         ops.AddRange(Common.MaximizeAtkLvl(p));
         ops.AddRange(Common.MaximizeDefLvl(p));
         ops.AddRange(Common.MaximizeHouseLvl(p));
+        return ops;
     }
 }

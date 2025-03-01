@@ -37,13 +37,14 @@ public class HumanBot(AutomationSettings a) : IBot(-1)
                 var wantCash = (a.PlayerAttackReq[vic] ?? a.AttackMoneyDefault);
                 while (p.GetPlayerData(vic).GetCash() >= wantCash)
                 {
-                    var res = ops.AddRange(Common.SafeAttackPlayer(p, vic, false));
-                    if (res is null)
+                    var atkRes = Common.SafeAttackPlayer(p, vic, false);
+                    if (atkRes is null)
                     {
                         break;
                     }
 
-                    if (res is IAttackResult { AttackSucceeded: false })
+                    ops.Add(atkRes);
+                    if (atkRes is IAttackResult { AttackSucceeded: false })
                     {
                         break;
                     }

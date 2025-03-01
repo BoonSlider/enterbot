@@ -51,15 +51,16 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
                 ops.AddRange(ExecuteBuildUpStrategy(p));
                 break;
             case 1: // Offensive
-                await ExecuteOffensiveStrategy(p);
+                ops.AddRange(ExecuteOffensiveStrategy(p));
                 break;
             case 2: // Defensive
-                await ExecuteDefensiveStrategy(p);
+                ops.AddRange(ExecuteDefensiveStrategy(p));
                 break;
         }
         
         // Always optimize levels and house
-        OptimizeLevelsAndHouse(p);
+        ops.AddRange(OptimizeLevelsAndHouse(p));
+        return ops;
     }
     
     private void UpdateStrategy(IPlayer p)
@@ -107,7 +108,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         ops.AddRange(Common.AllMovesEducation(p));
         
         // Balanced approach to weapons
-        AcquireBalancedWeapons(p);
+        ops.AddRange(AcquireBalancedWeapons(p));
         
         // Equal focus on mobsters and guards
         var movesSplit = d.Moves / 2;
@@ -137,21 +138,24 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
                 ops.AddRange(Common.AttackRandomPlayer(p));
             }
         }
+
+        return ops;
     }
     
     private IList<IOperationResult> ExecuteOffensiveStrategy(IPlayer p)
     {
         var d = p.MyData;
         
+        var ops = new List<IOperationResult>();
         // Focus primarily on attack weapons
-        AcquireOffensiveWeapons(p);
+        ops.AddRange();AcquireOffensiveWeapons(p);
         
         // Prioritize mobsters over guards
         var moveReserve = Math.Min(Consts.AtkMoves * 2, d.Moves / 3); // Reserve moves for attack
-        Common.AllMovesMobsters(p, null, moveReserve);
+        ops.AddRange(Common.AllMovesMobsters(p, null, moveReserve));
         
         // Use leftover moves for education
-        Common.AllMovesEducation(p);
+        ops.AddRange(Common.AllMovesEducation(p));
         
         // Attack aggressively if we can
         if (Calc.CanAttack(p.MyData))
@@ -165,22 +169,25 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
                 {
                     if (Calc.CanAttack(p.MyData))
                     {
-                        await Common.AttackRandomPlayer(p);
+                        ops.AddRange(Common.AttackRandomPlayer(p));
                     }
                 }
             }
         }
+
+        return ops;
     }
     
-    private async Task ExecuteDefensiveStrategy(IPlayer p)
+    private IList<IOperationResult>  ExecuteDefensiveStrategy(IPlayer p)
     {
+        var ops = new List<IOperationResult>();
         var d = p.MyData;
         
         // Focus primarily on defensive weapons
-        AcquireDefensiveWeapons(p);
+        ops.AddRange(AcquireDefensiveWeapons(p));
         
         // Prioritize guards over mobsters
-        Common.AllMovesGuards(p, null, 0);
+        ops.AddRange(Common.AllMovesGuards(p, null, 0));
         
         // Use leftover moves for education and minimal offense
         var remainingMoves =  d.Moves;
@@ -191,60 +198,65 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
             {
                 var movesToUse = mobsterMoves;
                 var mobsAllowed = movesToUse / Consts.MobsterMoves;
-                Common.EnsureFood(p, mobsAllowed * Consts.MobsterFood);
+                ops.AddRange(Common.EnsureFood(p, mobsAllowed * Consts.MobsterFood));
                 var canHire = Calc.CanHireMobsters(p.MyData);
                 canHire = Math.Min(canHire, mobsAllowed);
                 if (canHire > 0)
-                    p.HireMobsters(canHire).AssertOk();
+                    ops.AddRange(p.HireMobsters(canHire));
             }
         }
         
         // Invest in education with remaining moves
-        Common.AllMovesEducation(p);
+        ops.AddRange(Common.AllMovesEducation(p));
         
         // Only attack if we have a strong position
         if (Calc.CanAttack(p.MyData) && d.AtkLevel >= 30 && d.Mobsters >= 100)
         {
-            await Common.AttackRandomPlayer(p);
+            ops.AddRange(Common.AttackRandomPlayer(p));
         }
+
+        return ops;
     }
     
-    private void AcquireBalancedWeapons(IPlayer p)
+    private IList<IOperationResult> AcquireBalancedWeapons(IPlayer p)
     {
         var d = p.MyData;
         var totalMoves = d.Moves;
         var movesForWeapons = totalMoves / 3; // Use up to 1/3 of moves for weapons
         
         if (movesForWeapons < Consts.BuyWeaponMoves * 2)
-            return; // Not enough moves to bother with weapons
+            return []; // Not enough moves to bother with weapons
             
         // Prioritize weapons based on cost-effectiveness and balance
         // First get basic weapons for both offense and defense
+        var ops = new List<IOperationResult>();
         if (d.Weapons[Weapon.Bat] < _weaponTargets[Weapon.Bat])
         {
-            Common.AllMovesWeapon(p, Weapon.Bat, _weaponTargets[Weapon.Bat], 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Bat, _weaponTargets[Weapon.Bat], 0));
         }
         else if (d.Weapons[Weapon.Knife] < _weaponTargets[Weapon.Knife])
         {
-            Common.AllMovesWeapon(p, Weapon.Knife, _weaponTargets[Weapon.Knife], 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Knife, _weaponTargets[Weapon.Knife], 0));
         }
         else if (d.Weapons[Weapon.Armor] < _weaponTargets[Weapon.Armor])
         {
             // Armor is a major priority for balanced strategy
-            Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor], 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor], 0));
         }
         else if (d.Weapons[Weapon.Uzi] < _weaponTargets[Weapon.Uzi])
         {
-            Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi], 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi], 0));
         }
         else if (d.Weapons[Weapon.Pistol] < _weaponTargets[Weapon.Pistol])
         {
-            Common.AllMovesWeapon(p, Weapon.Pistol, _weaponTargets[Weapon.Pistol], 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Pistol, _weaponTargets[Weapon.Pistol], 0));
         }
         else if (d.Weapons[Weapon.Axe] < _weaponTargets[Weapon.Axe])
         {
-            Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe], 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe], 0));
         }
+
+        return ops;
     }
     
     private IList<IOperationResult> AcquireOffensiveWeapons(IPlayer p)
@@ -276,27 +288,30 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         return ops;
     }
     
-    private void AcquireDefensiveWeapons(IPlayer p)
+    private List<IOperationResult> AcquireDefensiveWeapons(IPlayer p)
     {
         var d = p.MyData;
         
+        var ops = new List<IOperationResult>();
         // Prioritize weapons with high defense value
         if (d.Weapons[Weapon.Armor] < _weaponTargets[Weapon.Armor] * 2) // Double armor target for defensive
         {
-            Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor] * 2, 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor] * 2, 0));
         }
         else if (d.Weapons[Weapon.Axe] < _weaponTargets[Weapon.Axe] * 1.5) // More axes for defensive
         {
-            Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe] * 3 / 2, 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe] * 3 / 2, 0));
         }
         else if (d.Weapons[Weapon.Bat] < _weaponTargets[Weapon.Bat] * 2) // Double bat target for defensive
         {
-            Common.AllMovesWeapon(p, Weapon.Bat, _weaponTargets[Weapon.Bat] * 2, 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Bat, _weaponTargets[Weapon.Bat] * 2, 0));
         }
         else if (d.Weapons[Weapon.Uzi] < _weaponTargets[Weapon.Uzi] / 2) // Half Uzi target for defensive
         {
-            Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi] / 2, 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi] / 2, 0));
         }
+
+        return ops;
     }
     
     private IList<IOperationResult> OptimizeLevelsAndHouse(IPlayer p)

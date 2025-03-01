@@ -10,9 +10,9 @@ public class GreedyDefense(int nameSuffix) : IBot(nameSuffix)
     {
         var ops = new List<IOperationResult>();
         ops.AddRange(Common.AllMovesGuards(p,null, 0));
-        Common.MaximizeHouseLvl(p);
-        Common.MaximizeDefLvl(p);
-        Common.MaximizeAtkLvl(p);
-        return Task.CompletedTask;
+        ops.AddRange(Common.MaximizeHouseLvl(p));
+        ops.AddRange(Common.MaximizeDefLvl(p));
+        ops.AddRange(Common.MaximizeAtkLvl(p));
+        return ops;
     }
 }
