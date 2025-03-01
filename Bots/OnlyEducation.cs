@@ -14,7 +14,7 @@ public class OnlyEducation(int nameSuffix) : IBot(nameSuffix)
         ops.AddRange(Common.AllMovesMobsters(p, null, 0));
         ops.AddRange(Common.MaximizeDefLvl(p));
         ops.AddRange(Common.MaximizeHouseLvl(p));
-        if (d is { HouseLevel: >= 26, DefLevel: Consts.MaxAtkDefLvl })
+        if (d is { DefLevel: Consts.MaxAtkDefLvl })
         {
             ops.AddRange(Common.MaximizeAtkLvl(p));
         }

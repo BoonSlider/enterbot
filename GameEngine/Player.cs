@@ -132,28 +132,28 @@ public class Player(string id, Data data) : IPlayer
 
     public IOperationResult BuyFood(long foodAmount, Dictionary<MoonshineItem, long> moonshineItemCounts)
     {
-        if (foodAmount <= 0) return OpRes.Err(MessageType.MustBePositive);
+        if (foodAmount < 0) return OpRes.Err(MessageType.MustBePositive);
         var cost = foodAmount * Consts.FoodPrice;
-        // foreach (var item in moonshineItemCounts.Keys.ToList())
-        // {
-        //     if (item == MoonshineItem.Puskar)
-        //         return OpRes.Err(MessageType.MoonshineCantBeBought);
-        //     if (moonshineItemCounts[item] <= 0)
-        //     {
-        //         return OpRes.Err(MessageType.MustBePositive);
-        //     }
-        //
-        //     cost += Consts.MoonshinePrices[item] * moonshineItemCounts[item];
-        // }
+        foreach (var item in moonshineItemCounts.Keys.ToList())
+        {
+            if (item == MoonshineItem.Puskar)
+                return OpRes.Err(MessageType.MoonshineCantBeBought);
+            if (moonshineItemCounts[item] < 0)
+            {
+                return OpRes.Err(MessageType.MustBePositive);
+            }
+        
+            cost += Consts.MoonshinePrices[item] * moonshineItemCounts[item];
+        }
 
         if (cost <= 0) return OpRes.Err(MessageType.MustBePositive);
         if (Mut.Money < cost) return OpRes.Err(MessageType.NotEnoughMoney);
         Mut.Money -= cost;
         Mut.Food += foodAmount;
-        // foreach (var item in moonshineItemCounts.Keys.ToList())
-        // {
-        //     Mut.MoonshineItemCounts[item] += moonshineItemCounts[item];
-        // }
+        foreach (var item in moonshineItemCounts.Keys.ToList())
+        {
+            Mut.MoonshineItemCounts[item] += moonshineItemCounts[item];
+        }
 
         return OpRes.Ok(MessageType.BoughtIngredients);
     }
