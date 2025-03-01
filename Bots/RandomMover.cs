@@ -5,29 +5,31 @@ namespace Bots;
 public class RandomMover(int nameSuffix) : IBot(nameSuffix)
 {
     public override string NamePrefix => "rando";
-    public override async Task PlayTurn(IPlayer p)
+    public override IList<IOperationResult> PlayTurn(IPlayer p)
     {
         var d = p.MyData;
         if (d.Moves < Consts.AtkMoves)
-            return;
+            return [];
         var moveType = Common.Rng.Next(4);
+        var ops = new List<IOperationResult>();
         switch (moveType)
         {
             case 0:
-                Common.AllMovesEducation(p);
+                ops.AddRange(Common.AllMovesEducation(p));
                 break;
             case 1:
-                Common.AllMovesMobsters(p, null, 0);
+                ops.AddRange(Common.AllMovesMobsters(p, null, 0));
                 break;
             case 2:
-                await Common.AttackRandomPlayer(p);
+                ops.AddRange(Common.AttackRandomPlayer(p));
                 break;
             case 3:
-                Common.AllMovesGuards(p, null, 0);
+                ops.AddRange(Common.AllMovesGuards(p, null, 0));
                 break;
         }
-        Common.MaximizeAtkLvl(p);
-        Common.MaximizeDefLvl(p);
-        Common.MaximizeHouseLvl(p);
+        ops.AddRange(Common.MaximizeAtkLvl(p));
+        ops.AddRange(Common.MaximizeDefLvl(p));
+        ops.AddRange(Common.MaximizeHouseLvl(p));
+        return ops;
     }
 }

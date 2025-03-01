@@ -199,4 +199,38 @@ public static class Calc
         var free = Math.Max(got-guarded, 0L);
         return free;
     }
+
+    public static long? NextHouseLvlPrice(IPlayerData d)
+    {
+        if (d.HouseLevel < Consts.MaxHouseLvl)
+        {
+            return Houses.GetHouseData(d.HouseLevel + 1).Price;
+        }
+
+        return null;
+    }
+    
+    public static long? NextAtkLvlPrice(IPlayerData d)
+    {
+        if (d.AtkLevel < Consts.MaxAtkDefLvl)
+        {
+            return Levels.LevelPrices[d.AtkLevel + 1];
+        }
+        
+        return null;
+    }
+    public static long? NextDefLvlPrice(IPlayerData d)
+    {
+        if (d.DefLevel < Consts.MaxAtkDefLvl)
+        {
+            return Levels.LevelPrices[d.DefLevel + 1];
+        }
+        
+        return null;
+    }
+
+    public static long GetMaxGuardedWeapons(IPlayerData d)
+    {
+        return (d.Mobsters + d.Guards) * Consts.WeaponGuardedRate;
+    }
 }

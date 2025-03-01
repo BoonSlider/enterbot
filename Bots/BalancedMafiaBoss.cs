@@ -25,7 +25,7 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         public double EstimatedDefenseStrength { get; set; }
     }
 
-    public override async Task PlayTurn(IPlayer p)
+    public override IList<IOperationResult> PlayTurn(IPlayer p)
     {
         var d = p.MyData;
         _turnCounter++;
@@ -34,27 +34,29 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         UpdatePhase(d);
 
         // Always try to get better jobs first for income
-        OptimizeJob(p);
+        var ops = new List<IOperationResult>();
+        ops.AddRange(OptimizeJob(p));
 
         // Act based on current phase
         switch (_phase)
         {
             case 0: // Early game - Focus on education and basic defense
-                EarlyGameStrategy(p);
+                ops.AddRange(EarlyGameStrategy(p));
                 break;
             case 1: // Mid-game - Build offensive capabilities
-                await MidGameStrategy(p);
+                ops.AddRange(MidGameStrategy(p));
                 break;
             case 2: // Late game - Attack and expand
-                await LateGameStrategy(p);
+                ops.AddRange(LateGameStrategy(p));
                 break;
         }
 
         // Always try to maximize house level if we have fame
-        Common.MaximizeHouseLvl(p);
+        ops.AddRange(Common.MaximizeHouseLvl(p));
 
         // Make sure we have some food
-        EnsureFoodSupply(p);
+        ops.AddRange(EnsureFoodSupply(p));
+        return ops;
     }
 
     private void UpdatePhase(IPlayerData d)
@@ -74,7 +76,7 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         }
     }
 
-    private void OptimizeJob(IPlayer p)
+    private IList<IOperationResult> OptimizeJob(IPlayer p)
     {
         var d = p.MyData;
         var maxJob = Calc.GetMaxJobLevel(d);
@@ -82,20 +84,23 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         // If we can get a better job, take it
         if (d.JobLevel != maxJob)
         {
-            p.AcceptJob(maxJob);
+            return [p.AcceptJob(maxJob)];
         }
+
+        return [];
     }
 
-    private void EarlyGameStrategy(IPlayer p)
+    private List<IOperationResult> EarlyGameStrategy(IPlayer p)
     {
         var d = p.MyData;
 
         // Early game is about maximizing education and income
         // Use up to 80% of moves for education
         long movesForEdu = (long)(d.Moves * 0.8);
+        var ops = new List<IOperationResult>();
         if (movesForEdu > 0 && d.Education < EducationThreshold)
         {
-            p.IncreaseEducation(movesForEdu);
+            ops.AddRange(p.IncreaseEducation(movesForEdu));
         }
 
         // Upgrade attack and defense levels if we can afford it
@@ -105,41 +110,43 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
             int targetDefLvl = Math.Min(5, Calc.MaxAffordableDefLvl(d));
 
             if (d.AtkLevel < targetAtkLvl)
-                p.UpdateAtkLevel(targetAtkLvl);
+                ops.AddRange(p.UpdateAtkLevel(targetAtkLvl));
 
             if (d.DefLevel < targetDefLvl)
-                p.UpdateDefLevel(targetDefLvl);
+                ops.AddRange(p.UpdateDefLevel(targetDefLvl));
         }
 
         // If we have spare money, buy some basic weapons
-        BuyBasicWeapons(p);
+        ops.AddRange(BuyBasicWeapons(p));
+        return ops;
     }
 
-    private async Task MidGameStrategy(IPlayer p)
+    private IList<IOperationResult> MidGameStrategy(IPlayer p)
     {
         var d = p.MyData;
 
         // Mid-game is about building attack and defense capabilities
         // Still invest in education if needed
+        var ops = new List<IOperationResult>();
         if (d.Education < EducationThreshold)
         {
             long eduMoves = Math.Min(10, d.Moves / 2);
             if (eduMoves > 0)
             {
-                p.IncreaseEducation(eduMoves);
+                ops.AddRange(p.IncreaseEducation(eduMoves));
             }
         }
 
         // Build up mobsters
         if (d is { Mobsters: < 100, Moves: > 20 })
         {
-            Common.AllMovesMobsters(p, null, 20); // Keep some moves for other actions
+            ops.AddRange(Common.AllMovesMobsters(p, null, 20)); // Keep some moves for other actions
         }
 
         // Get some guards too
         if (d is { Guards: < 50, Money: > 100000, Moves: > 10 })
         {
-            Common.AllMovesGuards(p, null, 0);
+            ops.AddRange(Common.AllMovesGuards(p, null, 0));
         }
 
         // Upgrade attack and defense
@@ -149,122 +156,135 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
             int targetDefLvl = Math.Min(15, Calc.MaxAffordableDefLvl(d));
 
             if (d.DefLevel < targetDefLvl)
-                p.UpdateDefLevel(targetDefLvl);
+                ops.Add(p.UpdateDefLevel(targetDefLvl));
 
             if (d.AtkLevel < targetAtkLvl)
-                p.UpdateAtkLevel(targetAtkLvl);
+                ops.Add(p.UpdateAtkLevel(targetAtkLvl));
         }
 
         // Buy more weapons
-        BuyStrategicWeapons(p);
+        ops.AddRange(BuyStrategicWeapons(p));
 
         // Maybe attack if we have strong offense
         if (d is { Mobsters: >= Consts.MinimumMobstersToAttack, Moves: >= Consts.AtkMoves })
         {
-            await OpportunisticAttack(p);
+            ops.AddRange(OpportunisticAttack(p));
         }
+
+        return ops;
     }
 
-    private async Task LateGameStrategy(IPlayer p)
+    private IList<IOperationResult> LateGameStrategy(IPlayer p)
     {
         var d = p.MyData;
 
         // Late game is about attacking and maximizing score
         // Still improve education if we can afford top-tier jobs
+        var ops = new List<IOperationResult>();
         if (d.Education < HighEducation && _turnCounter % 5 == 0 && d.Money > 1000000)
         {
             long eduMoves = Math.Min(5, d.Moves / 4);
             if (eduMoves > 0)
             {
-                p.IncreaseEducation(eduMoves);
+                ops.AddRange(p.IncreaseEducation(eduMoves));
             }
         }
 
         // Maintain maximum attack and defense levels
         if (d is { AtkLevel: < Consts.MaxAtkDefLvl, Money: > 300000 })
         {
-            Common.MaximizeAtkLvl(p);
+            ops.AddRange(Common.MaximizeAtkLvl(p));
         }
 
         if (d is { DefLevel: < Consts.MaxAtkDefLvl, Money: > 300000 })
         {
-            Common.MaximizeDefLvl(p);
+            ops.AddRange(Common.MaximizeDefLvl(p));
         }
 
         // Focus on mobsters for attacking
         if (d is { Moves: > 0, Money: > 500000 })
         {
-            Common.AllMovesMobsters(p, null, 20); // Keep some moves for attacks
+            ops.AddRange(Common.AllMovesMobsters(p, null, 20)); // Keep some moves for attacks
         }
 
         // Buy high-end weapons
-        BuyAdvancedWeapons(p);
+        ops.AddRange(BuyAdvancedWeapons(p));
 
         // Aggressively attack other players
-        await StrategicAttack(p);
+        ops.AddRange(StrategicAttack(p));
+        return ops;
     }
 
-    private void BuyBasicWeapons(IPlayer p)
+    private IList<IOperationResult> BuyBasicWeapons(IPlayer p)
     {
         var d = p.MyData;
 
         // In early game, focus on affordable weapons
+        var ops = new List<IOperationResult>();
         if (d.Money > 20000 && d.Weapons[Weapon.Armor] < WeaponThreshold)
         {
-            Common.AllMovesWeapon(p, Weapon.Armor, WeaponThreshold, 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Armor, WeaponThreshold, 0));
         }
         else if (d.Money > 10000 && d.Weapons[Weapon.Bat] < WeaponThreshold)
         {
-            Common.AllMovesWeapon(p, Weapon.Bat, WeaponThreshold, 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Bat, WeaponThreshold, 0));
         }
+
+        return ops;
     }
 
-    private void BuyStrategicWeapons(IPlayer p)
+    private IList<IOperationResult> BuyStrategicWeapons(IPlayer p)
     {
         var d = p.MyData;
 
+        var ops = new List<IOperationResult>();
         // In mid-game, buy a mix of weapons
         if (d.Money > 50000)
         {
             // Prioritize armor for defense
             if (d.Weapons[Weapon.Armor] < 1000)
             {
-                Common.AllMovesWeapon(p, Weapon.Armor, 1000, 0);
+                ops.AddRange(Common.AllMovesWeapon(p, Weapon.Armor, 1000, 0));
             }
             // Then get some pistols
             else if (d.Weapons[Weapon.Pistol] < 500)
             {
-                Common.AllMovesWeapon(p, Weapon.Pistol, 500, 0);
+                ops.AddRange(Common.AllMovesWeapon(p, Weapon.Pistol, 500, 0));
             }
             // And knives for cost efficiency
             else if (d.Weapons[Weapon.Knife] < 1000)
             {
-                Common.AllMovesWeapon(p, Weapon.Knife, 1000, 0);
+                ops.AddRange(Common.AllMovesWeapon(p, Weapon.Knife, 1000, 0));
             }
         }
+
+        return ops;
     }
 
-    private void BuyAdvancedWeapons(IPlayer p)
+    private IList<IOperationResult> BuyAdvancedWeapons(IPlayer p)
     {
         var d = p.MyData;
 
         // In late game, focus on high-end weapons
+        var ops = new List<IOperationResult>();
         if (d.Money > 100000)
         {
             // Get Uzis for maximum attack power
             if (d.Weapons[Weapon.Uzi] < 2000)
             {
-                Common.AllMovesWeapon(p, Weapon.Uzi, 2000, 0);
+                ops.AddRange(Common.AllMovesWeapon(p, Weapon.Uzi, 2000, 0));
             }
             // Maintain armor stock
             else if (d.Weapons[Weapon.Armor] < 5000)
             {
-                Common.AllMovesWeapon(p, Weapon.Armor, 5000, 0);
+                ops.AddRange(Common.AllMovesWeapon(p, Weapon.Armor, 5000, 0));
             }
         }
+
+        return ops;
     }
 
-    private async Task OpportunisticAttack(IPlayer p)
+    private IList<IOperationResult> OpportunisticAttack(IPlayer p)
     {
         var d = p.MyData;
 
@@ -274,12 +294,15 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
             // Find a suitable target
             string target = FindTargetBasedOnHistory(p, attackThreshold: 0.6);
 
-            var result = await p.AttackPlayer(target, true);
+            var result = p.AttackPlayer(target, true);
             ProcessAttackResult(target, result);
+            return [result];
         }
+
+        return [];
     }
 
-    private async Task StrategicAttack(IPlayer p)
+    private IList<IOperationResult> StrategicAttack(IPlayer p)
     {
         var d = p.MyData;
 
@@ -287,6 +310,7 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         int attacksThisTurn = 0;
         int maxAttacksPerTurn = 3; // Limit attacks per turn to avoid depleting all mobsters
 
+        var ops = new List<IOperationResult>();
         while (d is { Moves: >= Consts.AtkMoves, Mobsters: >= Consts.MinimumMobstersToAttack } &&
                attacksThisTurn < maxAttacksPerTurn)
         {
@@ -294,8 +318,9 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
             string target = FindTargetBasedOnHistory(p, attackThreshold: 0.7);
 
             {
-                var result = await p.AttackPlayer(target, true);
+                var result = p.AttackPlayer(target, true);
                 ProcessAttackResult(target, result);
+                ops.Add(result);
 
                 // If we lost a lot of mobsters, stop attacking
                 if (result is IAttackResult { AttackSucceeded: false } attackResult &&
@@ -307,6 +332,8 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
                 attacksThisTurn++;
             }
         }
+
+        return ops;
     }
 
     private void ProcessAttackResult(string? targetId, IOperationResult result)
@@ -477,7 +504,7 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         return baseStrength + weaponStrength;
     }
 
-    private void EnsureFoodSupply(IPlayer p)
+    private IList<IOperationResult> EnsureFoodSupply(IPlayer p)
     {
         var d = p.MyData;
 
@@ -488,7 +515,9 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         if (d.Food < neededFood && d.Money > neededFood * Consts.FoodPrice)
         {
             long foodToBuy = neededFood - d.Food;
-            p.BuyFood(foodToBuy);
+            return[p.BuyFood(foodToBuy)];
         }
+
+        return [];
     }
 }

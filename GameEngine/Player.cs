@@ -179,7 +179,7 @@ public class Player(string id, Data data) : IPlayer
         return OpRes.Ok(MessageType.BoughtNewBuilding);
     }
 
-    public async Task<IOperationResult> AttackPlayer(string victimId, bool withGang)
+    public IOperationResult AttackPlayer(string victimId, bool withGang)
     {
         if (Mut.Mobsters < Consts.MinimumMobstersToAttack)
             return OpRes.Err(MessageType.NotEnoughMobsters);

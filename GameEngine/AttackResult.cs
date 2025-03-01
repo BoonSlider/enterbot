@@ -5,7 +5,7 @@ namespace GameEngine;
 
 public record AttackResult : IAttackResult
 {
-    public long Id { get; set; } = Common.Rng.Next();
+    public long Id { get; set; } = 0;
     public bool AttackSucceeded { get; set; }
     public long MenLost { get; set; }
     public long MoneyStolen { get; set; }
