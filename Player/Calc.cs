@@ -233,4 +233,14 @@ public static class Calc
     {
         return (d.Mobsters + d.Guards) * Consts.WeaponGuardedRate;
     }
+
+    public static bool AllLevelsMaxed(IPlayerData d)
+    {
+        return d is { AtkLevel: Consts.MaxAtkDefLvl, DefLevel: Consts.MaxAtkDefLvl, HouseLevel: Consts.MaxHouseLvl };
+    }
+
+    public static long GetMaxProtectedGuards(IPlayerData d)
+    {
+        return Houses.GetHouseData(d.HouseLevel).ProtectedGuards;
+    }
 }

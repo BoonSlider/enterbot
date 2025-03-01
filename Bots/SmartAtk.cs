@@ -1,4 +1,3 @@
-using System.Security.AccessControl;
 using Player;
 
 namespace Bots;
@@ -11,7 +10,7 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
     private long InterestingAmount(IPlayerData d)
     {
         var mn = 200_000;
-        var mx = 1_000_000_000L;
+        var mx = 10_000_000_000L;
         // var p1 = Calc.NextHouseLvlPrice(d) ?? mx;
         var p2 = Calc.NextAtkLvlPrice(d) ?? mx;
         // var p3 = Calc.NextDefLvlPrice(d) ?? mx;
@@ -24,8 +23,18 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
         var op = new List<IOperationResult>();
         op.AddRange(OpportunisticAttack(p));
         var wweaponLimit = Calc.GetMaxGuardedWeapons(d);
-        op.AddRange(Common.AllMovesWeapon(p, Weapon.Uzi, wweaponLimit, keepMoves));
-        op.AddRange(Common.AllMovesMobsters(p, null, keepMoves));
+        if (Calc.AllLevelsMaxed(d))
+        {
+            op.AddRange(Common.AllMovesWeapon(p, Weapon.Armor, wweaponLimit, keepMoves));
+            var guardLimit = Calc.GetMaxProtectedGuards(d);
+            op.AddRange(Common.AllMovesGuards(p, guardLimit, keepMoves));
+            op.AddRange(Common.AllMovesMobsters(p, null, keepMoves));
+        }
+        else
+        {
+            op.AddRange(Common.AllMovesWeapon(p, Weapon.Uzi, wweaponLimit, keepMoves));
+            op.AddRange(Common.AllMovesMobsters(p, null, keepMoves));
+        }
         op.AddRange(Common.MaximizeAtkLvl(p));
         if (d.Money > 10_000_000)
         {
