@@ -6,26 +6,27 @@ public class HumanBot(AutomationSettings a) : IBot(-1)
 {
     public override string NamePrefix => "human";
 
-    public override async Task PlayTurn(IPlayer p)
+    public override IList<IOperationResult> PlayTurn(IPlayer p)
     {
-        if (!a.IsActive) return;
+        if (!a.IsActive) return [];
+        var ops = new List<IOperationResult>();
         if (a.EducationLimit is { } edu)
-            Common.AllMovesEducation(p, edu);
+            ops.AddRange(Common.AllMovesEducation(p, edu));
         if (a.MafiaLimit is { } mlim)
-            Common.AllMovesMobsters(p, mlim, a.MoveReserve);
+            ops.AddRange(Common.AllMovesMobsters(p, mlim, a.MoveReserve));
         if (a.GuardsLimit is { } glim)
-            Common.AllMovesGuards(p, glim, a.MoveReserve);
+            ops.AddRange(Common.AllMovesGuards(p, glim, a.MoveReserve));
         if (a.AttackLevel is { } atklvl)
-            Common.MaximizeAtkLvl(p, atklvl);
+            ops.AddRange(Common.MaximizeAtkLvl(p, atklvl));
         if (a.DefenseLevel is { } deflvl)
-            Common.MaximizeDefLvl(p, deflvl);
+            ops.AddRange(Common.MaximizeDefLvl(p, deflvl));
         if (a.HouseLevel is { } houseLevel)
-            Common.MaximizeHouseLvl(p, houseLevel);
+            ops.AddRange(Common.MaximizeHouseLvl(p, houseLevel));
         foreach (var w in a.WeaponLimits.Keys.ToList())
         {
             if (a.WeaponLimits[w] is { } wl)
             {
-                Common.AllMovesWeapon(p, w, wl, a.MoveReserve);
+                ops.AddRange(Common.AllMovesWeapon(p, w, wl, a.MoveReserve));
             }
         }
 
@@ -36,7 +37,7 @@ public class HumanBot(AutomationSettings a) : IBot(-1)
                 var wantCash = (a.PlayerAttackReq[vic] ?? a.AttackMoneyDefault);
                 while (p.GetPlayerData(vic).GetCash() >= wantCash)
                 {
-                    var res = await Common.SafeAttackPlayer(p, vic, false);
+                    var res = ops.AddRange(Common.SafeAttackPlayer(p, vic, false));
                     if (res is null)
                     {
                         break;
@@ -49,5 +50,7 @@ public class HumanBot(AutomationSettings a) : IBot(-1)
                 }
             }
         }
+
+        return ops;
     }
 }

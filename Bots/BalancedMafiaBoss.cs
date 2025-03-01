@@ -25,7 +25,7 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         public double EstimatedDefenseStrength { get; set; }
     }
 
-    public override async Task PlayTurn(IPlayer p)
+    public override IList<IOperationResult> PlayTurn(IPlayer p)
     {
         var d = p.MyData;
         _turnCounter++;
@@ -34,27 +34,28 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         UpdatePhase(d);
 
         // Always try to get better jobs first for income
-        OptimizeJob(p);
+        var ops = new List<IOperationResult>();
+        ops.AddRange(OptimizeJob(p));
 
         // Act based on current phase
         switch (_phase)
         {
             case 0: // Early game - Focus on education and basic defense
-                EarlyGameStrategy(p);
+                ops.AddRange(EarlyGameStrategy(p));
                 break;
             case 1: // Mid-game - Build offensive capabilities
-                await MidGameStrategy(p);
+                ops.AddRange(MidGameStrategy(p));
                 break;
             case 2: // Late game - Attack and expand
-                await LateGameStrategy(p);
+                ops.AddRange(LateGameStrategy(p));
                 break;
         }
 
         // Always try to maximize house level if we have fame
-        Common.MaximizeHouseLvl(p);
+        ops.AddRange(Common.MaximizeHouseLvl(p));
 
         // Make sure we have some food
-        EnsureFoodSupply(p);
+        ops.AddRange(EnsureFoodSupply(p));
     }
 
     private void UpdatePhase(IPlayerData d)
@@ -74,7 +75,7 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         }
     }
 
-    private void OptimizeJob(IPlayer p)
+    private IList<IOperationResult> OptimizeJob(IPlayer p)
     {
         var d = p.MyData;
         var maxJob = Calc.GetMaxJobLevel(d);
@@ -86,7 +87,7 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
         }
     }
 
-    private void EarlyGameStrategy(IPlayer p)
+    private List<IOperationResult> EarlyGameStrategy(IPlayer p)
     {
         var d = p.MyData;
 

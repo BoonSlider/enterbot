@@ -20,7 +20,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
     // Track when we last changed strategy to avoid oscillating
     private int _turnsSinceStrategyChange = 0;
     
-    public override async Task PlayTurn(IPlayer p)
+    public override IList<IOperationResult> PlayTurn(IPlayer p)
     {
         var d = p.MyData;
         _turnsSinceStrategyChange++;
@@ -32,14 +32,15 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
             _turnsSinceStrategyChange = 0;
         }
         
+        var ops = new List<IOperationResult>();
         // Always prioritize education up to target
         if (d.Education < _targetEdu)
         {
-            Common.AllMovesEducation(p, _targetEdu);
+            ops.AddRange(Common.AllMovesEducation(p, _targetEdu));
             if (d.Moves < 10) // If we spent most moves on education
             {
-                OptimizeLevelsAndHouse(p);
-                return;
+                ops.AddRange(OptimizeLevelsAndHouse(p));
+                return ops;
             }
         }
         
@@ -47,7 +48,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         switch (_strategy)
         {
             case 0: // Build up
-                await ExecuteBuildUpStrategy(p);
+                ops.AddRange(ExecuteBuildUpStrategy(p));
                 break;
             case 1: // Offensive
                 await ExecuteOffensiveStrategy(p);
@@ -97,12 +98,13 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         }
     }
     
-    private async Task ExecuteBuildUpStrategy(IPlayer p)
+    private IList<IOperationResult> ExecuteBuildUpStrategy(IPlayer p)
     {
         var d = p.MyData;
         
+        var ops = new List<IOperationResult>();
         // Continue education beyond target if we have excess moves
-        Common.AllMovesEducation(p);
+        ops.AddRange(Common.AllMovesEducation(p));
         
         // Balanced approach to weapons
         AcquireBalancedWeapons(p);
@@ -116,15 +118,15 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         {
             var movesToUse = mobsterMoves;
             var mobsAllowed = movesToUse / Consts.MobsterMoves;
-            Common.EnsureFood(p, mobsAllowed * Consts.MobsterFood);
+            ops.AddRange(Common.EnsureFood(p, mobsAllowed * Consts.MobsterFood));
             var canHire = Calc.CanHireMobsters(p.MyData);
             canHire = Math.Min(canHire, mobsAllowed);
             if (canHire > 0)
-                p.HireMobsters(canHire).AssertOk();
+                ops.AddRange(p.HireMobsters(canHire));
         }
         
         // Use remaining moves for guards
-        Common.AllMovesGuards(p, null, 0);
+        ops.AddRange(Common.AllMovesGuards(p, null, 0));
         
         // Attack if we have enough moves and mobsters
         if (Calc.CanAttack(p.MyData) && d.AtkLevel >= 20)
@@ -132,12 +134,12 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
             // Only attack if we feel confident
             if (d.Mobsters >= 50 && Calc.PlayerSoloTotalAtk(d) > 10000)
             {
-                await Common.AttackRandomPlayer(p);
+                ops.AddRange(Common.AttackRandomPlayer(p));
             }
         }
     }
     
-    private async Task ExecuteOffensiveStrategy(IPlayer p)
+    private IList<IOperationResult> ExecuteOffensiveStrategy(IPlayer p)
     {
         var d = p.MyData;
         
@@ -245,31 +247,33 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         }
     }
     
-    private void AcquireOffensiveWeapons(IPlayer p)
+    private IList<IOperationResult> AcquireOffensiveWeapons(IPlayer p)
     {
         var d = p.MyData;
-        
+        var ops = new List<IOperationResult>();
         // Prioritize weapons with high attack value
         if (d.Weapons[Weapon.Uzi] < _weaponTargets[Weapon.Uzi])
         {
-            Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi], 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Uzi, _weaponTargets[Weapon.Uzi], 0));
         }
         else if (d.Weapons[Weapon.Pistol] < _weaponTargets[Weapon.Pistol])
         {
-            Common.AllMovesWeapon(p, Weapon.Pistol, _weaponTargets[Weapon.Pistol], 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Pistol, _weaponTargets[Weapon.Pistol], 0));
         }
         else if (d.Weapons[Weapon.Knife] < _weaponTargets[Weapon.Knife] * 2) // Double knife target for offensive
         {
-            Common.AllMovesWeapon(p, Weapon.Knife, _weaponTargets[Weapon.Knife] * 2, 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Knife, _weaponTargets[Weapon.Knife] * 2, 0));
         }
         else if (d.Weapons[Weapon.Axe] < _weaponTargets[Weapon.Axe] * 2) // Double axe target for offensive
         {
-            Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe] * 2, 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Axe, _weaponTargets[Weapon.Axe] * 2, 0));
         }
         else if (d.Weapons[Weapon.Armor] < _weaponTargets[Weapon.Armor] / 2) // Half armor target for offensive
         {
-            Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor] / 2, 0);
+            ops.AddRange(Common.AllMovesWeapon(p, Weapon.Armor, _weaponTargets[Weapon.Armor] / 2, 0));
         }
+
+        return ops;
     }
     
     private void AcquireDefensiveWeapons(IPlayer p)
@@ -295,10 +299,12 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         }
     }
     
-    private void OptimizeLevelsAndHouse(IPlayer p)
+    private IList<IOperationResult> OptimizeLevelsAndHouse(IPlayer p)
     {
-        Common.MaximizeAtkLvl(p);
-        Common.MaximizeDefLvl(p);
-        Common.MaximizeHouseLvl(p);
+        var ops = new List<IOperationResult>();
+        ops.AddRange(Common.MaximizeAtkLvl(p));
+        ops.AddRange(Common.MaximizeDefLvl(p));
+        ops.AddRange(Common.MaximizeHouseLvl(p));
+        return ops;
     }
 }

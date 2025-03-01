@@ -6,84 +6,94 @@ public static class Common
 {
     public static readonly Random Rng = new();
 
-    public static void EnsureFood(IPlayer p, long amount)
+    public static List<IOperationResult> EnsureFood(IPlayer p, long amount)
     {
         if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
-        if (amount == 0) return;
+        if (amount == 0) return [];
         var d = p.MyData;
         var need = Math.Max(0L, amount - d.Food);
         var buy = Math.Min(need, d.Money / Consts.FoodPrice);
-        if (buy <= 0) return;
-        p.BuyFood(buy).AssertOk();
+        if (buy <= 0) return [];
+        return [p.BuyFood(buy)];
     }
 
-    public static void MaximizeAtkLvl(IPlayer p, int maxLvl = Consts.MaxAtkDefLvl)
+    public static IList<IOperationResult> MaximizeAtkLvl(IPlayer p, int maxLvl = Consts.MaxAtkDefLvl)
     {
         var d = p.MyData;
         var canAtkLvl = Calc.MaxAffordableAtkLvl(d, maxLvl);
         if (canAtkLvl != d.AtkLevel)
-            p.UpdateAtkLevel(canAtkLvl).AssertOk();
+            return [p.UpdateAtkLevel(canAtkLvl)];
+        return [];
     }
 
-    public static void MaximizeDefLvl(IPlayer p, int maxLvl = Consts.MaxAtkDefLvl)
+    public static IList<IOperationResult> MaximizeDefLvl(IPlayer p, int maxLvl = Consts.MaxAtkDefLvl)
     {
+        var ops = new List<IOperationResult>();
         var d = p.MyData;
         var canDefLvl = Calc.MaxAffordableDefLvl(d, maxLvl);
         if (canDefLvl != d.DefLevel)
-            p.UpdateDefLevel(canDefLvl).AssertOk();
+            ops.AddRange(p.UpdateDefLevel(canDefLvl));
+        return ops;
     }
 
-    public static void MaximizeHouseLvl(IPlayer p, int maxLvl = Consts.MaxHouseLvl)
+    public static IList<IOperationResult> MaximizeHouseLvl(IPlayer p, int maxLvl = Consts.MaxHouseLvl)
     {
         var d = p.MyData;
         var canHouseLvl = Calc.MaxHouseThatCanBeBought(d, maxLvl);
         if (canHouseLvl != d.HouseLevel)
-            p.BuyHouse(canHouseLvl).AssertOk();
+            return [p.BuyHouse(canHouseLvl)];
+        return [];
     }
 
-    public static void AllMovesEducation(IPlayer p, long? maxEdu = null)
+    public static List<IOperationResult> AllMovesEducation(IPlayer p, long? maxEdu = null)
     {
         var d = p.MyData;
+        var ops = new List<IOperationResult>();
         var canGetEdu = Calc.HowManyMovesCanSpendOnEdu(d, maxEdu);
         if (canGetEdu > 0)
-            p.IncreaseEducation(canGetEdu).AssertOk();
+            ops.AddRange(p.IncreaseEducation(canGetEdu));
         var maxJob = Calc.GetMaxJobLevel(d);
         if (d.JobLevel != maxJob)
         {
-            p.AcceptJob(maxJob).AssertOk();
+            ops.AddRange(p.AcceptJob(maxJob));
         }
+        return ops;
     }
 
-    public static void AllMovesMobsters(IPlayer p, long? maxCount, long keepMoves)
+    public static List<IOperationResult> AllMovesMobsters(IPlayer p, long? maxCount, long keepMoves)
     {
         var d = p.MyData;
         var moves = Math.Max(0L, d.Moves - keepMoves);
         var movesAllow = moves / Consts.MobsterMoves;
         var limAllows = maxCount == null ? movesAllow : Math.Max(maxCount.Value - d.Mobsters, 0L);
         movesAllow = Math.Min(movesAllow, limAllows);
-        EnsureFood(p, movesAllow * Consts.MobsterFood);
+        var ops = new List<IOperationResult>();
+        ops.AddRange(EnsureFood(p, movesAllow * Consts.MobsterFood));
         var canHire = Calc.CanHireMobsters(d);
         canHire = Math.Min(canHire, movesAllow);
-        if (canHire <= 0) return;
-        p.HireMobsters(canHire).AssertOk();
+        if (canHire <= 0) return ops;
+        ops.AddRange(p.HireMobsters(canHire));
+        return ops;
     }
     
-    public static void AllMovesGuards(IPlayer p, long? maxCount, long keepMoves)
+    public static IList<IOperationResult> AllMovesGuards(IPlayer p, long? maxCount, long keepMoves)
     {
         var d = p.MyData;
         var moves = Math.Max(0L, d.Moves - keepMoves);
         var movesAllow = moves / Consts.GuardMoves;
         var limAllows = maxCount == null ? movesAllow : Math.Max(maxCount.Value - d.Guards, 0L);
         movesAllow = Math.Min(movesAllow, limAllows);
-        EnsureFood(p, movesAllow * Consts.GuardFood);
+        var ops = new List<IOperationResult>();
+        ops.AddRange(EnsureFood(p, movesAllow * Consts.GuardFood));
         var canHire = Calc.CanHireGuards(d);
         canHire = Math.Min(canHire, movesAllow);
-        if (canHire <= 0) return;
-        p.HireGuards(canHire).AssertOk();
+        if (canHire <= 0) return ops;
+        ops.AddRange(p.HireGuards(canHire));
+        return ops;
     }
 
 
-    public static async Task AttackRandomPlayer(IPlayer p)
+    public static IList<IOperationResult> AttackRandomPlayer(IPlayer p)
     {
         var d = p.MyData;
         if (Calc.CanAttack(d))
@@ -95,11 +105,13 @@ public static class Common
                 target = Rng.Next(players.Count);
             }
 
-            await p.AttackPlayer(players[target], false);
+            return p.AttackPlayer(players[target], false);
         }
+
+        return [];
     }
 
-    public static void AllMovesWeapon(IPlayer p, Weapon w, long? max, long keepMoves)
+    public static IList<IOperationResult> AllMovesWeapon(IPlayer p, Weapon w, long? max, long keepMoves)
     {
         var d = p.MyData;
         var canBuy = Calc.CanBuyWeapon(d, w, keepMoves);
@@ -108,7 +120,8 @@ public static class Common
             canBuy = Math.Min(canBuy, Math.Max(0L, max.Value - d.Weapons[w]));
         }
         if (canBuy > 0)
-            p.BuyWeapons(new Dictionary<Weapon, long> { [w] = canBuy }).AssertOk();
+            return [p.BuyWeapons(new Dictionary<Weapon, long> { [w] = canBuy })];
+        return [];
     }
 
     public static async Task<IOperationResult?> SafeAttackPlayer(IPlayer p, string vic, bool withGang)
