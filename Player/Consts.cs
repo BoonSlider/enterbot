@@ -20,7 +20,8 @@ public class Consts
     public const int FoodPrice = 5;
     public const int MinimumMobstersToAttack = 20;
     public const int BuyWeaponMoves = 2;
-    public const long MaxEvents = 10000000;
+    public const int MoonshineProductionMoves = 35;
+    public const long MaxEvents = 10_000_000;
 
     public static readonly Dictionary<MoonshineItem, long> MoonshinePrices = new()
     {
@@ -29,6 +30,15 @@ public class Consts
         { MoonshineItem.Pärm, 4 },
         { MoonshineItem.Puskar, 67 },
     };
+    
+    public static readonly Dictionary<MoonshineItem, long> MoonshineRequirements = new()
+    {
+        { MoonshineItem.Teravili, 9 },
+        { MoonshineItem.Suhkur, 5 },
+        { MoonshineItem.Pärm, 2 },
+    };
+
+    public const long MoonshineCost = 41; /* 9 * 2 + 5 * 3 + 2 * 4;*/
 
     public static readonly Dictionary<GymStat, long> GymStatAtk = new()
     {

@@ -7,7 +7,7 @@ public static class Calc
 {
     public static long HowManyMovesCanSpendOnEdu(IPlayerData d, long? maxEdu, long leaveMoves)
     {
-        var ret = Math.Min(d.Money / Consts.EduCost, Math.Max(d.Moves-leaveMoves, 0));
+        var ret = Math.Min(d.Money / Consts.EduCost, Math.Max(d.Moves - leaveMoves, 0));
         var eduLeft = Math.Max((maxEdu ?? MaxEducation) - d.Education, 0L);
         var eduLeftMoves = (eduLeft + Consts.EduRate - 1) / Consts.EduRate;
         return Math.Min(ret, eduLeftMoves);
@@ -30,7 +30,7 @@ public static class Calc
         {
             ret += Consts.GymStatAtk[stat] * playerData.GymStats[stat];
         }
-        
+
         foreach (var stat in Enum.GetValues<Weapon>())
         {
             ret += Consts.WeaponAtk[stat] * playerData.Weapons[stat];
@@ -46,7 +46,7 @@ public static class Calc
         {
             ret += Consts.GymStatDef[stat] * playerData.GymStats[stat];
         }
-        
+
         foreach (var stat in Enum.GetValues<Weapon>())
         {
             ret += Consts.WeaponDef[stat] * playerData.Weapons[stat];
@@ -153,6 +153,7 @@ public static class Calc
     }
 
     public static long MaxEducation => Jobs.GetJobData(Consts.MaxJob).RequiredEducation;
+
     public static int MaxAffordableDefLvl(IPlayerData d, int maxLvl = Consts.MaxAtkDefLvl)
     {
         var money = d.Money;
@@ -177,7 +178,7 @@ public static class Calc
     public static long CanBuyWeapon(IPlayerData d, Weapon w, long keepMoves)
     {
         var moneyAllows = d.Money / Consts.WeaponPrice[w];
-        var movesAllow = Math.Max(d.Moves-keepMoves, 0L) / Consts.BuyWeaponMoves;
+        var movesAllow = Math.Max(d.Moves - keepMoves, 0L) / Consts.BuyWeaponMoves;
         return Math.Min(moneyAllows, movesAllow);
     }
 
@@ -196,7 +197,7 @@ public static class Calc
     {
         var guarded = Consts.WeaponGuardedRate * (d.Guards + d.Mobsters);
         var got = d.Weapons[w];
-        var free = Math.Max(got-guarded, 0L);
+        var free = Math.Max(got - guarded, 0L);
         return free;
     }
 
@@ -209,23 +210,24 @@ public static class Calc
 
         return null;
     }
-    
+
     public static long? NextAtkLvlPrice(IPlayerData d)
     {
         if (d.AtkLevel < Consts.MaxAtkDefLvl)
         {
             return Levels.LevelPrices[d.AtkLevel + 1];
         }
-        
+
         return null;
     }
+
     public static long? NextDefLvlPrice(IPlayerData d)
     {
         if (d.DefLevel < Consts.MaxAtkDefLvl)
         {
             return Levels.LevelPrices[d.DefLevel + 1];
         }
-        
+
         return null;
     }
 
@@ -255,8 +257,42 @@ public static class Calc
             return null;
         return Houses.GetHouseData(d.HouseLevel + 1);
     }
+
     public static HouseData CurrentHouse(IPlayerData d)
     {
         return Houses.GetHouseData(d.HouseLevel);
     }
+
+    public static long MaxMoonshineCanMake(IPlayerData d)
+    {
+        long low = 0L, high = (long)1e15, mid;
+        while (low < high)
+        {
+            mid = (low + high + 1) / 2;
+            if (CanMakeMoonshine(d, mid))
+            {
+                low = mid;
+            }
+            else
+            {
+                high = mid - 1;
+            }
+        }
+
+        return low;
+    }
+
+    private static bool CanMakeMoonshine(IPlayerData d, long amount)
+    {
+        long totCost = 0;
+        foreach (var (key, value) in Consts.MoonshineRequirements)
+        {
+            long needMore = Math.Max(0L, amount * value - d.MoonshineItemCounts[key]);
+            totCost += needMore * Consts.MoonshinePrices[key];
+        }
+
+        return totCost < d.Money;
+    }
+    
+    public static readonly long MoonshineProfit = Consts.MoonshinePrices[MoonshineItem.Puskar] - Consts.MoonshineCost;
 }

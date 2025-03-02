@@ -275,4 +275,42 @@ public class Player(string id, Data data) : IPlayer
 
         return OpRes.Ok(MessageType.BoughtWeapons);
     }
+
+    public IOperationResult MakeMoonshine(long amount)
+    {
+        if (amount <= 0)
+            return OpRes.Err(MessageType.MustBePositive);
+        if (Mut.Moves < Consts.MoonshineProductionMoves)
+            return OpRes.Err(MessageType.NotEnoughMoves);
+        foreach (var (item, needed) in Consts.MoonshineRequirements)
+        {
+            if (Mut.MoonshineItemCounts[item] < needed * amount)
+            {
+                return OpRes.Err(MessageType.NotEnoughIngredients);
+            }
+        }
+
+        foreach (var (item, needed) in Consts.MoonshineRequirements)
+        {
+            Mut.MoonshineItemCounts[item] -= needed * amount;
+        }
+
+        Mut.MoonshineItemCounts[MoonshineItem.Puskar] += amount;
+        Mut.Moves -= Consts.MoonshineProductionMoves;
+        return OpRes.Ok(MessageType.MadeMoonshine);
+    }
+
+    public IOperationResult SellItems(long amount)
+    {
+        if (amount <= 0) return OpRes.Err(MessageType.MustBePositive);
+        if (Mut.MoonshineItemCounts[MoonshineItem.Puskar] < amount)
+        {
+            return OpRes.Err(MessageType.NotEnoughMoonshine);
+        }
+
+        var earn = amount * Consts.MoonshinePrices[MoonshineItem.Puskar];
+        Mut.MoonshineItemCounts[MoonshineItem.Puskar] -= amount;
+        Mut.Money += earn;
+        return OpRes.Ok(MessageType.SoldMoonshine);
+    }
 }
