@@ -11,8 +11,10 @@
 @inject AlertTextProvider AlertTextProvider
 @inject AutomationService Auto
 @inject TextProvider L
+@inject HttpClient Http
 
 @code {
+    private string _buildTime = "Loading...";
     private IPlayer P => Engine.HumanPlayer;
     private IPlayerData D => P.MyData;
     private long? _movesNeed;
@@ -47,6 +49,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _buildTime = await Http.GetStringAsync("buildinfo.txt");
         await Auto.LoadAsync();
         Auto.InitializeWith(P.GetAllPlayers());
         Changes.OnChange += StateHasChanged;
@@ -110,6 +113,7 @@
 <div id="wrapper">
     <div id="border">
         <div id="header">
+            <div class="build-time-info">@_buildTime</div>
             <div id="notice">
                 <div id="noticetxt">
                     <table class="human-info-table">
