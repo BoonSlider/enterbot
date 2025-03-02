@@ -35,5 +35,9 @@
   "Weapon_Axe": "Kirves",
   "Weapon_Armor": "Kuulivest",
   "Weapon_Pistol": "Püstol",
-  "Weapon_Uzi": "Automaat"
+  "Weapon_Uzi": "Automaat",
+  "MessageType_SoldMoonshine": "Müüsid puskarit",
+  "MessageType_NotEnoughIngredients":  "Pole piisavalt tooraineid.",
+  "MessageType_NotEnoughMoonshine":  "Pole piisavalt puskarit.",
+  "MessageType_MadeMoonshine": "Valmistasid puskarit."
 }
