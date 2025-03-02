@@ -5,7 +5,7 @@ namespace Bots;
 
 public class GreedyDefense(int nameSuffix) : IBot(nameSuffix)
 {
-    public override string NamePrefix => "shield";
+    public override string NamePrefix => "fbi";
 
     public override IList<IOperationResult> PlayTurn(IPlayer p)
     {

@@ -5,7 +5,7 @@ namespace Bots;
 
 public class AttackEveryone(int nameSuffix) : IBot(nameSuffix)
 {
-    public override string NamePrefix => "sarimõrvar";
+    public override string NamePrefix => "chihuahua";
     public override IList<IOperationResult> PlayTurn(IPlayer p)
     {
         var d = p.MyData;
