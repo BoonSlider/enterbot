@@ -23,8 +23,7 @@ public class SmartDef(int nameSuffix) : IBot(nameSuffix)
             ops.AddRange(Common.AllMovesWeapon(p, w, weaponLimit, 0));
         }
 
-        var nextHouse = Calc.GetNextHouse(d);
-        if (nextHouse != null && d.Fame < nextHouse.RequiredFame)
+        if (d.Guards == Calc.CurrentHouse(d).ProtectedGuards && d.HouseLevel != Consts.MaxHouseLvl)
         {
             ops.AddRange(Common.AllMovesMobsters(p, Consts.MinimumMobstersToAttack, 0));
             while (Calc.CanAttack(d))
