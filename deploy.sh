@@ -11,7 +11,7 @@ if [ $(git ls-files -u | wc -l) -eq 0 ]; then
     date "+%Y-%m-%d %H:%M:%S" > $of/wwwroot/buildinfo.txt
     cp $of/wwwroot/* /c/enterbot/ -r
     sed -i 's/<base href="\/"\s*\/>/<base href="\/enterbot\/">/' /c/enterbot/index.html
-    sed -i 's/<base href="\/"\s*\/>/<base href="\/enterbot\/">/' /c/enterbot/404.html
+    cp -f /c/enterbot/index.html /c/enterbot/404.html
     git add .
     git commit -m "Merge master into gh-pages and publish"
     git push
