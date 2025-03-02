@@ -11,6 +11,13 @@ public class HumanBot(AutomationSettings a) : IBot(-1)
     {
         if (!a.IsActive) return [];
         var ops = new List<IOperationResult>();
+        foreach (var w in a.WeaponLimits.Keys.ToList())
+        {
+            if (a.WeaponLimits[w] is { } wl)
+            {
+                ops.AddRange(Common.AllMovesWeapon(p, w, wl, a.MoveReserve));
+            }
+        }
         if (a.EducationLimit is { } edu)
             ops.AddRange(Common.AllMovesEducation(p, edu, a.MoveReserve));
         if (a.MafiaLimit is { } mlim)
@@ -23,13 +30,6 @@ public class HumanBot(AutomationSettings a) : IBot(-1)
             ops.AddRange(Common.MaximizeDefLvl(p, deflvl));
         if (a.HouseLevel is { } houseLevel)
             ops.AddRange(Common.MaximizeHouseLvl(p, houseLevel));
-        foreach (var w in a.WeaponLimits.Keys.ToList())
-        {
-            if (a.WeaponLimits[w] is { } wl)
-            {
-                ops.AddRange(Common.AllMovesWeapon(p, w, wl, a.MoveReserve));
-            }
-        }
 
         foreach (var vic in p.GetAllPlayers())
         {
