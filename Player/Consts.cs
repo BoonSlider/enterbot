@@ -20,6 +20,7 @@ public class Consts
     public const int FoodPrice = 5;
     public const int MinimumMobstersToAttack = 20;
     public const int BuyWeaponMoves = 2;
+    public const long MaxEvents = 10000000;
 
     public static readonly Dictionary<MoonshineItem, long> MoonshinePrices = new()
     {
