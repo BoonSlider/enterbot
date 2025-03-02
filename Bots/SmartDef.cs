@@ -59,10 +59,11 @@ public class SmartDef(int nameSuffix) : IBot(nameSuffix)
 
     private string ChooseBestTarget(List<IPlayerPublicData> targets)
     {
-        return targets.OrderByDescending(t => _atkStats!.LastAtkWeapons(t.Id))
+        return targets
+            // OrderByDescending(t => _atkStats!.LastAtkWeapons(t.Id))
             // .ThenByDescending(t => _atkStats!.GetLastFameChange(t.Id) ?? 1)
             // .ThenByDescending(t => t.GetFameLevel())
-            .ThenByDescending(t => t.GetCash())
+            .OrderByDescending(t => t.GetCash())
             .First().Id;
     }
 }
