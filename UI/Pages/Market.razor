@@ -1,4 +1,5 @@
 @page "/turg"
+@page "/market"
 @using GameEngine
 @using Player
 @using UI.Services
@@ -27,6 +28,7 @@
     protected override void OnInitialized()
     {
         Changes.OnChange += StateHasChanged;
+        AutofillMoonshineAmount();
     }
 
     async Task BuyFoodItems()
@@ -67,6 +69,38 @@
         await Changes.Notify();
     }
 
+    private void AutofillMoonshineAmount()
+    {
+        _moonshineAmounts[MoonshineItem.Puskar] = D.MoonshineItemCounts[MoonshineItem.Puskar];
+        StateHasChanged();
+    }
+
+    private async Task SellItems()
+    {
+        var amount = _moonshineAmounts[MoonshineItem.Puskar];
+        if (amount is null) return;
+        Alerts.ShowAlert(P.SellItems(amount.Value));
+        AutofillMoonshineAmount();
+        await Changes.Notify();
+    }
+
+    private void AutofillFood()
+    {
+        _foodAmount = D.Money / Consts.FoodPrice;
+        StateHasChanged();
+    }
+
+    private void AutofillMoonshineIngredients()
+    {
+        var canMake = Calc.MaxMoonshineCanMake(D);
+        foreach (var (key, value) in Consts.MoonshineRequirements)
+        {
+            _moonshineAmounts[key] = Math.Max(canMake * value - D.MoonshineItemCounts[key], 0L);
+        }
+
+        StateHasChanged();
+    }
+
 }
 
 
@@ -99,7 +133,10 @@
                     <td>Toit</td>
                     <td class="toit">@Utils.SepThousands(D.Food)</td>
                     <td>@Consts.FoodPrice EEK</td>
-                    <td><input name="toitosta" type="number" @bind="_foodAmount"></td>
+                    <td>
+                        <input name="toitosta" type="number" @bind="_foodAmount">
+                        <div class="autofill" @onclick="AutofillFood"></div>
+                    </td>
                 </tr>
                 @foreach (var item in Enum.GetValues<MoonshineItem>().Where(x => x != MoonshineItem.Puskar))
                 {
@@ -107,7 +144,10 @@
                         <td>@item.ToString()</td>
                         <td>@Utils.SepThousands(D.MoonshineItemCounts[item])</td>
                         <td>@Consts.MoonshinePrices[item] EEK</td>
-                        <td><input type="number" @bind="_moonshineAmounts[item]"></td>
+                        <td>
+                            <input type="number" @bind="_moonshineAmounts[item]">
+                            <div class="autofill" @onclick="AutofillMoonshineIngredients"></div>
+                        </td>
                     </tr>
                 }
                 </tbody>
@@ -153,24 +193,29 @@
         </div>
     </form>
 
-    <h2>Müü kaupu</h2>
-    <div class="content last">
-        <table class="a">
-            <tbody>
-            <tr>
-                <th>Ühik</th>
-                <th>Müügi hind</th>
-                <th>Sul on</th>
-                <th>Palju müüa</th>
-            </tr>
-            <tr>
-                <td>Puskar</td>
-                <td>67 EEK</td>
-                <td class="puskar">0</td>
-                <td><input name="puskarmuu" type="number"></td>
-            </tr>
-            </tbody>
-        </table>
-        <p><input type="submit" name="submit" value="Ok"></p>
-    </div>
+    <form @onsubmit="SellItems">
+        <h2>Müü kaupu</h2>
+        <div class="content last">
+            <table class="a">
+                <tbody>
+                <tr>
+                    <th>Ühik</th>
+                    <th>Müügi hind</th>
+                    <th>Sul on</th>
+                    <th>Palju müüa</th>
+                </tr>
+                <tr>
+                    <td>Puskar</td>
+                    <td>@Consts.MoonshinePrices[MoonshineItem.Puskar] EEK</td>
+                    <td class="puskar">@Utils.SepThousands(D.MoonshineItemCounts[MoonshineItem.Puskar])</td>
+                    <td>
+                        <input name="puskarmuu" type="number" @bind="_moonshineAmounts[MoonshineItem.Puskar]">
+                        <div class="autofill" @onclick="AutofillMoonshineAmount"></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <p><input type="submit" name="submit" value="Ok"></p>
+        </div>
+    </form>
 </div>

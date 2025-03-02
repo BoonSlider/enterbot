@@ -1,4 +1,5 @@
 @page "/kinnisvara"
+@page "/housing"
 @using GameEngine
 @using Player
 @using Player.House
@@ -26,7 +27,7 @@
 
     private HouseData GetSelectedHouseData()
     {
-        return Houses.GetHouseData(_selectedHouseLevel);
+        return global::Player.House.Houses.GetHouseData(_selectedHouseLevel);
     }
 
     private string GetHouseText(long lvl)

@@ -1,0 +1,141 @@
+@page "/puskar"
+@page "/moonshine"
+@using System.Security.AccessControl
+@using GameEngine
+@using Player
+@using Player.House
+<PageTitle>Puskar</PageTitle>
+@inject Engine Engine
+@inject ChangeNotifier Changes
+@inject AlertService Alerts
+
+@code {
+    private IPlayer P => Engine.HumanPlayer;
+    private IPlayerData D => P.MyData;
+    private long _moonshineAmount = 0;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        AutofillMoonshineAmount();
+        Changes.OnChange += StateHasChanged;
+    }
+
+    HouseData CurHouse => Calc.CurrentHouse(D);
+    
+    private void AutofillMoonshineAmount()
+    {
+        long can = CurHouse.MoonshineLimit;
+        foreach (var (key, value) in Consts.MoonshineRequirements)
+        {
+            can = Math.Min(can, D.MoonshineItemCounts[key] / value);
+        }
+
+        _moonshineAmount = can;
+    }
+
+    private async Task MakeMoonshine()
+    {
+        if (_moonshineAmount == 0) return;
+        Alerts.ShowAlert(P.MakeMoonshine(_moonshineAmount));
+        AutofillMoonshineAmount();
+        await Changes.Notify();
+    }
+
+    private async Task AutoMoonshine()
+    {
+        var amount = Calc.MaxMoonshineCanMake(D);
+        Dictionary<MoonshineItem, long> needed = new();
+        foreach (var (key, value) in Consts.MoonshineRequirements)
+        {
+            var needMore = Math.Max(0L, value * amount - D.MoonshineItemCounts[key]);
+            if(needMore > 0)
+                needed[key] = needMore;
+        }
+        P.BuyFood(0, needed).AssertOk();
+        amount = Math.Min(amount, CurHouse.MoonshineLimit);
+        var makeRes = P.MakeMoonshine(amount);
+        if (!makeRes.Success)
+        {
+            Alerts.ShowAlert(makeRes);
+            return;
+        }
+
+        Alerts.ShowAlert(P.SellItems(amount));
+        AutofillMoonshineAmount();
+        await Changes.Notify();
+    }
+
+}
+
+<form @onsubmit="MakeMoonshine">
+    <h1>Puskar</h1>
+    <div class="content last">
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    Puskari tootmine on üks mängu tulusamaid tegevusi. Valmis puskari saad maha müüa <a href="turg">turul</a>.
+                    Sealt saad osta ka tootmiseks vajalikke tooraineid.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <table>
+            <tbody>
+            <tr>
+                <th>Ühik</th>
+                <th>Sul on</th>
+                <th>1 ühik puskarit vajab</th>
+            </tr>
+            @foreach (var key in Consts.MoonshineRequirements.Keys.ToList())
+            {
+                <tr>
+                    <td>@key</td>
+                    <td>@D.MoonshineItemCounts[key]</td>
+                    <td>@Consts.MoonshineRequirements[key]</td>
+                </tr>
+            }
+            <tr>
+                <td>Valmis puskarit on sul:</td>
+                <td>@D.MoonshineItemCounts[MoonshineItem.Puskar]</td>
+            </tr>
+            </tbody>
+        </table>
+        <table>
+            <tbody>
+            <tr>
+                <td><b>Puskari valmistamine nõuab @Consts.MoonshineProductionMoves käiku.</b></td>
+            </tr>
+            </tbody>
+        </table>
+        <table>
+            <tbody>
+            <tr>
+                <td>Korraga on võimalik valmistada kuni @CurHouse.MoonshineLimit puskarit.</td>
+            </tr>
+            </tbody>
+        </table>
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    Tooda: <input type="number" @bind=_moonshineAmount>
+                    <div class="autofill" @onclick="AutofillMoonshineAmount"></div>
+                    <input type="submit" name="ok" value="Valmista!">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @{
+                        var amount = Calc.MaxMoonshineCanMake(D);
+                        amount = Math.Min(amount, CurHouse.MoonshineLimit);
+                        var profit = amount * Calc.MoonshineProfit;
+                    }
+                    Automaat: tooda ja müü @Utils.SepThousands(amount) puskarit, teenides @Utils.SepThousands(profit)
+                    <input type="button" name="ok" value="Automaat-valmista" @onclick="AutoMoonshine">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
