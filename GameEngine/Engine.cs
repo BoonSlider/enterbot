@@ -41,6 +41,7 @@ public class Engine
             new SmartAtk(2),
             new SmartDef(1),
             new SmartDef(2),
+            new Juggernaut(1),
         ];
         foreach (var bot in botList)
         {
