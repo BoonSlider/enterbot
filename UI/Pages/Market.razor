@@ -79,7 +79,7 @@
     {
         var amount = _moonshineAmounts[MoonshineItem.Puskar];
         if (amount is null) return;
-        Alerts.ShowAlert(P.SellItems(amount.Value));
+        Alerts.ShowAlert(P.SellMoonshine(amount.Value));
         AutofillMoonshineAmount();
         await Changes.Notify();
     }
