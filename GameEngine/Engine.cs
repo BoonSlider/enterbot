@@ -1,4 +1,5 @@
 using Bots;
+using Bots.HumanAutomation;
 using Player;
 using Player.Job;
 

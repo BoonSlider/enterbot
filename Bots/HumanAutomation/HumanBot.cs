@@ -1,6 +1,7 @@
+using Bots.Shared;
 using Player;
 
-namespace Bots;
+namespace Bots.HumanAutomation;
 
 public class HumanBot(AutomationSettings a) : IBot(-1)
 {

@@ -1,3 +1,4 @@
+using Bots.Shared;
 using Player;
 
 namespace Bots;

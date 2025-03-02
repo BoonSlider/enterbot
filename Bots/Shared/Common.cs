@@ -1,6 +1,6 @@
 using Player;
 
-namespace Bots;
+namespace Bots.Shared;
 
 public static class Common
 {

@@ -1,6 +1,6 @@
 using Player;
 
-namespace UI.Services;
+namespace UI;
 
 public class AlertService
 {
