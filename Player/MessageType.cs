@@ -29,9 +29,9 @@ public enum MessageType
     Todo,
     WorldRestarted,
     BoughtWeapons,
+    SoldMoonshine,
     
     NotEnoughIngredients,
-    SoldMoonshine,
     NotEnoughMoonshine,
     MadeMoonshine,
 }

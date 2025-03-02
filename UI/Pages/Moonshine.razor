@@ -44,6 +44,7 @@
     private async Task AutoMoonshine()
     {
         var amount = Calc.MaxMoonshineCanMake(D);
+        amount = Math.Min(amount, CurHouse.MoonshineLimit);
         Dictionary<MoonshineItem, long> needed = new();
         foreach (var (key, value) in Consts.MoonshineRequirements)
         {
@@ -51,7 +52,8 @@
             if(needMore > 0)
                 needed[key] = needMore;
         }
-        P.BuyFood(0, needed).AssertOk();
+        if(needed.Count > 0)
+            P.BuyFood(0, needed).AssertOk();
         amount = Math.Min(amount, CurHouse.MoonshineLimit);
         var makeRes = P.MakeMoonshine(amount);
         if (!makeRes.Success)
@@ -60,7 +62,7 @@
             return;
         }
 
-        Alerts.ShowAlert(P.SellItems(amount));
+        Alerts.ShowAlert(P.SellMoonshine(amount));
         AutofillMoonshineAmount();
         await Changes.Notify();
     }
@@ -111,7 +113,7 @@
         <table>
             <tbody>
             <tr>
-                <td>Korraga on võimalik valmistada kuni @CurHouse.MoonshineLimit puskarit.</td>
+                <td>Korraga on võimalik valmistada kuni @Utils.SepThousands(CurHouse.MoonshineLimit) puskarit.</td>
             </tr>
             </tbody>
         </table>

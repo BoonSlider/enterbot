@@ -300,7 +300,7 @@ public class Player(string id, Data data) : IPlayer
         return OpRes.Ok(MessageType.MadeMoonshine);
     }
 
-    public IOperationResult SellItems(long amount)
+    public IOperationResult SellMoonshine(long amount)
     {
         if (amount <= 0) return OpRes.Err(MessageType.MustBePositive);
         if (Mut.MoonshineItemCounts[MoonshineItem.Puskar] < amount)

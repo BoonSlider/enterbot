@@ -14,5 +14,5 @@ public interface IPlayerActions
     public IOperationResult AttackPlayer(string victimId, bool withGang);
     public IOperationResult BuyWeapons(IDictionary<Weapon, long> weaponAmounts);
     public IOperationResult MakeMoonshine(long amount);
-    public IOperationResult SellItems(long amount);
+    public IOperationResult SellMoonshine(long amount);
 }
