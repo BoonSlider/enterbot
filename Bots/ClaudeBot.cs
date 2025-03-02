@@ -1,3 +1,4 @@
+using Bots.Shared;
 using Player;
 
 namespace Bots;
@@ -36,7 +37,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         // Always prioritize education up to target
         if (d.Education < _targetEdu)
         {
-            ops.AddRange(Common.AllMovesEducation(p, _targetEdu));
+            ops.AddRange(Common.AllMovesEducation(p, _targetEdu, 0));
             if (d.Moves < 10) // If we spent most moves on education
             {
                 ops.AddRange(OptimizeLevelsAndHouse(p));
@@ -105,7 +106,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         
         var ops = new List<IOperationResult>();
         // Continue education beyond target if we have excess moves
-        ops.AddRange(Common.AllMovesEducation(p));
+        ops.AddRange(Common.AllMovesEducation(p, null, 0));
         
         // Balanced approach to weapons
         ops.AddRange(AcquireBalancedWeapons(p));
@@ -155,7 +156,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         ops.AddRange(Common.AllMovesMobsters(p, null, moveReserve));
         
         // Use leftover moves for education
-        ops.AddRange(Common.AllMovesEducation(p));
+        ops.AddRange(Common.AllMovesEducation(p, null, 0));
         
         // Attack aggressively if we can
         if (Calc.CanAttack(p.MyData))
@@ -207,7 +208,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         }
         
         // Invest in education with remaining moves
-        ops.AddRange(Common.AllMovesEducation(p));
+        ops.AddRange(Common.AllMovesEducation(p, null, 0));
         
         // Only attack if we have a strong position
         if (Calc.CanAttack(p.MyData) && d.AtkLevel >= 30 && d.Mobsters >= 100)

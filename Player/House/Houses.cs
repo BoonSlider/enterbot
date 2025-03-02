@@ -2,6 +2,7 @@ namespace Player.House;
 
 public class Houses
 {
+    public static HouseData MaxHouse => GetHouseData(Consts.MaxHouseLvl);
     public static HouseData GetHouseData(long houseLevel)
     {
         return houseLevel switch

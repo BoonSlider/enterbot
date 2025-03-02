@@ -8,5 +8,8 @@ public interface IAttackResult : IOperationResult
     public long GuardsKilled { get; }
     public IDictionary<Weapon, long> WeaponsStolen { get; }
     public long TurnNumber { get; }
+    public string Attacker { get; }
+    public string Defender { get; }
+    public long FameChange { get; }
 
 }

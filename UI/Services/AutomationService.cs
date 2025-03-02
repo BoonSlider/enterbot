@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Bots;
+using Bots.HumanAutomation;
 using Microsoft.JSInterop;
 
 namespace UI.Services;

@@ -1,6 +1,7 @@
+using Bots.Shared;
 using Player;
 
-namespace Bots;
+namespace Bots.HumanAutomation;
 
 public class HumanBot(AutomationSettings a) : IBot(-1)
 {
@@ -11,7 +12,7 @@ public class HumanBot(AutomationSettings a) : IBot(-1)
         if (!a.IsActive) return [];
         var ops = new List<IOperationResult>();
         if (a.EducationLimit is { } edu)
-            ops.AddRange(Common.AllMovesEducation(p, edu));
+            ops.AddRange(Common.AllMovesEducation(p, edu, a.MoveReserve));
         if (a.MafiaLimit is { } mlim)
             ops.AddRange(Common.AllMovesMobsters(p, mlim, a.MoveReserve));
         if (a.GuardsLimit is { } glim)

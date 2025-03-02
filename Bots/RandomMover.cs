@@ -1,3 +1,4 @@
+using Bots.Shared;
 using Player;
 
 namespace Bots;
@@ -15,7 +16,7 @@ public class RandomMover(int nameSuffix) : IBot(nameSuffix)
         switch (moveType)
         {
             case 0:
-                ops.AddRange(Common.AllMovesEducation(p));
+                ops.AddRange(Common.AllMovesEducation(p, null, 0));
                 break;
             case 1:
                 ops.AddRange(Common.AllMovesMobsters(p, null, 0));

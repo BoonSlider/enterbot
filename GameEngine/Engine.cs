@@ -1,4 +1,5 @@
 using Bots;
+using Bots.HumanAutomation;
 using Player;
 using Player.Job;
 
@@ -38,6 +39,8 @@ public class Engine
             new BalancedMafiaBoss(1),
             new SmartAtk(1),
             new SmartAtk(2),
+            new SmartDef(1),
+            new SmartDef(2),
         ];
         foreach (var bot in botList)
         {

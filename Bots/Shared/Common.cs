@@ -1,6 +1,6 @@
 using Player;
 
-namespace Bots;
+namespace Bots.Shared;
 
 public static class Common
 {
@@ -45,11 +45,11 @@ public static class Common
         return [];
     }
 
-    public static List<IOperationResult> AllMovesEducation(IPlayer p, long? maxEdu = null)
+    public static List<IOperationResult> AllMovesEducation(IPlayer p, long? maxEdu, long leaveMoves)
     {
         var d = p.MyData;
         var ops = new List<IOperationResult>();
-        var canGetEdu = Calc.HowManyMovesCanSpendOnEdu(d, maxEdu);
+        var canGetEdu = Calc.HowManyMovesCanSpendOnEdu(d, maxEdu, leaveMoves);
         if (canGetEdu > 0)
             ops.AddRange(p.IncreaseEducation(canGetEdu));
         var maxJob = Calc.GetMaxJobLevel(d);
@@ -124,14 +124,20 @@ public static class Common
         return [];
     }
 
-    public static IOperationResult? SafeAttackPlayer(IPlayer p, string vic, bool withGang)
+    public static IAttackResult? SafeAttackPlayer(IPlayer p, string vic, bool withGang)
     {
         var d = p.MyData;
         if (Calc.CanAttack(d))
         {
-            return p.AttackPlayer(vic, withGang);
+            return (IAttackResult)p.AttackPlayer(vic, withGang);
         }
 
         return null;
+    }
+
+    public static IList<IOperationResult> AllMovesProtectedGuards(IPlayer p, long keepMoves)
+    {
+        var maxGuards = Calc.GetMaxProtectedGuards(p.MyData);
+        return AllMovesGuards(p, maxGuards, keepMoves);
     }
 }

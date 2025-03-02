@@ -1,6 +1,6 @@
 using Player;
 
-namespace Bots;
+namespace Bots.HumanAutomation;
 
 public class AutomationSettings
 {

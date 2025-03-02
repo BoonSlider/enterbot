@@ -142,7 +142,7 @@ public class Player(string id, Data data) : IPlayer
             {
                 return OpRes.Err(MessageType.MustBePositive);
             }
-        
+
             cost += Consts.MoonshinePrices[item] * moonshineItemCounts[item];
         }
 
@@ -191,8 +191,10 @@ public class Player(string id, Data data) : IPlayer
         var atk = withGang ? Calc.PlayerGangTotalAtk(MyData) : Calc.PlayerSoloTotalAtk(MyData);
         var def = Calc.PlayerGangTotalDef(victim);
         Mut.Moves -= Consts.AtkMoves;
+        long fameChange = 0;
         if (atk > def)
         {
+            fameChange = victim.Fame > Mut.Fame ? 2 : 1;
             var cash = victim.GetCash();
             var takeRatio = (double)atk / (atk + def);
             var moneyStolen = (long)Math.Floor(cash * takeRatio);
@@ -205,6 +207,7 @@ public class Player(string id, Data data) : IPlayer
                 Success = true, AttackSucceeded = true, MoneyStolen = moneyStolen, GuardsKilled = guardsKilled,
                 Attacker = Mut.Id, Defender = victim.Id,
                 TurnNumber = Mut.TurnsPlayed,
+                FameChange = fameChange,
             };
             // await DbHelper.Db!.SaveAsync(res);
             foreach (var weapon in victim.Weapons.Keys)
@@ -224,27 +227,13 @@ public class Player(string id, Data data) : IPlayer
             victim.Guards -= guardsKilled;
             victim.GuardsLost += guardsKilled;
             Mut.GuardsKilled += guardsKilled;
-            if (victim.Fame > Mut.Fame)
-            {
-                Mut.Fame += 2;
-            }
-            else
-            {
-                Mut.Fame += 1;
-            }
+            Mut.Fame += fameChange;
 
             return res;
         }
 
-        if (victim.Fame > Mut.Fame)
-        {
-            Mut.Fame -= 2;
-        }
-        else
-        {
-            Mut.Fame -= 1;
-        }
-
+        fameChange = victim.Fame > Mut.Fame ? -2 : -1;
+        Mut.Fame += fameChange;
         Mut.Fame = Math.Max(Mut.Fame, 0L);
 
         var menLost = Math.Min(def / atk, Mut.Mobsters);
@@ -254,7 +243,8 @@ public class Player(string id, Data data) : IPlayer
         var resFail = new AttackResult
         {
             Success = true, AttackSucceeded = false, MenLost = menLost,
-                Attacker = Mut.Id, Defender = victim.Id, TurnNumber = Mut.TurnsPlayed,
+            Attacker = Mut.Id, Defender = victim.Id, TurnNumber = Mut.TurnsPlayed,
+            FameChange = fameChange,
         };
         // await DbHelper.Db!.SaveAsync(resFail);
         return resFail;

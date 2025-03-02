@@ -1,7 +1,7 @@
 using GameEngine;
 using Player;
-using UI;
-using UI.Services;
+
+namespace UI.Services;
 
 public class AlertTextProvider
 {

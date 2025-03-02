@@ -1,4 +1,5 @@
 using Bots;
+using Bots.Shared;
 using Player;
 
 namespace GameEngine;
