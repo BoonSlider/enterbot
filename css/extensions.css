@@ -214,3 +214,10 @@ body {
 .atk-fail {
     background: orange;
 }
+
+.build-time-info {
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    z-index: 1000;
+}
