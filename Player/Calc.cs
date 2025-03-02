@@ -243,4 +243,9 @@ public static class Calc
     {
         return Houses.GetHouseData(d.HouseLevel).ProtectedGuards;
     }
+
+    public static long TotalWeaponsStolen(IAttackResult atk)
+    {
+        return atk.WeaponsStolen.Values.Sum();
+    }
 }
