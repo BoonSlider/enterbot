@@ -103,7 +103,7 @@ public class IndexedDbService(IJSRuntime jsRuntime) : IAsyncDisposable
         try
         {
             // Auto-assign ID for new items (if ID is 0 or negative)
-            if (attackResult.Id <= 0)
+            if (attackResult.Id <= 0 || attackResult.Id >= Consts.MaxEvents)
             {
                 attackResult.Id = GetNextId();
                 await UpdateStoredCounterAsync();
