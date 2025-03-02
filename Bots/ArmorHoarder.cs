@@ -5,7 +5,7 @@ namespace Bots;
 
 public class ArmorHoarder(int nameSuffix) : IBot(nameSuffix)
 {
-    public override string NamePrefix => "armor";
+    public override string NamePrefix => "patient";
     private readonly AttackEveryone _innerDemon = new(-1);
 
     public override IList<IOperationResult> PlayTurn(IPlayer p)
@@ -21,7 +21,7 @@ public class ArmorHoarder(int nameSuffix) : IBot(nameSuffix)
         ops.AddRange(Common.AllMovesEducation(p, null, 0));
         var uzi = 200000;
         ops.AddRange(Common.AllMovesWeapon(p, Weapon.Uzi, uzi, 0));
-        if (d.Weapons[Weapon.Uzi] == uzi)
+        if (d.Weapons[Weapon.Uzi] >= uzi)
         {
             ops.AddRange(_innerDemon.PlayTurn(p));
         }
