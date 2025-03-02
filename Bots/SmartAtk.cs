@@ -7,7 +7,7 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
 {
     public override string NamePrefix => "killua";
     private const long WaitBeforeRetry = 96*7;
-    private readonly AtkStats _atkStats = new AtkStats();
+    private AtkStats? _atkStats;
 
     private long InterestingAmount(IPlayerData d)
     {
@@ -20,6 +20,7 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
     }
     public override IList<IOperationResult> PlayTurn(IPlayer p)
     {
+        EnsureInitialize(p);
         var keepMoves = 40;
         var d = p.MyData;
         var op = new List<IOperationResult>();
@@ -46,6 +47,11 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
         return op;
     }
 
+    private void EnsureInitialize(IPlayer p)
+    {
+        _atkStats ??= new AtkStats(p.Id, p.GetAllPlayers());
+    }
+
     private IList<IOperationResult> OpportunisticAttack(IPlayer p)
     {
         var oth = p.GetAllPlayers().Except([p.Id]).ToList();
@@ -58,7 +64,7 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
             while (AttackCondition(vd, interestingAmount, d))
             {
                 var atk = (IAttackResult)p.AttackPlayer(vic, false);
-                _atkStats.SaveAtkResult(atk);
+                _atkStats!.SaveAtkResult(atk);
                 op.Add(atk);
             }
         }
@@ -69,7 +75,7 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
     private bool AttackCondition(IPlayerPublicData vd, long interestingAmount, IPlayerData d)
     {
         if (!Calc.CanAttack(d)) return false;
-        var lastAttacked = _atkStats.GetLastAttacked(vd.Id) ?? 0;
+        var lastAttacked = _atkStats!.GetLastAttacked(vd.Id) ?? 0;
         if (d.TurnsPlayed - lastAttacked >= GetMaxWait(vd.Id))
             return true;
         var lastFailed = _atkStats.GetLastFailed(vd.Id);
@@ -87,7 +93,7 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
 
     private long GetMaxWait(string id)
     {
-        if (_atkStats.HaveGottenWeaponsBefore(id) && !_atkStats.HaveFailedBefore(id))
+        if (_atkStats!.HaveGottenWeaponsBefore(id) && !_atkStats.HaveFailedBefore(id))
         {
             return WaitBeforeRetry / 20;
         }

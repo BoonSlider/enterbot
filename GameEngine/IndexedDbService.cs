@@ -134,6 +134,7 @@ public class IndexedDbService(IJSRuntime jsRuntime) : IAsyncDisposable
                 attackResult.Attacker,
                 attackResult.Defender,
                 attackResult.TurnNumber,
+                attackResult.FameChange,
             };
 
             await jsRuntime.InvokeVoidAsync("indexedDBInterop.saveItem", _dbName, _storeName, dbRecord);
@@ -264,6 +265,7 @@ public class IndexedDbService(IJSRuntime jsRuntime) : IAsyncDisposable
             Attacker = jsonElement.GetProperty("attacker").GetString()!,
             Defender = jsonElement.GetProperty("defender").GetString()!,
             TurnNumber = jsonElement.GetProperty("turnNumber").GetInt64(),
+            FameChange= jsonElement.GetProperty("fameChange").GetInt64(),
         };
 
         // Deserialize weapons stolen

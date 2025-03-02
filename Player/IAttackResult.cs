@@ -10,5 +10,6 @@ public interface IAttackResult : IOperationResult
     public long TurnNumber { get; }
     public string Attacker { get; }
     public string Defender { get; }
+    public long FameChange { get; }
 
 }

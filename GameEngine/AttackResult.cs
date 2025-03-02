@@ -15,4 +15,5 @@ public record AttackResult : IAttackResult
     public MessageType Type { get; set; } = MessageType.AttackAttempted;
     public required string Attacker { get; init; }
     public required string Defender { get; init; }
+    public required long FameChange { get; init; }
 }

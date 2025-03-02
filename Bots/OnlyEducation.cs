@@ -11,7 +11,7 @@ public class OnlyEducation(int nameSuffix) : IBot(nameSuffix)
     {
         var d = p.MyData;
         var ops = new List<IOperationResult>();
-        ops.AddRange(Common.AllMovesEducation(p));
+        ops.AddRange(Common.AllMovesEducation(p, null, 0));
         ops.AddRange(Common.AllMovesMobsters(p, null, 0));
         ops.AddRange(Common.MaximizeDefLvl(p));
         ops.AddRange(Common.MaximizeHouseLvl(p));

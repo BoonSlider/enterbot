@@ -5,9 +5,9 @@ namespace Player;
 
 public static class Calc
 {
-    public static long HowManyMovesCanSpendOnEdu(IPlayerData d, long? maxEdu = null)
+    public static long HowManyMovesCanSpendOnEdu(IPlayerData d, long? maxEdu, long leaveMoves)
     {
-        var ret = Math.Min(d.Money / Consts.EduCost, d.Moves);
+        var ret = Math.Min(d.Money / Consts.EduCost, Math.Max(d.Moves-leaveMoves, 0));
         var eduLeft = Math.Max((maxEdu ?? MaxEducation) - d.Education, 0L);
         var eduLeftMoves = (eduLeft + Consts.EduRate - 1) / Consts.EduRate;
         return Math.Min(ret, eduLeftMoves);
@@ -247,5 +247,12 @@ public static class Calc
     public static long TotalWeaponsStolen(IAttackResult atk)
     {
         return atk.WeaponsStolen.Values.Sum();
+    }
+
+    public static HouseData? GetNextHouse(IPlayerData d)
+    {
+        if (d.HouseLevel == Consts.MaxHouseLvl)
+            return null;
+        return Houses.GetHouseData(d.HouseLevel + 1);
     }
 }
