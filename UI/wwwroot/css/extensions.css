@@ -217,7 +217,7 @@ body {
 
 .build-time-info {
     position: absolute;
-    top: 15px;
-    left: 25px;
+    top: 5px;
+    left: 5px;
     z-index: 1000;
 }
