@@ -1,3 +1,4 @@
+using System.Security.AccessControl;
 using Player;
 
 namespace Bots.Shared;
@@ -139,5 +140,18 @@ public static class Common
     {
         var maxGuards = Calc.GetMaxProtectedGuards(p.MyData);
         return AllMovesGuards(p, maxGuards, keepMoves);
+    }
+
+    public static IList<IOperationResult> EnsureNotFeeding(IPlayer p, long maxFeed, long safetyMargin)
+    {
+        var d = p.MyData;
+        if (d.WeaponsLost > maxFeed)
+        {
+            var gotMax = d.Weapons.Values.Max();
+            var needGuards = (gotMax + Consts.WeaponGuardedRate - 1) / Consts.WeaponGuardedRate + safetyMargin;
+            return AllMovesGuards(p, needGuards, 0);
+        }
+
+        return [];
     }
 }

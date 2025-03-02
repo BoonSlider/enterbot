@@ -3,7 +3,7 @@ using Player;
 
 namespace Bots;
 
-public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
+public class Claude2(int nameSuffix) : IBot(nameSuffix)
 {
     public override string NamePrefix => "claude2";
     private readonly Random _random = new();
@@ -36,6 +36,7 @@ public class BalancedMafiaBoss(int nameSuffix) : IBot(nameSuffix)
 
         // Always try to get better jobs first for income
         var ops = new List<IOperationResult>();
+        ops.AddRange(Common.EnsureNotFeeding(p, d.TurnsPlayed/10, 10));
         ops.AddRange(OptimizeJob(p));
 
         // Act based on current phase

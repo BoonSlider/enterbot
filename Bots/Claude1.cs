@@ -3,9 +3,9 @@ using Player;
 
 namespace Bots;
 
-public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
+public class Claude1(int nameSuffix) : IBot(nameSuffix)
 {
-    public override string NamePrefix => "claudebot";
+    public override string NamePrefix => "claude1";
     private int _strategy = 0; // 0: build up, 1: offensive, 2: defensive
     private long _targetEdu = 18500; // Matches ArmorHoarder's initial education target
     private readonly Dictionary<Weapon, long> _weaponTargets = new()
@@ -34,6 +34,7 @@ public class ClaudeBot(int nameSuffix) : IBot(nameSuffix)
         }
         
         var ops = new List<IOperationResult>();
+        ops.AddRange(Common.EnsureNotFeeding(p, d.TurnsPlayed/10, 10));
         // Always prioritize education up to target
         if (d.Education < _targetEdu)
         {
