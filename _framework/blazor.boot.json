@@ -1,10 +1,10 @@
 {
   "mainAssemblyName": "ui",
   "resources": {
-    "hash": "sha256-umeHC3rjC4jQGIqxAkWOZXm0L+lohICJQ3+B3L/LhIg=",
+    "hash": "sha256-AegmLtR/6DlJXOVxLbnaemMpzygzhbKayQg3iHO6KIg=",
     "fingerprinting": {
-      "Bots.75c92t2888.wasm": "Bots.wasm",
-      "GameEngine.f6oqcyw9fb.wasm": "GameEngine.wasm",
+      "Bots.0cx6m0aj2j.wasm": "Bots.wasm",
+      "GameEngine.tpto5cblc6.wasm": "GameEngine.wasm",
       "IndexedDB.Blazor.wi4xqmzb2y.wasm": "IndexedDB.Blazor.wasm",
       "Microsoft.AspNetCore.Components.Forms.g23xjr9jh4.wasm": "Microsoft.AspNetCore.Components.Forms.wasm",
       "Microsoft.AspNetCore.Components.x4dpy2qw12.wasm": "Microsoft.AspNetCore.Components.wasm",
@@ -24,7 +24,7 @@
       "Microsoft.JSInterop.bdr89uoxtd.wasm": "Microsoft.JSInterop.wasm",
       "Microsoft.JSInterop.WebAssembly.p386u0jty9.wasm": "Microsoft.JSInterop.WebAssembly.wasm",
       "netstandard.ea9p0fovac.wasm": "netstandard.wasm",
-      "Player.i4ptj3eff7.wasm": "Player.wasm",
+      "Player.j5v3qqgd69.wasm": "Player.wasm",
       "System.Collections.Concurrent.d9rro02za1.wasm": "System.Collections.Concurrent.wasm",
       "System.Collections.Immutable.9n2dhsg64c.wasm": "System.Collections.Immutable.wasm",
       "System.Collections.egdkvos4pj.wasm": "System.Collections.wasm",
@@ -34,11 +34,11 @@
       "System.Diagnostics.DiagnosticSource.u7fmtfl7hv.wasm": "System.Diagnostics.DiagnosticSource.wasm",
       "System.IO.Pipelines.h68d94scrb.wasm": "System.IO.Pipelines.wasm",
       "System.Linq.Expressions.kt7w8h90b2.wasm": "System.Linq.Expressions.wasm",
-      "System.Linq.7sts5sanim.wasm": "System.Linq.wasm",
+      "System.Linq.9r7172z8l6.wasm": "System.Linq.wasm",
       "System.Memory.acxyzgdz32.wasm": "System.Memory.wasm",
       "System.Net.Http.pu2adu2edz.wasm": "System.Net.Http.wasm",
       "System.Net.Primitives.3uow9zd1kc.wasm": "System.Net.Primitives.wasm",
-      "System.Private.CoreLib.2v2ac8tvui.wasm": "System.Private.CoreLib.wasm",
+      "System.Private.CoreLib.43uzuc6idx.wasm": "System.Private.CoreLib.wasm",
       "System.Private.Uri.nsfj740ux6.wasm": "System.Private.Uri.wasm",
       "System.Runtime.InteropServices.JavaScript.f4ln4hfftw.wasm": "System.Runtime.InteropServices.JavaScript.wasm",
       "System.Runtime.InteropServices.ebl1t4cqsb.wasm": "System.Runtime.InteropServices.wasm",
@@ -49,7 +49,7 @@
       "System.Threading.Tasks.Extensions.8lgfcm41ed.wasm": "System.Threading.Tasks.Extensions.wasm",
       "System.Threading.9awl0tu40j.wasm": "System.Threading.wasm",
       "TG.Blazor.IndexedDB.y0k6n7pzc8.wasm": "TG.Blazor.IndexedDB.wasm",
-      "ui.hx7v18jtht.wasm": "ui.wasm",
+      "ui.7xq1ljd6sy.wasm": "ui.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.8bti36lthm.js": "dotnet.native.js",
       "dotnet.native.tr0cyonrwt.wasm": "dotnet.native.wasm",
@@ -69,12 +69,12 @@
       "icudt.oh1zvcfom8.dat": "sha256-tO5O5YzMTVSaKBboxAqezOQL9ewmupzV2JrB5Rkc8a4="
     },
     "coreAssembly": {
-      "System.Private.CoreLib.2v2ac8tvui.wasm": "sha256-ApdL/QGg0Zr+p9WHBrZfI68iGKObe1V29lsPvjeFvJE=",
+      "System.Private.CoreLib.43uzuc6idx.wasm": "sha256-EPH14rN/H04QLiVsc0DBMW2SiRiFhQuMbJwgGslX9/k=",
       "System.Runtime.InteropServices.JavaScript.f4ln4hfftw.wasm": "sha256-r+LQmgoVdHgFKWJvUNAR7HQZAtSw+xvBIQ6siSPsBNM="
     },
     "assembly": {
-      "Bots.75c92t2888.wasm": "sha256-u5tWSAFIbd8m8ct8iMGPnyA+AY4rgFg8NGtAKYZp7XM=",
-      "GameEngine.f6oqcyw9fb.wasm": "sha256-55A9yHXw8BISlyRTCQF8u119CgGhfIFuELL5unhC6TA=",
+      "Bots.0cx6m0aj2j.wasm": "sha256-wNuTKYChKEufho4sHn7VfAFZQsn778xpxhxOTYKNWHs=",
+      "GameEngine.tpto5cblc6.wasm": "sha256-j45ZxjEYcN+N5sQEbzfFCpQfykMD56/bLuiWt1SJTaI=",
       "IndexedDB.Blazor.wi4xqmzb2y.wasm": "sha256-KPfBDdTsdA1UJa39MMwHDmeTAj43EMBfmy0J8wNBcuo=",
       "Microsoft.AspNetCore.Components.Forms.g23xjr9jh4.wasm": "sha256-yBzFtVpcxoVM+XCK5Nkz/WM7Ok7SH/AOnfh8tCrVnv4=",
       "Microsoft.AspNetCore.Components.x4dpy2qw12.wasm": "sha256-P6fo84MG937oMy/eCV5c2R+xFoGltwVweDnfRlBV4lc=",
@@ -94,7 +94,7 @@
       "Microsoft.JSInterop.bdr89uoxtd.wasm": "sha256-j93883TLWrUsylBnXBVb1aCW34uImOVFvkmgV7v8tx0=",
       "Microsoft.JSInterop.WebAssembly.p386u0jty9.wasm": "sha256-hbzWuXrlepIqY/y+nQ2ZAFer2/njy1dc+Y4LUaAaL5E=",
       "netstandard.ea9p0fovac.wasm": "sha256-RtfO3jFnxlYazC9bU4xPo7YDw3+w3wNSSFH5otrByO4=",
-      "Player.i4ptj3eff7.wasm": "sha256-jlxQx3lG2OvWSI3iXWSwAjJUsYj27ACyeKedEoyYV/g=",
+      "Player.j5v3qqgd69.wasm": "sha256-if0JafY0ZziAE1Jx623fTtB7XtKfwbuVXwi0VW1cKCg=",
       "System.Collections.Concurrent.d9rro02za1.wasm": "sha256-P0XmoKiRUer4V33RdQvLqLpg1VCCUBE9F719NQX/7js=",
       "System.Collections.Immutable.9n2dhsg64c.wasm": "sha256-W5B+p32qAsTbm0IXc9J93QIL9YW/QLq+T98juf8Ix1Q=",
       "System.Collections.egdkvos4pj.wasm": "sha256-HiDceIXkq10l2Lym8LZmXsQTCTQ5jW+P0dmjdAGKn3Y=",
@@ -104,7 +104,7 @@
       "System.Diagnostics.DiagnosticSource.u7fmtfl7hv.wasm": "sha256-it8D2LDu75JSUfBoJv+MJuWsT9MgDE3SXk2zfCzQP/g=",
       "System.IO.Pipelines.h68d94scrb.wasm": "sha256-V5z9/XlJMVOFEDQ+R/mfLxmcykbKzh9+yhFeRdF4kdU=",
       "System.Linq.Expressions.kt7w8h90b2.wasm": "sha256-mGvjkBdZeko53FM3iruaGLY5iqOxd7VS/0O9JcJZ+kY=",
-      "System.Linq.7sts5sanim.wasm": "sha256-x/pm3hyabY4WXBWSKUOCh0IT8oyB7IpSu+s/tXftWG0=",
+      "System.Linq.9r7172z8l6.wasm": "sha256-e0NINzNAt7/vDrh08fEyphukLh2ZXSoennnpbWkm+00=",
       "System.Memory.acxyzgdz32.wasm": "sha256-SrBVMo6y8K0FW1a07/LPx+E73mNBQDIPA1+IPvft0aI=",
       "System.Net.Http.pu2adu2edz.wasm": "sha256-D879B9wQMAKCwOpV7s1YQEu9qIQah803NnxPuvMpz0A=",
       "System.Net.Primitives.3uow9zd1kc.wasm": "sha256-RZU3+AurzUeBWgVjZalkA1jPlfRnehNr+R49gyYTuFI=",
@@ -117,7 +117,7 @@
       "System.Threading.Tasks.Extensions.8lgfcm41ed.wasm": "sha256-vCWVBUrIto8psBFQS6HMm/OVI93g5YjH9rx9pyJGMi8=",
       "System.Threading.9awl0tu40j.wasm": "sha256-sQqdAQ9ilL89LZ1mSKDpn6zX4LqrL8s6DUCBQwLVvj8=",
       "TG.Blazor.IndexedDB.y0k6n7pzc8.wasm": "sha256-4u3DzThxux9K9sTeHhZyBhid/AlxJKAaouBiayJ/n5Y=",
-      "ui.hx7v18jtht.wasm": "sha256-G5X64uKAxQyYf5qQghVz1GRnPIvLSeeqp3Wq+verP9Q="
+      "ui.7xq1ljd6sy.wasm": "sha256-i+8ijf4UARkDOe4n8Hauiw18V9uXCyZPRQodTW20W7E="
     }
   },
   "cacheBootResources": true,
