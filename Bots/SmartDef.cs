@@ -41,7 +41,8 @@ public class SmartDef(int nameSuffix) : IBot(nameSuffix)
             ops.AddRange(Common.AllMovesMobsters(p, null, 100));
         ops.AddRange(Common.MaximizeHouseLvl(p));
         ops.AddRange(Common.MaximizeDefLvl(p));
-        if (d.Mobsters > 10000)
+        var nextHouse = Calc.GetNextHouse(d);
+        if (d.Mobsters > 10000 || nextHouse != null && nextHouse.Price <= d.Money)
         {
             ops.AddRange(Common.MaximizeAtkLvl(p));
         }
@@ -59,8 +60,8 @@ public class SmartDef(int nameSuffix) : IBot(nameSuffix)
     private string ChooseBestTarget(List<IPlayerPublicData> targets)
     {
         return targets.OrderByDescending(t => _atkStats!.LastAtkWeapons(t.Id))
-            .ThenByDescending(t => _atkStats!.GetLastFameChange(t.Id) ?? 1)
-            .ThenByDescending(t => t.GetFameLevel())
+            // .ThenByDescending(t => _atkStats!.GetLastFameChange(t.Id) ?? 1)
+            // .ThenByDescending(t => t.GetFameLevel())
             .ThenByDescending(t => t.GetCash())
             .First().Id;
     }
