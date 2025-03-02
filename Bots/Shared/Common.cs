@@ -9,7 +9,7 @@ public static class Common
 
     public static List<IOperationResult> EnsureFood(IPlayer p, long amount)
     {
-        if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
+        if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
         if (amount == 0) return [];
         var d = p.MyData;
         var need = Math.Max(0L, amount - d.Food);
@@ -58,6 +58,7 @@ public static class Common
         {
             ops.AddRange(p.AcceptJob(maxJob));
         }
+
         return ops;
     }
 
@@ -76,7 +77,7 @@ public static class Common
         ops.AddRange(p.HireMobsters(canHire));
         return ops;
     }
-    
+
     public static IList<IOperationResult> AllMovesGuards(IPlayer p, long? maxCount, long keepMoves)
     {
         var d = p.MyData;
@@ -120,6 +121,7 @@ public static class Common
         {
             canBuy = Math.Min(canBuy, Math.Max(0L, max.Value - d.Weapons[w]));
         }
+
         if (canBuy > 0)
             return [p.BuyWeapons(new Dictionary<Weapon, long> { [w] = canBuy })];
         return [];
@@ -142,16 +144,30 @@ public static class Common
         return AllMovesGuards(p, maxGuards, keepMoves);
     }
 
+    public static long NeedMenToCover(IPlayerData d)
+    {
+        var gotMax = d.Weapons.Values.Max();
+        var needMen = (gotMax + Consts.WeaponGuardedRate - 1) / Consts.WeaponGuardedRate;
+        return needMen;
+    }
+
     public static IList<IOperationResult> EnsureNotFeeding(IPlayer p, long maxFeed, long safetyMargin)
     {
         var d = p.MyData;
         if (d.WeaponsLost > maxFeed)
         {
-            var gotMax = d.Weapons.Values.Max();
-            var needGuards = (gotMax + Consts.WeaponGuardedRate - 1) / Consts.WeaponGuardedRate + safetyMargin;
-            return AllMovesGuards(p, needGuards, 0);
+            var menNeeded = NeedMenToCover(d) + safetyMargin;
+            return AllMovesGuards(p, Math.Max(menNeeded - d.Mobsters, 0L), 0);
         }
 
         return [];
+    }
+
+    public static IEnumerable<IOperationResult> EnsureWeaponsCoveredByMobsters(IPlayer p)
+    {
+        var d = p.MyData;
+        var needMen = NeedMenToCover(d);
+        needMen = Math.Max(0L, needMen - d.Guards);
+        return AllMovesMobsters(p, needMen, 0);
     }
 }

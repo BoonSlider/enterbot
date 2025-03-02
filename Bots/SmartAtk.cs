@@ -24,6 +24,7 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
         var keepMoves = 40;
         var d = p.MyData;
         var op = new List<IOperationResult>();
+        op.AddRange(Common.EnsureWeaponsCoveredByMobsters(p));
         op.AddRange(OpportunisticAttack(p));
         var wweaponLimit = Calc.GetMaxGuardedWeapons(d);
         if (Calc.AllLevelsMaxed(d))
@@ -44,6 +45,7 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
             op.AddRange(Common.MaximizeDefLvl(p));
             op.AddRange(Common.MaximizeHouseLvl(p));
         }
+        op.AddRange(Common.EnsureWeaponsCoveredByMobsters(p));
         return op;
     }
 
