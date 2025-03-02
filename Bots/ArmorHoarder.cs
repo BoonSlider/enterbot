@@ -12,6 +12,7 @@ public class ArmorHoarder(int nameSuffix) : IBot(nameSuffix)
     {
         var d = p.MyData;
         var ops = new List<IOperationResult>();
+        ops.AddRange(Common.EnsureNotFeeding(p, d.TurnsPlayed/10, 10));
         ops.AddRange(Common.AllMovesEducation(p, 18500, 0));
         var armor = 100000;
         Common.AllMovesWeapon(p, Weapon.Armor, armor, 0);

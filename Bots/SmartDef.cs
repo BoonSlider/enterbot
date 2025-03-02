@@ -15,6 +15,7 @@ public class SmartDef(int nameSuffix) : IBot(nameSuffix)
         EnsureInitialized(p);
         var d = p.MyData;
         var ops = new List<IOperationResult>();
+        ops.AddRange(Common.EnsureNotFeeding(p, d.TurnsPlayed/10, 10));
         ops.AddRange(Common.AllMovesProtectedGuards(p, 0));
         var weaponLimit = Calc.GetMaxGuardedWeapons(d);
         foreach (var w in Enum.GetValues<Weapon>())
