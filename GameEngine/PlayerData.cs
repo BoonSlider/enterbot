@@ -109,7 +109,7 @@ public class PlayerData : IPlayerData
     {
         long score = 0;
         score += Money / 100;
-        score += (AtkLevel + 3) * (DefLevel + 3) * (HouseLevel + 3) * (Guards + Mobsters + 3 + Calc.TotalWeapons(this));
+        score += (AtkLevel + 3) * (DefLevel + 3) * (HouseLevel + 3) * (Guards + Mobsters + 3 + Calc.TotalWeapons(this)/2);
         return score;
     }
 
