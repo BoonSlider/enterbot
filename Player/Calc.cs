@@ -255,4 +255,8 @@ public static class Calc
             return null;
         return Houses.GetHouseData(d.HouseLevel + 1);
     }
+    public static HouseData CurrentHouse(IPlayerData d)
+    {
+        return Houses.GetHouseData(d.HouseLevel);
+    }
 }
