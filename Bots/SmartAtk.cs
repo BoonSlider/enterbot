@@ -6,10 +6,8 @@ namespace Bots;
 public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
 {
     public override string NamePrefix => "killua";
-    private readonly Dictionary<string, long> _lastFail = new();
-    private readonly Dictionary<string, long> _lastSuccess = new();
-    private readonly Dictionary<string, long> _lastWeapons = new();
     private const long WaitBeforeRetry = 96*7;
+    private readonly AtkStats _atkStats = new AtkStats();
 
     private long InterestingAmount(IPlayerData d)
     {
@@ -60,16 +58,7 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
             while (AttackCondition(vd, interestingAmount, d))
             {
                 var atk = (IAttackResult)p.AttackPlayer(vic, false);
-                if (atk.AttackSucceeded)
-                {
-                    _lastSuccess[vic] = d.TurnsPlayed;
-                    _lastWeapons[vic] = Calc.TotalWeaponsStolen(atk);
-                }
-                else
-                {
-                    _lastFail[vic] = d.TurnsPlayed;
-                    _lastWeapons[vic] = 0;
-                }
+                _atkStats.SaveAtkResult(atk);
                 op.Add(atk);
             }
         }
@@ -80,13 +69,13 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
     private bool AttackCondition(IPlayerPublicData vd, long interestingAmount, IPlayerData d)
     {
         if (!Calc.CanAttack(d)) return false;
-        var lastAttacked = GetLastAttacked(vd.Id) ?? 0;
+        var lastAttacked = _atkStats.GetLastAttacked(vd.Id) ?? 0;
         if (d.TurnsPlayed - lastAttacked >= GetMaxWait(vd.Id))
             return true;
-        var lastFailed = GetLastFailed(vd.Id);
-        if (lastFailed != null && d.TurnsPlayed - lastFailed < GetFailedWait(vd.Id))
+        var lastFailed = _atkStats.GetLastFailed(vd.Id);
+        if (lastFailed != null && d.TurnsPlayed - lastFailed < GetFailedWait())
             return false;
-        var expectedWeapons = _lastWeapons.TryGetValue(vd.Id, out var lastW) ? lastW : (long?)null;
+        var expectedWeapons = _atkStats.LastAtkWeapons(vd.Id);
         if (expectedWeapons * Consts.BuyWeaponMoves >= Consts.AtkMoves)
             return true;
         var effectiveMoves = Consts.AtkMoves - expectedWeapons * Consts.BuyWeaponMoves;
@@ -98,30 +87,16 @@ public class SmartAtk(int nameSuffix) : IBot(nameSuffix)
 
     private long GetMaxWait(string id)
     {
-        if (_lastWeapons.ContainsKey(id) && !_lastFail.ContainsKey(id))
+        if (_atkStats.HaveGottenWeaponsBefore(id) && !_atkStats.HaveFailedBefore(id))
         {
             return WaitBeforeRetry / 20;
         }
 
         return WaitBeforeRetry;
     }
-
-    private long GetFailedWait(string id)
+    private long GetFailedWait()
     {
         return WaitBeforeRetry;
     }
 
-    private long? GetLastFailed(string id)
-    {
-        var a = _lastFail.TryGetValue(id, out var v1) ? v1: (long?)null;
-        return a;
-    }
-    private long? GetLastAttacked(string id)
-    {
-        var a = GetLastFailed(id);
-        var b = _lastSuccess.TryGetValue(id, out var v2) ? v2: (long?)null;
-        if (a is null) return b;
-        if (b is null) return a;
-        return Math.Max(a.Value, b.Value);
-    }
 }
