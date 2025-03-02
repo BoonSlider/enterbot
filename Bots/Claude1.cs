@@ -5,7 +5,7 @@ namespace Bots;
 
 public class Claude1(int nameSuffix) : IBot(nameSuffix)
 {
-    public override string NamePrefix => "claude1";
+    public override string NamePrefix => "santa";
     private int _strategy = 0; // 0: build up, 1: offensive, 2: defensive
     private long _targetEdu = 18500; // Matches ArmorHoarder's initial education target
     private readonly Dictionary<Weapon, long> _weaponTargets = new()

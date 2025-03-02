@@ -5,7 +5,7 @@ namespace Bots;
 
 public class Claude2(int nameSuffix) : IBot(nameSuffix)
 {
-    public override string NamePrefix => "claude2";
+    public override string NamePrefix => "cloud";
     private readonly Random _random = new();
     private int _phase;
     private int _turnCounter;
